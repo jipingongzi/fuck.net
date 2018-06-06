@@ -25,3 +25,6 @@ function getRow(){
         }
     });
 }
+function back() {
+    window.location.href = "../pages/nav.html";
+}

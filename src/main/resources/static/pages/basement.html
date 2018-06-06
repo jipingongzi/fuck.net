@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
   </head>
   <body>
     <div class="container-fluid">
-	<h2 style="margin-top: 20px">基地和采购组列表</h2>
+	<h2 style="margin-top: 20px ">基地和采购组列表</h2>
+	<button id="btn" class="btn btn-primary" style="margin: 10px 0px" onclick="back()">返回首页</button>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="tabbable" id="panel">
@@ -28,7 +28,9 @@
 							</thead>
 							<tbody></tbody>
 						</table>
-						<button id="btn" class="btn btn-info" style="margin-left: 40%" onclick="getRow()">下拉加载更多</button>
+						<div align="center">
+							<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+						</div>
 					</div>
 				</div>
 			</div>
