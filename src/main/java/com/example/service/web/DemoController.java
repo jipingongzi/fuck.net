@@ -40,9 +40,12 @@ public class DemoController {
         if(ed > array.size() + 1){
             return null;
         }
+        if(ed > array.size() - 1){
+            ed = array.size() - 1;
+        }
         for (int i = st; i < ed; i++) {
             result.fluentAdd(array.getJSONObject(i));
         }
-        return array;
+        return result;
     }
 }
