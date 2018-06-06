@@ -41,7 +41,7 @@ public class DemoController {
             return null;
         }
         if(ed > array.size() - 1){
-            ed = array.size() - 1;
+            ed = array.size();
         }
         for (int i = st; i < ed; i++) {
             result.fluentAdd(array.getJSONObject(i));

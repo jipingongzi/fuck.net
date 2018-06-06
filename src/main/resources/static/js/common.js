@@ -11,7 +11,9 @@ function getRow(){
                 $(builder.pageBtnId).text("没有更多了");
                 $(builder.pageBtnId).removeClass("btn-info");
                 $(builder.pageBtnId).addClass("btn-default");
-                rows = [];
+                if(rows == undefined){
+                    rows = [];
+                }
             }
             for(var j = 0; j < rows.length; j++) {
                 var line = builder.buildLine(rows[j])
