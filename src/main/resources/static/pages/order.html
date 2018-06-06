@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>订单信息</title>
+</head>
+<body>
+<div class="container-fluid">
+
+<h2 style="margin-top: 20px ">订单信息</h2>
+  <button class="btn btn-primary" style="margin: 10px 0px" onclick="back()">返回首页</button>
+
+<div>
+  <ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#goodsOrder" data-toggle="tab">商品订单</a></li>
+    <li><a href="#festivalOrder" data-toggle="tab">节日订单</a></li>
+    <li><a href="#rechargeOrder" data-toggle="tab">充值订单</a></li>
+    <li><a href="#refundOrder" data-toggle="tab">退款列表</a></li>
+    <li><a href="#supplyGoodsOrder" data-toggle="tab">供应点商品订单</a></li>
+    <li><a href="#supplyFestivalOrder" data-toggle="tab">供应点节日订单</a></li>
+  </ul>
+
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="goodsOrder"><p>商品订单</p></div>
+    <div class="tab-pane fade" id="festivalOrder"><p>节日订单</p></div>
+    <div class="tab-pane fade" id="rechargeOrder"><p>充值订单</p></div>
+    <div class="tab-pane fade" id="refundOrder"><p>退款列表</p></div>
+    <div class="tab-pane fade" id="supplyGoodsOrder"><p>供应点商品订单</p></div>
+    <div class="tab-pane fade" id="supplyFestivalOrder"><p>供应点节日订单</p></div>
+  </div>
+</div>
+</div>
+    <!--<div class="tab-pane fade in active" id="goodsOrder">-->
+    <!--<div class="row">-->
+      <!--<div class="col-md-12">-->
+        <!--<div class="tabbable" id="panel">-->
+          <!--&lt;!&ndash;商品订单列表&ndash;&gt;-->
+          <!--<div class="tab-content">-->
+            <!--<div class="tab-pane active show" id="panel-list">-->
+              <!--<table class="table table-striped" id="tab">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                  <!--<th>订单编号</th>-->
+                  <!--<th>用户账号</th>-->
+                  <!--<th>商品数量</th>-->
+                  <!--<th>订单金额</th>-->
+                  <!--<th>充值金额支付</th>-->
+                  <!--<th>补贴金额支付</th>-->
+                  <!--<th>下单时间</th>-->
+                  <!--<th>取货日期</th>-->
+                  <!--<th>所属供货点</th>-->
+                  <!--<th>是否取货</th>-->
+                  <!--<th>货源名称</th>-->
+                  <!--<th>领取时间</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody></tbody>-->
+              <!--</table>-->
+              <!--<div align="center">-->
+                <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+    <!--<div class="tab-pane fade in active" id="festivalOrder">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <!--<div class="tabbable" id="panel">-->
+            <!--&lt;!&ndash;节日订单列表&ndash;&gt;-->
+            <!--<div class="tab-content">-->
+              <!--<div class="tab-pane active show" id="panel-list">-->
+                <!--<table class="table table-striped" id="tab">-->
+                  <!--<thead>-->
+                  <!--<tr>-->
+                    <!--<th>所属供货点</th>-->
+                    <!--<th>商品数量</th>-->
+                    <!--<th>总金额</th>-->
+                    <!--<th>取货日期</th>-->
+                    <!--<th>是否发货</th>-->
+                  <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody></tbody>-->
+                <!--</table>-->
+                <!--<div align="center">-->
+                  <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="tab-pane fade in active" id="rechargeOrder">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <!--<div class="tabbable" id="panel">-->
+            <!--&lt;!&ndash;节日订单列表&ndash;&gt;-->
+            <!--<div class="tab-content">-->
+              <!--<div class="tab-pane active show" id="panel-list">-->
+                <!--<table class="table table-striped" id="tab">-->
+                  <!--<thead>-->
+                  <!--<tr>-->
+                    <!--<th>用户账号</th>-->
+                    <!--<th>订单编号</th>-->
+                    <!--<th>充值金额</th>-->
+                    <!--<th>充值时间</th>-->
+                  <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody></tbody>-->
+                <!--</table>-->
+                <!--<div align="center">-->
+                  <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="tab-pane fade in active" id="refundOrder">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <!--<div class="tabbable" id="panel">-->
+            <!--&lt;!&ndash;节日订单列表&ndash;&gt;-->
+            <!--<div class="tab-content">-->
+              <!--<div class="tab-pane active show" id="panel-list">-->
+                <!--<table class="table table-striped" id="tab">-->
+                  <!--<thead>-->
+                  <!--<tr>-->
+                    <!--<th>订单编号</th>-->
+                    <!--<th>用户账号</th>-->
+                    <!--<th>商品名称</th>-->
+                    <!--<th>所属供货点</th>-->
+                    <!--<th>退款金额</th>-->
+                    <!--<th>充值退款金额</th>-->
+                    <!--<th>补贴退款金额</th>-->
+                    <!--<th>下单时间</th>-->
+                    <!--<th>取货日期</th>-->
+                    <!--<th>申请退款时间</th>-->
+                    <!--<th>退款状态</th>-->
+                  <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody></tbody>-->
+                <!--</table>-->
+                <!--<div align="center">-->
+                  <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="tab-pane fade in active" id="supplyGoodsOrder">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <!--<div class="tabbable" id="panel">-->
+            <!--&lt;!&ndash;节日订单列表&ndash;&gt;-->
+            <!--<div class="tab-content">-->
+              <!--<div class="tab-pane active show" id="panel-list">-->
+                <!--<table class="table table-striped" id="tab">-->
+                  <!--<thead>-->
+                  <!--<tr>-->
+                    <!--<th>商品名称</th>-->
+                    <!--<th>商品编号</th>-->
+                    <!--<th>商品数量</th>-->
+                    <!--<th>商品金额</th>-->
+                  <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody></tbody>-->
+                <!--</table>-->
+                <!--<div align="center">-->
+                  <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="tab-pane fade in active" id="supplyFestivalOrder">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+          <!--<div class="tabbable" id="panel">-->
+            <!--&lt;!&ndash;节日订单列表&ndash;&gt;-->
+            <!--<div class="tab-content">-->
+              <!--<div class="tab-pane active show" id="panel-list">-->
+                <!--<table class="table table-striped" id="tab">-->
+                  <!--<thead>-->
+                  <!--<tr>-->
+                    <!--<th>商品名称</th>-->
+                    <!--<th>商品编号</th>-->
+                    <!--<th>商品数量</th>-->
+                    <!--<th>商品金额</th>-->
+                  <!--</tr>-->
+                  <!--</thead>-->
+                  <!--<tbody></tbody>-->
+                <!--</table>-->
+                <!--<div align="center">-->
+                  <!--<button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/build.js"></script>
+<script src="../js/common.js"></script>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      // 获取已激活的标签页的名称
+      var activeTab = $(e.target).text();
+      // 获取前一个激活的标签页的名称
+      var previousTab = $(e.relatedTarget).text();
+      $(".active-tab span").html(activeTab);
+      $(".previous-tab span").html(previousTab);
+    });
+  });
+</script>
+</body>
+</html>
