@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>代购组列表</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <h2 style="margin-top: 20px">代购组列表</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable" id="panel">
+                <!--代购组列表-->
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="panel-list">
+                        <table class="table table-striped" id="tab">
+                            <thead>
+                            <tr><th>名称</th>
+                                <th>代购组账号数</th>
+                                <th>代购组商品数</th>
+                                <th>已售商品数</th>
+                                <th>已销售金额</th>
+                                <th>代购组供应点</th>
+                                <th>创建日期</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <button id="btn" class="btn btn-info" style="margin-left: 40%" onclick="getRow()">下拉加载更多</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/basement.js"></script>
+<script src="../js/common.js"></script>
+</body>
+</html>
