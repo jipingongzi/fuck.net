@@ -23,13 +23,195 @@
     <li><a href="#supplyFestivalOrder" data-toggle="tab">供应点节日订单</a></li>
   </ul>
 
+  <!--<div id="myTabContent" class="tab-content">-->
+    <!--<div class="tab-pane fade in active" id="goodsOrder"><p>商品订单</p></div>-->
+    <!--<div class="tab-pane fade" id="festivalOrder"><p>节日订单</p></div>-->
+    <!--<div class="tab-pane fade" id="rechargeOrder"><p>充值订单</p></div>-->
+    <!--<div class="tab-pane fade" id="refundOrder"><p>退款列表</p></div>-->
+    <!--<div class="tab-pane fade" id="supplyGoodsOrder"><p>供应点商品订单</p></div>-->
+    <!--<div class="tab-pane fade" id="supplyFestivalOrder"><p>供应点节日订单</p></div>-->
+  <!--</div>-->
   <div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade in active" id="goodsOrder"><p>商品订单</p></div>
-    <div class="tab-pane fade" id="festivalOrder"><p>节日订单</p></div>
-    <div class="tab-pane fade" id="rechargeOrder"><p>充值订单</p></div>
-    <div class="tab-pane fade" id="refundOrder"><p>退款列表</p></div>
-    <div class="tab-pane fade" id="supplyGoodsOrder"><p>供应点商品订单</p></div>
-    <div class="tab-pane fade" id="supplyFestivalOrder"><p>供应点节日订单</p></div>
+    <div class="tab-pane fade in active" id="goodsOrder">
+      <p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">订单编号</font></th>
+                  <th><font size="1">用户账号</font></th>
+                  <th><font size="1">商品数量</font></th>
+                  <th><font size="1">订单金额</font></th>
+                  <th><font size="1">充值金额支付</font></th>
+                  <th><font size="1">补贴金额支付</font></th>
+                  <th><font size="1">下单时间</font></th>
+                  <th><font size="1">取货日期</font></th>
+                  <th><font size="1">所属供货点</font></th>
+                  <th><font size="1">是否取货</font></th>
+                  <th><font size="1">货源名称</font></th>
+                  <th><font size="1">领取时间</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></p></div>
+
+    <div class="tab-pane fade" id="festivalOrder">
+      <p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">所属供货点</font></th>
+                  <th><font size="1">商品数量</font></th>
+                  <th><font size="1">总金额</font></th>
+                  <th><font size="1">取货日期</font></th>
+                  <th><font size="1">是否发货</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></p></div>
+
+    <div class="tab-pane fade" id="rechargeOrder">
+      <p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">用户账号</font></th>
+                  <th><font size="1">订单编号</font></th>
+                  <th><font size="1">充值金额</font></th>
+                  <th><font size="1">充值时间</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></p></div>
+
+    <div class="tab-pane fade" id="refundOrder">
+      <p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">订单编号</font></th>
+                  <th><font size="1">用户账号</font></th>
+                  <th><font size="1">商品名称</font></th>
+                  <th><font size="1">所属供货点</font></th>
+                  <th><font size="1">退款金额</font></th>
+                  <th><font size="1">充值退款金额</font></th>
+                  <th><font size="1">补贴退款金额</font></th>
+                  <th><font size="1">下单时间</font></th>
+                  <th><font size="1">申请退款时间</font></th>
+                  <th><font size="1">下单时间</font></th>
+                  <th><font size="1">退款状态</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </p></div>
+
+    <div class="tab-pane fade" id="supplyGoodsOrder">
+      <p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">商品名称</font></th>
+                  <th><font size="1">商品编号</font></th>
+                  <th><font size="1">商品数量</font></th>
+                  <th><font size="1">商品金额</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </p></div>
+
+    <div class="tab-pane fade" id="supplyFestivalOrder"><p><div class="row">
+      <div class="col-md-12">
+        <div class="tabbable" id="panel">
+          <!--商品订单列表-->
+          <div class="tab-content">
+            <div class="tab-pane active show" id="panel-list">
+              <table class="table table-striped" id="tab">
+                <thead>
+                <tr>
+                  <th><font size="1">商品名称</font></th>
+                  <th><font size="1">商品编号</font></th>
+                  <th><font size="1">商品数量</font></th>
+                  <th><font size="1">商品金额</font></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <div align="center">
+                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </p></div>
+
   </div>
 </div>
 </div>
