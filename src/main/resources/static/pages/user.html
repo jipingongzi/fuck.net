@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>用户管理</title>
+</head>
+<body>
+<div class="container-fluid">
+
+    <h2 style="margin-top: 20px ">用户管理</h2>
+    <button class="btn btn-primary" style="margin: 10px 0px" onclick="back()">返回首页</button>
+
+    <div>
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#users" data-toggle="tab">用户列表</a></li>
+            <li><a href="#costs" data-toggle="tab">代扣流水</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="users">
+                <p><div class="row">
+                <div class="col-md-12">
+                    <div class="tabbable" id="panel">
+                        <!--商品订单列表-->
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="panel-list">
+                                <table class="table table-striped" id="tabUser">
+                                    <thead>
+                                    <tr>
+                                        <th><font size="1">用户账号</font></th>
+                                        <th><font size="1">余额总额</font></th>
+                                        <th><font size="1">充值余额</font></th>
+                                        <th><font size="1">补贴余额</font></th>
+                                        <th><font size="1">订单总金额</font></th>
+                                        <th><font size="1">订单充值金额</font></th>
+                                        <th><font size="1">订单补贴金额</font></th>
+                                        <th><font size="1">储值退款总金额</font></th>
+                                        <th><font size="1">补贴退款总金额</font></th>
+                                        <th><font size="1">代扣总金额</font></th>
+                                        <th><font size="1">代扣充值金额</font></th>
+                                        <th><font size="1">代扣补贴金额</font></th>
+                                        <th><font size="1">所属供应点</font></th>
+                                        <th><font size="1">注册时间</font></th>
+                                        <th><font size="1">状态</font></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div align="center">
+                                    <button id="btnUser" class="btn btn-info" onclick="getRow(1)">下拉加载更多</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div></p></div>
+
+            <div class="tab-pane fade" id="costs">
+                <p><div class="row">
+                <div class="col-md-12">
+                    <div class="tabbable" id="panel">
+                        <!--商品订单列表-->
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="panel-list">
+                                <table class="table table-striped" id="tabCost">
+                                    <thead>
+                                    <tr>
+                                        <th><font size="1">用户账号</font></th>
+                                        <th><font size="1">扣除前补贴余额</font></th>
+                                        <th><font size="1">扣除前充值余额</font></th>
+                                        <th><font size="1">扣除补贴余额</font></th>
+                                        <th><font size="1">扣除充值余额</font></th>
+                                        <th><font size="1">扣除后补贴余额</font></th>
+                                        <th><font size="1">扣除后充值余额</font></th>
+                                        <th><font size="1">代扣时间</font></th>
+                                        <th><font size="1">摘要</font></th>
+                                        <th><font size="1">经手人</font></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div align="center">
+                                    <button id="btnCost" class="btn btn-info" onclick="getRow(2)">下拉加载更多</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div></p></div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/user.js"></script>
+</body>
+</html>
