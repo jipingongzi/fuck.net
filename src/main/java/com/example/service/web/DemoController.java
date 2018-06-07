@@ -3,10 +3,15 @@ package com.example.service.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.service.query.IUserQueryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class DemoController {
+
+    @Autowired
+    private IUserQueryService userQueryService;
 
     @PostMapping("/Backstage/Farm/GetDatagrid")
     public String basement(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
@@ -69,6 +74,10 @@ public class DemoController {
         return object.toJSONString();
     }
 
+    @GetMapping("/ms")
+    public String ms(@RequestParam("pageNumber") int pageNumber,@RequestParam("pageSize")int pageSize){
+        return JSON.toJSONString(userQueryService.getUserList(pageNumber,pageSize));
+    }
 
     private JSONArray getPageArray(JSONArray array,int page,int rows){
         int st = page * rows;
