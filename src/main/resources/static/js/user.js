@@ -37,9 +37,13 @@ $(function(){
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         var activeTab = $(e.target).text();
         if(activeTab == "用户列表"){
-           getRow(1);
+            if(pageUser.number == 0){
+                getRow(1);
+            }
         }else {
-            getRow(2);
+            if(pageCost.number ==0){
+                getRow(2);
+            }
         }
     });
 });
