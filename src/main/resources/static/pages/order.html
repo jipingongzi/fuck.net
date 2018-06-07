@@ -31,7 +31,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabGoodsOrder">
                 <thead>
                 <tr>
                   <th><font size="1">订单编号</font></th>
@@ -51,7 +51,7 @@
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnGoodsOrder" class="btn btn-info" onclick="getRow(1)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabFestivalOrder">
                 <thead>
                 <tr>
                   <th><font size="1">所属供货点</font></th>
@@ -79,7 +79,7 @@
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnFestivalOrder" class="btn btn-info" onclick="getRow(2)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabRechargeOrder">
                 <thead>
                 <tr>
                   <th><font size="1">用户账号</font></th>
@@ -106,7 +106,7 @@
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnRechargeOrder" class="btn btn-info" onclick="getRow(3)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabRefundOrder">
                 <thead>
                 <tr>
                   <th><font size="1">订单编号</font></th>
@@ -132,15 +132,15 @@
                   <th><font size="1">充值退款金额</font></th>
                   <th><font size="1">补贴退款金额</font></th>
                   <th><font size="1">下单时间</font></th>
+                  <th><font size="1">取货日期</font></th>
                   <th><font size="1">申请退款时间</font></th>
-                  <th><font size="1">下单时间</font></th>
                   <th><font size="1">退款状态</font></th>
                 </tr>
                 </thead>
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnRefundOrder" class="btn btn-info" onclick="getRow(4)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -156,7 +156,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabSupplyGoodsOrder">
                 <thead>
                 <tr>
                   <th><font size="1">商品名称</font></th>
@@ -168,7 +168,7 @@
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnSupplyGoodsOrder" class="btn btn-info" onclick="getRow(5)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@
           <!--商品订单列表-->
           <div class="tab-content">
             <div class="tab-pane active show" id="panel-list">
-              <table class="table table-striped" id="tab">
+              <table class="table table-striped" id="tabSupplyFestivalOrder">
                 <thead>
                 <tr>
                   <th><font size="1">商品名称</font></th>
@@ -195,7 +195,7 @@
                 <tbody></tbody>
               </table>
               <div align="center">
-                <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                <button id="btnSupplyFestivalOrder" class="btn btn-info" onclick="getRow(6)">下拉加载更多</button>
               </div>
             </div>
           </div>
@@ -209,23 +209,8 @@
 </div>
 
 
-<script src="../js/jquery.min.js"></script>
-<script src="../js/build.js"></script>
-<script src="../js/common.js"></script>
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="../js/order.js"></script>
-<script type="text/javascript">
-  $(function(){
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      // 获取已激活的标签页的名称
-      var activeTab = $(e.target).text();
-      // 获取前一个激活的标签页的名称
-      var previousTab = $(e.relatedTarget).text();
-      $(".active-tab span").html(activeTab);
-      $(".previous-tab span").html(previousTab);
-    });
-  });
-</script>
 </body>
 </html>
