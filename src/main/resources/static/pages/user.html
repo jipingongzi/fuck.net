@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <title>用户管理</title>
 </head>
@@ -49,7 +48,7 @@
                                     <tbody></tbody>
                                 </table>
                                 <div align="center">
-                                    <button id="btnUser" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                                    <button id="btnUser" class="btn btn-info" onclick="getRow(1)">下拉加载更多</button>
                                 </div>
                             </div>
                         </div>
@@ -64,20 +63,25 @@
                         <!--商品订单列表-->
                         <div class="tab-content">
                             <div class="tab-pane active show" id="panel-list">
-                                <table class="table table-striped" id="tab">
+                                <table class="table table-striped" id="tabCost">
                                     <thead>
                                     <tr>
-                                        <th><font size="1">所属供货点</font></th>
-                                        <th><font size="1">商品数量</font></th>
-                                        <th><font size="1">总金额</font></th>
-                                        <th><font size="1">取货日期</font></th>
-                                        <th><font size="1">是否发货</font></th>
+                                        <th><font size="1">用户账号</font></th>
+                                        <th><font size="1">扣除前补贴余额</font></th>
+                                        <th><font size="1">扣除前充值余额</font></th>
+                                        <th><font size="1">扣除补贴余额</font></th>
+                                        <th><font size="1">扣除充值余额</font></th>
+                                        <th><font size="1">扣除后补贴余额</font></th>
+                                        <th><font size="1">扣除后充值余额</font></th>
+                                        <th><font size="1">代扣时间</font></th>
+                                        <th><font size="1">摘要</font></th>
+                                        <th><font size="1">经手人</font></th>
                                     </tr>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
                                 <div align="center">
-                                    <button id="btn" class="btn btn-info" onclick="getRow()">下拉加载更多</button>
+                                    <button id="btnCost" class="btn btn-info" onclick="getRow(2)">下拉加载更多</button>
                                 </div>
                             </div>
                         </div>
@@ -87,11 +91,8 @@
         </div>
     </div>
 </div>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/build.js"></script>
-<script src="../js/user.js"></script>
-<script src="../js/common.js"></script>
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../js/user.js"></script>
 </body>
 </html>
