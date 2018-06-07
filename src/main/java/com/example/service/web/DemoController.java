@@ -32,6 +32,18 @@ public class DemoController {
         return object.toJSONString();
     }
 
+    @PostMapping("/Backstage/Supply/GetDatagrid")
+    public String supply(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
+        int pageSize = rows;
+        String list = "[{\"rn\":1,\"id\":10,\"Name\":\"紫竹院供应点\",\"AccountCount\":2,\"FarmCount\":5,\"MemberCount\":142,\"AgencyBuyingCount\":1,\"AgencyBuyingProductCount\":277,\"AgencyBuyingSellProductCount\":2953,\"AgencyBuyingSellProductTotal\":87492.32},{\"rn\":2,\"id\":9,\"Name\":\"海运仓供应点\",\"AccountCount\":2,\"FarmCount\":5,\"MemberCount\":78,\"AgencyBuyingCount\":1,\"AgencyBuyingProductCount\":277,\"AgencyBuyingSellProductCount\":2536,\"AgencyBuyingSellProductTotal\":83565.80}]";
+        JSONArray array = JSON.parseArray(list);
+        JSONArray result = getPageArray(array,pageNumber,pageSize);
+        JSONObject object = new JSONObject();
+        object.put("total",100);
+        object.put("rows",result);
+        return object.toJSONString();
+    }
+
 
     private JSONArray getPageArray(JSONArray array,int page,int rows){
         int st = page * rows;
