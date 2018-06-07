@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <title>基地与采购组列表</title>
+  <title>供应点列表</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,12 +9,12 @@
   </head>
   <body>
     <div class="container-fluid">
-	<h2 style="margin-top: 20px ">基地和采购组列表</h2>
+	<h2 style="margin-top: 20px ">供应点列表</h2>
 	<button class="btn btn-primary" style="margin: 10px 0px" onclick="back()">返回首页</button>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="tabbable" id="panel">
-				<!--基地和采购组列表-->
+				<!--供应点列表-->
 				<div class="tab-content">
 					<div class="tab-pane active show" id="panel-list">
 						<table class="table table-striped" id="tab">
@@ -22,11 +22,13 @@
 							<tr>
 								<th></th>
 								<th>名称</th>
-								<th>农场账号数</th>
-								<th>农场商品数</th>
-								<th>已售商品数</th>
-								<th>已销售金额</th>
-								<th>农场供应点</th></tr>
+								<th>登录帐号数</th>
+								<th>关联农场数</th>
+								<th>关联用户数</th>
+								<th>关联代购组数</th>
+								<th>代购商品数</th>
+								<th>已售代购商品数</th>
+								<th>已销售代购金额</th></tr>
 							</thead>
 							<tbody></tbody>
 						</table>
@@ -42,7 +44,7 @@
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 	<script src="../js/build.js"></script>
-	<script src="../js/basement.js"></script>
+	<script src="../js/supply.js"></script>
 	<script src="../js/common.js"></script>
   </body>
 </html>
