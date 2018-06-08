@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.service.query.IBasementQueryService;
+import com.example.service.query.IBuyProxyQueryService;
 import com.example.service.query.IOrderQueryService;
 import com.example.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class DemoController {
     private IOrderQueryService orderQueryService;
     @Autowired
     private IBasementQueryService basementQueryService;
+    @Autowired
+    private IBuyProxyQueryService buyProxyQueryService;
 
     @PostMapping("/Backstage/Farm/GetDatagrid")
     public String basement(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
@@ -38,19 +41,25 @@ public class DemoController {
             }
             return m;
         }).collect(Collectors.toList());
-        object.put("total",100);
         object.put("rows",result);
         return object.toJSONString();
     }
 
     @PostMapping("/Backstage/AgencyBuying/GetDatagrid")
     public String buyproxy(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
-        int pageSize = rows;
-        String list = "[{\"IDX\":1,\"ID\":16,\"Weight\":0,\"Name\":\"代购\",\"CagegoryIDs\":\"15,16,19,24,28,29,30,31,32,37,38\",\"FlagID\":2,\"CTime\":\"2018-05-10 09:50:30\",\"AccountCount\":1,\"GoodsCount\":10985,\"BuyGoodsCount\":5386,\"BuyPrice\":168461.06,\"SupplyCount\":4}]";
-        JSONArray array = JSON.parseArray(list);
-        JSONArray result = getPageArray(array,pageNumber,pageSize);
         JSONObject object = new JSONObject();
-        object.put("total",100);
+        List<Map<String,Object>> result = buyProxyQueryService.getBuyProxyList(pageNumber,rows).stream().map(m -> {
+            if(m.get("GoodsCount") == null){
+                m.put("GoodsCount",0);
+            }
+            if(m.get("BuyGoodsCount") == null){
+                m.put("BuyGoodsCount",0);
+            }
+            if(m.get("BuyPrice") == null){
+                m.put("BuyPrice",0);
+            }
+            return m;
+        }).collect(Collectors.toList());
         object.put("rows",result);
         return object.toJSONString();
     }
