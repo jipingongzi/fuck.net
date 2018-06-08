@@ -3,10 +3,7 @@ package com.example.service.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.service.query.IBasementQueryService;
-import com.example.service.query.IBuyProxyQueryService;
-import com.example.service.query.IOrderQueryService;
-import com.example.service.query.IUserQueryService;
+import com.example.service.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +22,8 @@ public class DemoController {
     private IBasementQueryService basementQueryService;
     @Autowired
     private IBuyProxyQueryService buyProxyQueryService;
+    @Autowired
+    private ISupplyQueryService supplyQueryService;
 
     @PostMapping("/Backstage/Farm/GetDatagrid")
     public String basement(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
@@ -66,12 +65,8 @@ public class DemoController {
 
     @PostMapping("/Backstage/Supply/GetDatagrid")
     public String supply(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
-        int pageSize = rows;
-        String list = "[{\"rn\":1,\"id\":10,\"Name\":\"紫竹院供应点\",\"AccountCount\":2,\"FarmCount\":5,\"MemberCount\":142,\"AgencyBuyingCount\":1,\"AgencyBuyingProductCount\":277,\"AgencyBuyingSellProductCount\":2953,\"AgencyBuyingSellProductTotal\":87492.32},{\"rn\":2,\"id\":9,\"Name\":\"海运仓供应点\",\"AccountCount\":2,\"FarmCount\":5,\"MemberCount\":78,\"AgencyBuyingCount\":1,\"AgencyBuyingProductCount\":277,\"AgencyBuyingSellProductCount\":2536,\"AgencyBuyingSellProductTotal\":83565.80}]";
-        JSONArray array = JSON.parseArray(list);
-        JSONArray result = getPageArray(array,pageNumber,pageSize);
         JSONObject object = new JSONObject();
-        object.put("rows",result);
+        object.put("rows",supplyQueryService.getSupplyList(pageNumber,rows));
         return object.toJSONString();
     }
 
