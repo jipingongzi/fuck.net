@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.service.common.DateUtil;
+import com.example.service.query.IOrderQueryService;
 import com.example.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ public class DemoController {
 
     @Autowired
     private IUserQueryService userQueryService;
+    @Autowired
+    private IOrderQueryService orderQueryService;
 
     @PostMapping("/Backstage/Farm/GetDatagrid")
     public String basement(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
