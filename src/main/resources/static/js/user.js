@@ -4,7 +4,7 @@ builderUser.tableId = "#tabUser";
 builderUser.pageBtnId = "#btnUser";
 builderUser.buildLine = function (item) {
     var line ="<tr>";
-    var content = buildTd(item.Phone,item.Money,item.Balance,item.Subsidy,
+    var content = buildTd(item.rownumber,item.Phone,item.Money,item.Balance,item.Subsidy,
         item.OrderPrice,item.OrderRechargeTotal,item.OrderSubsidyTotal,item.RefundBalance,item.RefundSubsidy,
         item.WithholdTotal,item.WithholdRechargePrice,item.WithholdSubsidyTotal,item.SupplyName,item.InsertTime,item.Status);
     line += content;
@@ -26,10 +26,10 @@ builderCost.buildLine = function (item) {
 }
 var pageUser = {};
 pageUser.number = 0;
-pageUser.rows = 2;
+pageUser.rows = 10;
 var pageCost = {};
 pageCost.number = 0;
-pageCost.rows = 2;
+pageCost.rows = 10;
 //默认加载用户列表页
 getRow(1);
 

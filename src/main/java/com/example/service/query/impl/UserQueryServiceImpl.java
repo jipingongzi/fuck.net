@@ -46,7 +46,7 @@ public class UserQueryServiceImpl implements IUserQueryService {
                 "\t\t\t\t\t\t\t\tSubsidyTotal AS with_hold_Subside\n" +
                 "\t\t\t\t\t\t\t\tfrom YUNYI_WithholdLog) \n" +
                 "\t\t\t\t\t\t\tt_with_hold ON t_member.ID = t_with_hold.MemberID \n" +
-                "\t\t\t\t     LEFT JOIN YUNYI_Supply t_supply ON t_supply.id = t_member.SupplyID\t\t\t\t";
+                "\t\t\t\t     LEFT JOIN YUNYI_Supply t_supply ON t_supply.id = t_member.SupplyID WHERE t_member.isDeleted <> 1";
         return jdbcTemplate.queryForList(
                 getPageQuery(sql,"InsertTime",pageSize,pageNumber)
         );

@@ -3,10 +3,15 @@ package com.example.service.web;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.service.common.DateUtil;
 import com.example.service.query.IUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,6 +70,19 @@ public class DemoController {
             }
             if(m.get("WithholdSubsidyTotal") == null){
                 m.put("WithholdSubsidyTotal",0);
+            }
+            if(m.get("OrderPrice") == null){
+                m.put("OrderPrice","0");
+            }
+            if(m.get("OrderRechargeTotal") == null){
+                m.put("OrderRechargeTotal","0");
+            }
+            if(m.get("OrderSubsidyTotal") == null){
+                m.put("OrderSubsidyTotal","0");
+            }
+            if(m.get("InsertTime") != null){
+                String insertTimeStr = m.get("InsertTime").toString().split(" ")[0];
+                m.put("InsertTime",insertTimeStr);
             }
             if(m.get("Status") == null){
                 m.put("Status","正常");
