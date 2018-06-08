@@ -16,7 +16,7 @@ builderFestivalOrder.tableId = "#tabFestivalOrder";
 builderFestivalOrder.pageBtnId = "#btnFestivalOrder";
 builderFestivalOrder.buildLine = function (item) {
   var line ="<tr>";
-  var content = buildTd(item.SupplyName,item.FestivalGoodsCount,item.FestivalGoodsPrice,item.PickupDate,item.IsDeliver);
+  var content = buildTd(item.SupplyName,item.GoodsAmount,item.TotalPrice,item.PickupDate,item.IsDeliver);
   line += content;
   line += "</tr>";
   return line;
@@ -40,7 +40,7 @@ builderRefundOrder.tableId = "#tabRefundOrder";
 builderRefundOrder.pageBtnId = "#btnRefundOrder";
 builderRefundOrder.buildLine = function (item) {
   var line ="<tr>";
-  var content = buildTd(item.OrderNo,item.Phone,item.GoodsName,item.SupplyName,item.RefundPrice,item.RefundPrice1,item.RefundPrice2,item.InsertTime,item.PickupDate,item.RefundTime,item.RefundState);
+  var content = buildTd(item.OrderNo,item.Phone,item.GoodsName,item.Name,item.RefundPrice,item.RefundSubsidyPrice,item.RefundRechargePrice,item.InsertTime,item.PickupDate,item.RefundTime,item.RefundState);
   line += content;
   line += "</tr>";
   return line;
@@ -73,22 +73,22 @@ builderSupplyFestivalOrder.buildLine = function (item) {
 
 var pageGoodsOrder = {};
 pageGoodsOrder.number = 0;
-pageGoodsOrder.rows = 2;
+pageGoodsOrder.rows = 10;
 var pageFestivalOrder = {};
 pageFestivalOrder.number = 0;
-pageFestivalOrder.rows = 2;
+pageFestivalOrder.rows = 10;
 var pageRechargeOrder = {};
 pageRechargeOrder.number = 0;
-pageRechargeOrder.rows = 2;
+pageRechargeOrder.rows = 10;
 var pageRefundOrder = {};
 pageRefundOrder.number = 0;
-pageRefundOrder.rows = 2;
+pageRefundOrder.rows = 10;
 var pageSupplyGoodsOrder = {};
 pageSupplyGoodsOrder.number = 0;
-pageSupplyGoodsOrder.rows = 2;
+pageSupplyGoodsOrder.rows = 10;
 var pageSupplyFestivalOrder = {};
 pageSupplyFestivalOrder.number = 0;
-pageSupplyFestivalOrder.rows = 2;
+pageSupplyFestivalOrder.rows = 10;
 //默认加载商品订单列表页
 getRow(1);
 
