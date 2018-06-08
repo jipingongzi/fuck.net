@@ -8,7 +8,7 @@ builder.pageBtnId = "#btn";
 builder.buildLine = function (item) {
     var line ="<tr>";
     //封装列的值，需要和table中的顺序一致
-    var content = buildTd(item.IDX,item.Name,item.FlagID,item.GoodsCount,item.BuyGoodsCount,item.BuyPrice,item.SupplyCount,item.CTime);
+    var content = buildTd(item.rownumber,item.Name,item.AccountCount,item.GoodsCount,item.BuyGoodsCount,item.BuyPrice,item.SupplyCount,item.CTime);
     line += content;
     line += "</tr>";
     return line;
