@@ -17,7 +17,7 @@ builderCost.tableId = "#tabCost";
 builderCost.pageBtnId = "#btnCost";
 builderCost.buildLine = function (item) {
     var line ="<tr>";
-    var content = buildTd(item.Phone,item.OldSubsidyTotal,item.OldBalanceTotal,item.SubsidyTotal,
+    var content = buildTd(item.rownumber,item.Phone,item.OldSubsidyTotal,item.OldBalanceTotal,item.SubsidyTotal,
         item.BalanceTotal,item.NewSubsidyTotal,item.NewBalanceTotal,item.InsertTime,item.Summary,
         item.HandleingByPerson);
     line += content;

@@ -95,19 +95,11 @@ public class DemoController {
 
     @PostMapping("/Backstage/Member/GetWithholdDatagrid")
     public String costs(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
-        int pageSize = rows;
-        String list = "[{\"ID\":6,\"Phone\":\"Z0005J\",\"OldSubsidyTotal\":9272.82,\"OldBalanceTotal\":11924.51,\"SubsidyTotal\":1007.72,\"BalanceTotal\":201.54,\"NewSubsidyTotal\":8265.10,\"NewBalanceTotal\":11722.97,\"InsertTime\":\"2018-05-24 10:01\",\"Summary\":\"付明细单\",\"HandleingByPerson\":\"韩敬\",\"InputMan\":\"admin\"},{\"ID\":7,\"Phone\":\"Z0006J\",\"OldSubsidyTotal\":9466.81,\"OldBalanceTotal\":1693.37,\"SubsidyTotal\":1696.73,\"BalanceTotal\":339.35,\"NewSubsidyTotal\":7770.08,\"NewBalanceTotal\":1354.02,\"InsertTime\":\"2018-05-24 10:01\",\"Summary\":\"付明细单\",\"HandleingByPerson\":\"韩敬\",\"InputMan\":\"admin\"},{\"ID\":8,\"Phone\":\"Z0016J\",\"OldSubsidyTotal\":6214.73,\"OldBalanceTotal\":1242.92,\"SubsidyTotal\":1341.92,\"BalanceTotal\":268.38,\"NewSubsidyTotal\":4872.81,\"NewBalanceTotal\":974.54,\"InsertTime\":\"2018-05-24 10:03\",\"Summary\":\"付明细单\",\"HandleingByPerson\":\"韩敬\",\"InputMan\":\"admin\"},{\"ID\":4,\"Phone\":\"H0017Y\",\"OldSubsidyTotal\":0.00,\"OldBalanceTotal\":0.00,\"SubsidyTotal\":271.67,\"BalanceTotal\":54.33,\"NewSubsidyTotal\":-271.67,\"NewBalanceTotal\":-54.33,\"InsertTime\":\"2018-03-14 08:15\",\"Summary\":\"代购鲜甲馅1kg36元，鲜里脊1kg46元，鲜排骨2kg144元，牛腩1kg100元。付款方式：公务卡。\",\"HandleingByPerson\":\"admin\",\"InputMan\":\"admin\"},{\"ID\":5,\"Phone\":\"H0018Y\",\"OldSubsidyTotal\":0.00,\"OldBalanceTotal\":0.00,\"SubsidyTotal\":175.00,\"BalanceTotal\":35.00,\"NewSubsidyTotal\":-175.00,\"NewBalanceTotal\":-35.00,\"InsertTime\":\"2018-03-14 08:24\",\"Summary\":\"代购鲜甲馅2.5kg90元，五花肉2.5kg120元。付款方式：公务卡。\",\"HandleingByPerson\":\"admin\",\"InputMan\":\"admin\"},{\"ID\":9,\"Phone\":\"H0022Y\",\"OldSubsidyTotal\":4513.09,\"OldBalanceTotal\":802.58,\"SubsidyTotal\":978.17,\"BalanceTotal\":195.63,\"NewSubsidyTotal\":3534.92,\"NewBalanceTotal\":606.95,\"InsertTime\":\"2018-05-24 10:04\",\"Summary\":\"付明细单\",\"HandleingByPerson\":\"韩敬\",\"InputMan\":\"admin\"}]";
-        JSONArray array = JSON.parseArray(list);
-        JSONArray result = getPageArray(array,pageNumber,pageSize);
         JSONObject object = new JSONObject();
-        object.put("total",100);
+        List<Map<String,Object>> result =  userQueryService.getCosytList(pageNumber,rows);
+
         object.put("rows",result);
         return object.toJSONString();
-    }
-
-    @GetMapping("/ms")
-    public String ms(@RequestParam("pageNumber") int pageNumber,@RequestParam("pageSize")int pageSize){
-        return JSON.toJSONString(userQueryService.getUserList(pageNumber,pageSize));
     }
 
     private JSONArray getPageArray(JSONArray array,int page,int rows){

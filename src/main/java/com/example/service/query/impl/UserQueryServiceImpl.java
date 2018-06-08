@@ -51,4 +51,25 @@ public class UserQueryServiceImpl implements IUserQueryService {
                 getPageQuery(sql,"InsertTime",pageSize,pageNumber)
         );
     }
+
+    @Override
+    public List<Map<String, Object>> getCosytList(int pageNumber, int pageSize) {
+        String sql = "SELECT \n" +
+                "YUNYI_Member.Phone,\n" +
+                "YUNYI_WithholdLog.OldBalanceTotal,\n" +
+                "YUNYI_WithholdLog.BalanceTotal,\n" +
+                "YUNYI_WithholdLog.OldSubsidyTotal,\n" +
+                "YUNYI_WithholdLog.SubsidyTotal,\n" +
+                "(YUNYI_WithholdLog.OldBalanceTotal - YUNYI_WithholdLog.BalanceTotal) AS NewBalanceTotal,\n" +
+                "(YUNYI_WithholdLog.OldSubsidyTotal - YUNYI_WithholdLog.SubsidyTotal) AS NewSubsidyTotal,\n" +
+                "CONVERT(varchar(100), YUNYI_WithholdLog.InsertTime, 120) AS InsertTime,\n" +
+                "YUNYI_WithholdLog.Summary,\n" +
+                "YUNYI_WithholdLog.HandleingByPerson\n" +
+                "\n" +
+                "FROM YUNYI_WithholdLog \n" +
+                "LEFT JOIN YUNYI_Member ON YUNYI_Member.id = YUNYI_WithholdLog.MemberID";
+        return jdbcTemplate.queryForList(
+                getPageQuery(sql,"InsertTime",pageSize,pageNumber)
+        );
+    }
 }
