@@ -51,7 +51,7 @@ public class SupplyQueryServiceImpl implements ISupplyQueryService {
                 "FROM YUNYI_OrderGoods \n" +
                 "WHERE OrderID IN (SELECT ID FROM YUNYI_Order WHERE SupplyID = ? AND State = 2)\n" +
                 "AND GoodsID IN (SELECT ID AS AgencyBuyingCount FROM YUNYI_Goods WHERE  TypeID = 3 AND IsPutaway = 2 AND CategoryID IN (SELECT ID FROM YUNYI_Category WHERE TypeID = 3))\n";
-        result.forEach(t -> {
+        result.parallelStream().forEach(t -> {
             Map<String,Object> numberAndMoney = jdbcTemplate.queryForList(numberAndMoneySql,t.get("ID")).get(0);
             t.put("AgencyBuyingSellProductTotal",numberAndMoney.get("AgencyBuyingSellProductTotal"));
             t.put("AgencyBuyingSellProductCount",numberAndMoney.get("AgencyBuyingSellProductCount"));
