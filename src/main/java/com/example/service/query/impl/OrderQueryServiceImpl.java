@@ -114,17 +114,45 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
 
     @Override
     public List<Map<String, Object>> getSupplyGoodsOrderList(int pageNumber, int pageSize) {
-        String sql = "";
+        String sql = "SELECT\n" +
+                "YUNYI_Goods.Name,\n" +
+                "YUNYI_Goods.SerialNum,\n" +
+                "t1.goodsAmount,\n" +
+                "t1.goodsPrice,\n" +
+                "t1.id\n" +
+                "from (SELECT \n" +
+                "YUNYI_OrderGoods.GoodsID as id,\n" +
+                "SUM(YUNYI_OrderGoods.Amount) AS goodsAmount,\n" +
+                "SUM (YUNYI_OrderGoods.Price*YUNYI_OrderGoods.Amount)AS goodsPrice\n" +
+                "FROM  YUNYI_OrderGoods\n" +
+                "INNER JOIN YUNYI_Order  ON YUNYI_Order.ID = YUNYI_OrderGoods.OrderID \n" +
+                "where  YUNYI_Order.State in(1,2) AND YUNYI_Order.IsFestival=0 \n" +
+                "GROUP BY YUNYI_OrderGoods.GoodsID) t1\n" +
+                "INNER JOIN YUNYI_Goods ON YUNYI_Goods.ID = t1.id\n";
         return jdbcTemplate.queryForList(
-                getPageQuery(sql,"",pageSize,pageNumber)
+                getPageQuery(sql,"SerialNum",pageSize,pageNumber)
         );
     }
 
     @Override
     public List<Map<String, Object>> getSupplyFestivalOrderList(int pageNumber, int pageSize) {
-        String sql = "";
+        String sql = "SELECT\n" +
+                "YUNYI_Goods.Name,\n" +
+                "YUNYI_Goods.SerialNum,\n" +
+                "t1.goodsAmount,\n" +
+                "t1.goodsPrice,\n" +
+                "t1.id\n" +
+                "from (SELECT \n" +
+                "YUNYI_OrderGoods.GoodsID as id,\n" +
+                "SUM(YUNYI_OrderGoods.Amount) AS goodsAmount,\n" +
+                "SUM (YUNYI_OrderGoods.Price*YUNYI_OrderGoods.Amount)AS goodsPrice\n" +
+                "FROM  YUNYI_OrderGoods\n" +
+                "INNER JOIN YUNYI_Order  ON YUNYI_Order.ID = YUNYI_OrderGoods.OrderID\n" +
+                "where  YUNYI_Order.State in(1,2) AND YUNYI_Order.IsFestival=1 AND YUNYI_Order.IsDeliver=1\n" +
+                "GROUP BY YUNYI_OrderGoods.GoodsID) t1\n" +
+                "INNER JOIN YUNYI_Goods ON YUNYI_Goods.ID = t1.id";
         return jdbcTemplate.queryForList(
-                getPageQuery(sql,"",pageSize,pageNumber)
+                getPageQuery(sql,"SerialNum",pageSize,pageNumber)
         );
     }
 }

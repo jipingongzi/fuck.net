@@ -52,7 +52,7 @@ builderSupplyGoodsOrder.tableId = "#tabSupplyGoodsOrder";
 builderSupplyGoodsOrder.pageBtnId = "#btnSupplyGoodsOrder";
 builderSupplyGoodsOrder.buildLine = function (item) {
   var line ="<tr>";
-  var content = buildTd(item.GoodsName,item.SerialNum,item.Amount,item.Price);
+  var content = buildTd(item.Name,item.SerialNum,item.goodsAmount,item.goodsPrice);
   line += content;
   line += "</tr>";
   return line;
@@ -64,7 +64,7 @@ builderSupplyFestivalOrder.tableId = "#tabSupplyFestivalOrder";
 builderSupplyFestivalOrder.pageBtnId = "#btnSupplyFestivalOrder";
 builderSupplyFestivalOrder.buildLine = function (item) {
   var line ="<tr>";
-  var content = buildTd(item.GoodsName,item.SerialNum,item.Amount,item.Price);
+  var content = buildTd(item.Name,item.SerialNum,item.goodsAmount,item.goodsPrice);
   line += content;
   line += "</tr>";
   return line;
