@@ -10,20 +10,13 @@
         height: 350px;
         position: absolute;
         left: 35%;
-        top: 25%;
+        top: 35%;
     }
-        .code{
-            float: right;
-            width: 96px;
-            height: 38px;
-            display: inline-block;
-            vertical-align: middle;
-        }
         label{
             color: white;
         }
         .header{
-            margin-top: 50px;
+            margin-top: 150px;
             text-align: center;
         }
         .info{
@@ -31,6 +24,9 @@
             color: darkred;
             display: block;
             text-align: center;
+        }
+        h1{
+            color: white;
         }
     </style>
 </head>
@@ -62,7 +58,7 @@ function login() {
     var pwd = $("#pwd").val();
     if(name == 'admin' && pwd == '123456'){
         window.location.href = "nav.html";
-        $.cookie("login",true);
+        $.cookie("login",true, { expires: 7 });
     }else{
         $("#info").removeAttr("hidden");
     }
