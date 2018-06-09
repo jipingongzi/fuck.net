@@ -54,12 +54,15 @@
 <script src="../js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script>
+if($.cookie('login')){
+    window.location.href = "nav.html";
+}
 function login() {
-
     var name = $("#name").val();
     var pwd = $("#pwd").val();
     if(name == 'admin' && pwd == '123456'){
         window.location.href = "nav.html";
+        $.cookie("login",true);
     }else{
         $("#info").removeAttr("hidden");
     }
