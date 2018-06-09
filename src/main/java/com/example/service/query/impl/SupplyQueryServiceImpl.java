@@ -39,18 +39,16 @@ public class SupplyQueryServiceImpl implements ISupplyQueryService {
                 ") t_buy_proxy ON t_supply.id = t_buy_proxy.SupplyID\n";
         List<Map<String,Object>> result = jdbcTemplate.queryForList(getPageQuery(baseInfoSql,"ID",pageSize,pageNumber));
         //查询供应点代购商品数
-        String goodsCountSql = "SELECT COUNT(ID) AS AgencyBuyingCount FROM YUNYI_Goods \n" +
-                "WHERE  TypeID = 3 AND IsPutaway = 2 AND \n" +
-                "CategoryID IN (\n" +
-                "\tSELECT ID FROM YUNYI_Category WHERE TypeID = 3\n" +
-                ")";
+        String goodsCountSql = "SELECT COUNT(id) AS AgencyBuyingCount from YUNYI_FarmGoods WHERE FarmID = 16";
         Object AgencyBuyingCount = jdbcTemplate.queryForList(goodsCountSql).get(0).get("AgencyBuyingCount");
         result.forEach(t -> t.put("AgencyBuyingCount",AgencyBuyingCount));
         //出售价格和数量
-        String numberAndMoneySql = "SELECT SUM(Price * Amount) AS AgencyBuyingSellProductTotal,COUNT(ID) AS AgencyBuyingSellProductCount\n" +
-                "FROM YUNYI_OrderGoods \n" +
-                "WHERE OrderID IN (SELECT ID FROM YUNYI_Order WHERE SupplyID = ? AND State = 2)\n" +
-                "AND GoodsID IN (SELECT ID AS AgencyBuyingCount FROM YUNYI_Goods WHERE  TypeID = 3 AND IsPutaway = 2 AND CategoryID IN (SELECT ID FROM YUNYI_Category WHERE TypeID = 3))\n";
+        String numberAndMoneySql = "SELECT SUM(Price * Amount) AS AgencyBuyingSellProductTotal,SUM(Amount) AS AgencyBuyingSellProductCount\n" +
+                "                FROM YUNYI_OrderGoods \n" +
+                "                WHERE\n" +
+                "\t\t\t\t\t\t\t\tTypeID = 3\n" +
+                "\t\t\t\t\t\t\t\tAND OrderID IN (SELECT ID FROM YUNYI_Order WHERE SupplyID = ? AND State IN (1,2))\n" +
+                "                AND GoodsID IN (SELECT GoodsID from YUNYI_FarmGoods WHERE FarmID = 16 )";
         result.parallelStream().forEach(t -> {
             Map<String,Object> numberAndMoney = jdbcTemplate.queryForList(numberAndMoneySql,t.get("ID")).get(0);
             t.put("AgencyBuyingSellProductTotal",numberAndMoney.get("AgencyBuyingSellProductTotal"));
