@@ -37,7 +37,7 @@ public class UserQueryServiceImpl implements IUserQueryService {
                 "\t\t\t\t\t\t\t( SELECT MemberID,SUM(Balance + Subsidy) AS order_total,\n" +
                 "\t\t\t\t\t\t\t\tSUM(Balance) AS order_balance,\n" +
                 "\t\t\t\t\t\t\t\tSUM(Subsidy) AS order_Subside\n" +
-                "\t\t\t\t\t\t\t\tfrom YUNYI_Order group by MemberID) t_order ON t_member.ID = t_order.MemberID \n" +
+                "\t\t\t\t\t\t\t\tfrom YUNYI_Order WHERE State in (1,2) group by MemberID) t_order ON t_member.ID = t_order.MemberID \n" +
                 "\t\t\t\t\t\t LEFT JOIN\n" +
                 "\t\t\t\t\t\t\t( SELECT\n" +
                 "\t\t\t\t\t\t\t\tMemberID,\n" +

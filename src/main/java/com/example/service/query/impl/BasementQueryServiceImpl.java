@@ -42,7 +42,7 @@ public class BasementQueryServiceImpl implements IBasementQueryService {
                 "\t(\n" +
                 "\tselect c.Id,a.TotalPrice,a.Balance, b.IsFestival,b.GoodsName,b.Price,b.Amount \n" +
                 "\t\t\t\t\t\t\t\t\tfrom YUNYI_Order a, YUNYI_OrderGoods b, YUNYI_Farm c \n" +
-                "\t\t\t\t\t\t\t\t\twhere a.ID = b.OrderID and b.FarmID = c.ID and a.State in('1','2') and a.IsFestival = 0 \n" +
+                "\t\t\t\t\t\t\t\t\twhere a.ID = b.OrderID and b.FarmID = c.ID and a.State in('1','2') \n" +
                 "\t)t GROUP BY t.Id\n" +
                 ")t_info ON t_info.id = t_farm.id\n" +
                 "WHERE t_farm.FlagID = 1\n";
