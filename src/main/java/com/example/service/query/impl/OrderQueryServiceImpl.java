@@ -54,17 +54,18 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
 
     @Override
     public List<Map<String, Object>> getFestivalOrderList(int pageNumber, int pageSize) {
-        String sql = "SELECT \n" +
-                "t_supply.name as SupplyName\n" +
-                ",t_order.GoodsAmount\n" +
-                ",t_order.TotalPrice\n" +
-                ",t_order.PickupDate\n" +
-                ",t_order.IsDeliver\n" +
-                "FROM YUNYI_Order t_order \n" +
+        String sql = "SELECT\n" +
+                "                t_supply.name as SupplyName\n" +
+                "                ,t_order.GoodsAmount\n" +
+                "\t\t\t\t\t\t\t\t,t_order.TotalPrice\n" +
+                "\t\t\t\t\t\t\t\t,t_order.PickupDate\n" +
+                "                ,t_order.IsDeliver\n" +
+                "\t\t\t\t\t\t\t\t,t_order.OrderNo\n" +
+                "                FROM YUNYI_Order t_order\n" +
+                "              \n" +
+                "                LEFT JOIN YUNYI_Supply t_supply ON t_order.SupplyID = t_supply.ID\n" +
                 "\n" +
-                "LEFT JOIN YUNYI_Supply t_supply ON t_order.SupplyID = t_supply.ID\n" +
-                "\n" +
-                "WHERE IsFestival=1 AND  SupplyID=9 AND State!=0 AND State!=3";
+                "                WHERE IsFestival=1 AND  State IN(1,2) AND IsDeliver = 1 ";
         return jdbcTemplate.queryForList(
                 getPageQuery(sql,"PickupDate",pageSize,pageNumber)
         );
@@ -115,20 +116,20 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
     @Override
     public List<Map<String, Object>> getSupplyGoodsOrderList(int pageNumber, int pageSize) {
         String sql = "SELECT\n" +
-                "YUNYI_Goods.Name,\n" +
-                "YUNYI_Goods.SerialNum,\n" +
-                "t1.goodsAmount,\n" +
-                "t1.goodsPrice,\n" +
-                "t1.id\n" +
-                "from (SELECT \n" +
-                "YUNYI_OrderGoods.GoodsID as id,\n" +
-                "SUM(YUNYI_OrderGoods.Amount) AS goodsAmount,\n" +
-                "SUM (YUNYI_OrderGoods.Price*YUNYI_OrderGoods.Amount)AS goodsPrice\n" +
-                "FROM  YUNYI_OrderGoods\n" +
-                "INNER JOIN YUNYI_Order  ON YUNYI_Order.ID = YUNYI_OrderGoods.OrderID \n" +
-                "where  YUNYI_Order.State in(1,2) AND YUNYI_Order.IsFestival=0 \n" +
-                "GROUP BY YUNYI_OrderGoods.GoodsID) t1\n" +
-                "INNER JOIN YUNYI_Goods ON YUNYI_Goods.ID = t1.id\n";
+                "                DISTINCT(YUNYI_Goods.Name),\n" +
+                "                YUNYI_Goods.SerialNum,\n" +
+                "                t1.goodsAmount,\n" +
+                "                t1.goodsPrice,\n" +
+                "                t1.id\n" +
+                "                from (SELECT \n" +
+                "                YUNYI_OrderGoods.GoodsID as id,\n" +
+                "                SUM(YUNYI_OrderGoods.Amount) AS goodsAmount,\n" +
+                "                SUM (YUNYI_OrderGoods.Price*YUNYI_OrderGoods.Amount)AS goodsPrice\n" +
+                "                FROM  YUNYI_OrderGoods\n" +
+                "                INNER JOIN YUNYI_Order  ON YUNYI_Order.ID = YUNYI_OrderGoods.OrderID\n" +
+                "                where  YUNYI_Order.State in(1,2) AND YUNYI_Order.IsFestival=0\n" +
+                "                GROUP BY YUNYI_OrderGoods.GoodsID) t1\n" +
+                "                INNER JOIN YUNYI_Goods ON YUNYI_Goods.ID = t1.id";
         return jdbcTemplate.queryForList(
                 getPageQuery(sql,"SerialNum",pageSize,pageNumber)
         );
