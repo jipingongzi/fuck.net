@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生活供应保障服务平台</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        img{
+            width: 60%;
+            margin-top: 50px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div align="center" >
+    <img src="download.png" onclick="basenment()">
+    <button class="btn btn-primary" style="display:block;margin-top: 30px" onclick="download()">点击下载</button>
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script>
+    function download(){
+        var $form = $('<form method="GET"></form>');
+        $form.attr('action', 'http://servicesplus.oss-cn-beijing.aliyuncs.com/apk/ServiceQuery_servicequery_v1.0.0_2018_06_11.apk');
+        $form.appendTo($('body'));
+        $form.submit();
+    }
+</script>
+</body>
+</html>
