@@ -46,11 +46,11 @@
     <button type="button" class="btn btn-info" style="width: 100%;margin-top: 30px" onclick="login()">登录</button>
     <span id="info" class="info" hidden>用户名或密码错误</span>
     </div>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script>
-if($.cookie('login')){
+if($.cookie('login') != null){
     window.location.href = "nav.html";
 }
 function login() {
@@ -58,7 +58,7 @@ function login() {
     var pwd = $("#pwd").val();
     if(name == 'admin' && pwd == '123456'){
         window.location.href = "nav.html";
-        $.cookie("login",true, { expires: 7 });
+        $.cookie("login","admin", { expires: 7 });
     }else{
         $("#info").removeAttr("hidden");
     }

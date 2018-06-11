@@ -15,20 +15,44 @@
             margin-top: 10px;
             text-align: center;
         }
+        .admin{
+            margin-top: 10px;
+            margin-left: 10px;
+            color: white;
+        }
+        .logout{
+            margin-top: 10px;
+            margin-left: 30px;
+            color: white;
+        }
+        .top{
+            margin-top: 20px;
+            margin-left: 10px;
+        }
 
     </style>
 </head>
 <body style="background-color: #49828B">
-<div align="left" class="frame">
+<div class="top">
+    <span class="admin" id="admin">欢迎</span>
+    <span class="logout" id="logout" onclick="logout()">[退出]</span>
+</div>
+    <div align="left" class="frame">
     <img src="../imgs/basement.jpg" onclick="basenment()">
     <img src="../imgs/buyproxy.jpg" onclick="buyproxy()">
     <img src="../imgs/supply.jpg" onclick="supply()">
     <img src="../imgs/user.jpg" onclick="user()">
     <img src="../imgs/order.jpg" onclick="order()">
 </div>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script>
+    if(!$.cookie('login') || $.cookie('login') == null){
+        window.location.href = "login.html";
+    }else {
+        $("#admin").text("欢迎，" + $.cookie('login'))
+    }
     function basenment() {
         window.location.href = "basement.html"
     }
@@ -43,6 +67,10 @@
     }
     function order() {
         window.location.href = "order.html"
+    }
+    function logout() {
+        $.cookie('login', '', { expires: -1 }); // 删除
+        window.location.href = "login.html";
     }
 </script>
 </body>

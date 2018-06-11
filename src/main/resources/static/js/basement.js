@@ -11,5 +11,7 @@ builder.buildLine = function (item) {
     var content = buildTd(item.rownumber,item.Name,item.AccountCount,item.GoodsCount,item.BuyGoodsCount,item.BuyPrice,item.SupplyCount);
     line += content;
     line += "</tr>";
+    $("#loading").hide(300)
+    $("#btn").attr("disabled",false)
     return line;
 }
