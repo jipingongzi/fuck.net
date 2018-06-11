@@ -40,7 +40,7 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
                 "\n" +
                 "LEFT JOIN \n" +
                 "(SELECT \n" +
-                "YUNYI_Farm.Name AS SupplyOfGoods ,\n" +
+                "DISTINCT(YUNYI_Farm.Name) AS SupplyOfGoods ,\n" +
                 "YUNYI_OrderGoods.OrderID\n" +
                 "FROM YUNYI_Farm \n" +
                 "LEFT JOIN YUNYI_OrderGoods on\n" +
