@@ -153,7 +153,7 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
                 "GROUP BY YUNYI_OrderGoods.GoodsID) t1\n" +
                 "INNER JOIN YUNYI_Goods ON YUNYI_Goods.ID = t1.id";
         return jdbcTemplate.queryForList(
-                getPageQuery(sql,"SerialNum",pageSize,pageNumber)
+                getPageQuery(sql,"Name",pageSize,pageNumber)
         );
     }
 }
