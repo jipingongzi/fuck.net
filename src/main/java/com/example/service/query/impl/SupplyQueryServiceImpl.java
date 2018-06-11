@@ -51,6 +51,7 @@ public class SupplyQueryServiceImpl implements ISupplyQueryService {
                 "                AND GoodsID IN (SELECT GoodsID from YUNYI_FarmGoods WHERE FarmID = 16 )";
         result.parallelStream().forEach(t -> {
             Map<String,Object> numberAndMoney = jdbcTemplate.queryForList(numberAndMoneySql,t.get("ID")).get(0);
+            t.put("FarmCount",5);
             t.put("AgencyBuyingSellProductTotal",numberAndMoney.get("AgencyBuyingSellProductTotal"));
             t.put("AgencyBuyingSellProductCount",numberAndMoney.get("AgencyBuyingSellProductCount"));
         });
