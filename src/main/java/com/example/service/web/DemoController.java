@@ -71,9 +71,9 @@ public class DemoController {
     }
 
     @PostMapping("/Backstage/Member/GetDatagrid")
-    public String users(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
+    public String users(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows,@CookieValue(name = "login")String loginAdmin){
         JSONObject object = new JSONObject();
-        List<Map<String,Object>> result =  userQueryService.getUserList(pageNumber,rows);
+        List<Map<String,Object>> result =  userQueryService.getUserList(pageNumber,rows,loginAdmin);
         result = result.stream().map(m ->{
             if(m.get("WithholdTotal") == null){
                 m.put("WithholdTotal",0);
@@ -132,7 +132,9 @@ public class DemoController {
     }
 
     @PostMapping("/Backstage/Order/GetDatagrid")
-    public String goodsOrder(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows){
+    public String goodsOrder(@RequestParam("page")int pageNumber,@RequestParam("rows")int rows,
+                             @CookieValue(name = "login")String loginAdmin){
+        System.out.println(loginAdmin);
         JSONObject object = new JSONObject();
         List<Map<String,Object>> result =  orderQueryService.getGoodsOrderList(pageNumber,rows);
         result = result.stream().map(m ->{

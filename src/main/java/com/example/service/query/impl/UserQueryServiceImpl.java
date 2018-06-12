@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserQueryServiceImpl implements IUserQueryService {
@@ -14,8 +17,14 @@ public class UserQueryServiceImpl implements IUserQueryService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private static Map<String,List<String>> adminUser;
+    {
+       adminUser = new HashMap<>();
+       adminUser.put("admin", Arrays.asList("1","2"));
+    }
+
     @Override
-    public List<Map<String, Object>> getUserList(int pageNumber,int pageSize) {
+    public List<Map<String, Object>> getUserList(int pageNumber,int pageSize,String admin) {
         String sql = "SELECT  \n" +
                 "\t\t\t\t\t\t\tt_member.ID\n" +
                 "\t\t\t\t\t\t\t,t_member.Phone    \n" +
@@ -47,8 +56,17 @@ public class UserQueryServiceImpl implements IUserQueryService {
                 "\t\t\t\t\t\t\t\tfrom YUNYI_WithholdLog) \n" +
                 "\t\t\t\t\t\t\tt_with_hold ON t_member.ID = t_with_hold.MemberID \n" +
                 "\t\t\t\t     LEFT JOIN YUNYI_Supply t_supply ON t_supply.id = t_member.SupplyID WHERE t_member.isDeleted <> 1";
+
+        List<String> userIds = adminUser.get(admin);
+        String userConditionSql = " " +
+                ")";
+        if (admin == "admin"){
+            userConditionSql = " " +")";
+        }else {
+
+        }
         return jdbcTemplate.queryForList(
-                getPageQuery(sql,"InsertTime",pageSize,pageNumber)
+                getPageQuery(sql + userConditionSql,"InsertTime",pageSize,pageNumber)
         );
     }
 
