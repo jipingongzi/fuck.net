@@ -1,10 +1,12 @@
 package com.example.service.query.impl;
 
 import com.example.service.query.IUserQueryService;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -57,16 +59,23 @@ public class UserQueryServiceImpl implements IUserQueryService {
                 "\t\t\t\t\t\t\tt_with_hold ON t_member.ID = t_with_hold.MemberID \n" +
                 "\t\t\t\t     LEFT JOIN YUNYI_Supply t_supply ON t_supply.id = t_member.SupplyID WHERE t_member.isDeleted <> 1";
 
-        List<String> userIds = adminUser.get(admin);
-        String userConditionSql = " " +
-                ")";
-        if (admin == "admin"){
-            userConditionSql = " " +")";
+        if (admin.equals("admin")){
+            System.out.println(admin);
         }else {
-
+            System.out.println(admin);
         }
+//        String userConditionSql = " " +
+//                ")";
+//        if (admin == "admin"){
+//            userConditionSql = " " +")";
+//        }else {
+//            List<String> userIds = adminUser.get(admin);
+//        }
+//        return jdbcTemplate.queryForList(
+//                getPageQuery(sql + userConditionSql,"InsertTime",pageSize,pageNumber)
+//        );
         return jdbcTemplate.queryForList(
-                getPageQuery(sql + userConditionSql,"InsertTime",pageSize,pageNumber)
+                getPageQuery(sql,"InsertTime",pageSize,pageNumber)
         );
     }
 
