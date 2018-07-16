@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-public class DemoController {
+public class DataStatisticsController {
 
     @Autowired
     private IUserQueryService userQueryService;
@@ -113,22 +113,6 @@ public class DemoController {
 
         object.put("rows",result);
         return object.toJSONString();
-    }
-
-    private JSONArray getPageArray(JSONArray array,int page,int rows){
-        int st = page * rows;
-        int ed = st + rows;
-        JSONArray result = new JSONArray();
-        if(ed > array.size() + 1){
-            return null;
-        }
-        if(ed > array.size() - 1){
-            ed = array.size();
-        }
-        for (int i = st; i < ed; i++) {
-            result.fluentAdd(array.getJSONObject(i));
-        }
-        return result;
     }
 
     @PostMapping("/Backstage/Order/GetDatagrid")

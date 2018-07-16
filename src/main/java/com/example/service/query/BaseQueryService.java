@@ -1,4 +1,4 @@
-package com.example.service.query.impl;
+package com.example.service.query;
 
 public interface BaseQueryService {
 

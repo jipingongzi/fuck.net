@@ -1,7 +1,5 @@
 package com.example.service.query;
 
-import com.example.service.query.impl.BaseQueryService;
-
 import java.util.List;
 import java.util.Map;
 

@@ -56,35 +56,22 @@ if($.cookie('login') != null){
 function login() {
     var name = $("#name").val();
     var pwd = $("#pwd").val();
-    if(name == 'admin' && pwd == '123456'){
-        window.location.href = "nav.html";
-        $.cookie("login","admin", {path:'/', expires: 7 });
-    }else if(name == 'FWC1' && pwd == '123456'){
-     window.location.href = "nav.html";
-     $.cookie("login","FWC1", { path:'/',expires: 7 });
-    }else if(name == 'FWC2' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWC2", { path:'/',expires: 7 });
-    }else if(name == 'FWC3' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWC3", { path:'/',expires: 7 });
-    }else if(name == 'FWCYYT' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWCYYT", { path:'/',expires: 7 });
-    }else if(name == 'FWCHS' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWCHS", { path:'/',expires: 7 });
-    }else if(name == 'FWCFXL' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWCFXL", { path:'/',expires: 7 });
-    }else if(name == 'FWCZTS' && pwd == '123456'){
-      window.location.href = "nav.html";
-      $.cookie("login","FWCZTS", { path:'/',expires: 7 });
-    }
-    else{
-        $("#info").removeAttr("hidden");
-    }
-
+    $.ajax({
+        type: 'POST',
+        url:"/sys/login",
+        data:{
+            userName:name,
+            password:pwd
+        },
+        dataType: "json",
+        success:function (data) {
+            $.cookie("login",data, { expires: 7 })
+            window.location.href = "nav.html";
+        },
+        error: function () {
+            $("#info").removeAttr("hidden");
+        }
+    })
 }
 </script>
 </body>

@@ -59,9 +59,10 @@ function getRow(type){
         builder = builderCost;
         page = pageCost;
     }
+    console.log("ds")
     $.ajax({
         type: "POST",
-        url: builder.url,
+        url: "http://192.168.31.45:9521/api/web/statistic/sale/best",
         data: {page:page.number,rows:page.rows},
         dataType: "json",
         success: function(data){
