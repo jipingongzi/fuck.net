@@ -45,26 +45,16 @@
     <img src="../imgs/order.jpg" onclick="order()">
   </div>
 
-  <div align="left" class="frame" id="type2">
-    <img src="../imgs/user.jpg" onclick="user()">
-    <img src="../imgs/order.jpg" onclick="order()">
-  </div>
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script>
-    if(!$.cookie('login') || $.cookie('login') == null){
+    if( $.cookie('login') == null){
         window.location.href = "login.html";
     }else {
         $("#admin").text("欢迎，" + $.cookie('login'))
     }
-    if ($.cookie('login') == "admin"){
-      $("#type1").show();
-      $("#type2").hide();
-    }else {
-      $("#type2").show();
-      $("#type1").hide();
-    }
+
     function basenment() {
         window.location.href = "basement.html"
     }
@@ -81,8 +71,9 @@
         window.location.href = "order.html"
     }
     function logout() {
-      $.cookie('login', '', { path:'/',expires: -1 }); // 删除
-      window.location.href = "login.html";
+        $.cookie('login', '', {expires: -1 });
+        $.cookie('serviceId', '', {expires: -1 });
+        window.location.href = "login.html";
     }
 </script>
 </body>
