@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>商品统计</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .nav{position:relative; width:100%;height: 44px}
+    .nav img{width:100%;}
+    .nav middle{position:absolute;width:100%;height:44px;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;height:44px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+
+    .search{position:relative; width:100%;height: 45px;background-color: #e4e4e4}
+    .search startTime{
+      position:absolute;
+      width:100px;
+      height:45px;
+      left:10px;
+      bottom:0px;
+      top:10px;
+      color:#333333;
+      text-align: center
+    }
+
+    .search startTimeBtn{
+      position:absolute;
+      width:200px;
+      height:35px;
+      margin-left:115px;
+      bottom:0px;
+      top:5px;
+      text-align: center;
+      color:#55A845;
+      border-radius: 3px;
+      background-color: white;
+      border-color:#55A845 ;
+      font-size: 16px;
+    }
+
+    .search endTime{
+      position:absolute;
+      width:100px;
+      height:45px;
+      margin-left:320px;
+      bottom:0px;
+      top:10px;
+      color:#333333;
+      text-align: center
+    }
+
+    .search endTimeBtn{
+      position:absolute;
+      width:200px;
+      height:35px;
+      margin-left:425px;
+      bottom:0px;
+      top:5px;
+      text-align: center;
+      color:#55A845;
+      border-radius: 3px;
+      border-color:#55A845 ;
+      background-color: white;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="nav">
+  <img src="../imgs/nav.jpg">
+  <middle>商品统计</middle>
+  <left onclick="backAction()">返回</left>
+</div>
+<div class="search">
+  <startTime>开始时间</startTime>
+  <startTimeBtn style="border-radius: 3px;border-color: #55A845">2018-12-31</startTimeBtn>
+  <endTime>截止时间</endTime>
+  <endTimeBtn style="border-radius: 3px;border-color: #55A845">2018-01-01</endTimeBtn>
+</div>
+
+
+
+<script>
+  function backAction() {
+    window.location.href = "nav.html"
+  }
+</script>
+</body>
+</html>
