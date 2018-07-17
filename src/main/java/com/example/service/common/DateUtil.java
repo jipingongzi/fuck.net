@@ -20,4 +20,17 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(Long.valueOf(seconds+"000")));
     }
+
+    /**
+     * 毫秒值转时间字符串
+     * @param seconds 毫秒值
+     * @param format 格式化
+     */
+    public static String timeStamp2Date(long seconds,String format) {
+        if(format == null || format.isEmpty()){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(seconds));
+    }
 }
