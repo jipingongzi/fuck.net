@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <title>普通商品统计</title>
+
+  <style>
+    .nav{position:relative; width:100%;height: 10vh}
+    .nav img{width:100%;}
+    .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+    .nav right{position:absolute;width:200px;right:10px;bottom:0px;top:10px;color: white;text-align: right}
+  </style>
+</head>
+<body>
+<div class="nav">
+<img src="../imgs/nav.jpg">
+<middle>普通商品统计</middle>
+<left onclick="backAction()">返回</left>
+  <right onclick="normalGoodsDetail()">查看详情</right>
+</div>
+
+<div style="display: flex">
+  <div id="container1" style="height: 88vh;width:50%"></div>
+  <div id="container2" style="height: 88vh;width:50%"></div>
+</div>
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+  renderEcharts1();
+  renderEcharts2();
+
+  function renderEcharts1 () {
+    var dom = document.getElementById("container1");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var posList = [
+      'left', 'right', 'top', 'bottom',
+      'inside',
+      'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+      'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+      rotate: {
+        min: -90,
+        max: 90
+      },
+      align: {
+        options: {
+          left: 'left',
+          center: 'center',
+          right: 'right'
+        }
+      },
+      verticalAlign: {
+        options: {
+          top: 'top',
+          middle: 'middle',
+          bottom: 'bottom'
+        }
+      },
+      position: {
+        options: echarts.util.reduce(posList, function (map, pos) {
+          map[pos] = pos;
+          return map;
+        }, {})
+      },
+      distance: {
+        min: 0,
+        max: 100
+      }
+    };
+
+    app.config = {
+      rotate: 90,
+      align: 'left',
+      verticalAlign: 'middle',
+      position: 'insideBottom',
+      distance: 15,
+      onChange: function () {
+        var labelOption = {
+          normal: {
+            rotate: app.config.rotate,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            position: app.config.position,
+            distance: app.config.distance
+          }
+        };
+        myChart.setOption({
+          series: [{
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }]
+        });
+      }
+    };
+
+
+    var labelOption = {
+      normal: {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: '{c}  {name|{a}}',
+        fontSize: 16,
+        rich: {
+          name: {
+            textBorderColor: '#fff'
+          }
+        }
+      }
+    };
+
+    option = {
+      color: ['rgb(0, 150, 136)', 'rgba(229, 160, 28, 0.97)', '#e5323e'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        data: ['销量', '销售金额', '订单数量']
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          axisTick: {show: false},
+          data: ['销量', '销售金额', '订单数量']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '销量',
+          type: 'bar',
+          barGap: 0,
+          label: labelOption,
+          data: ['111','222','333']
+        },
+        {
+          name: '销售金额',
+          type: 'bar',
+          label: labelOption,
+          data: ['111','222','333']
+        },
+        {
+          name: '订单数量',
+          type: 'bar',
+          label: labelOption,
+          data: ['111','222','333']
+        }
+      ]
+    };
+    if (option && typeof option === "object") {
+      myChart.setOption(option, true);
+    }
+  }
+
+  function renderEcharts2 () {
+    var dom = document.getElementById("container2");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var posList = [
+      'left', 'right', 'top', 'bottom',
+      'inside',
+      'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+      'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+      rotate: {
+        min: -90,
+        max: 90
+      },
+      align: {
+        options: {
+          left: 'left',
+          center: 'center',
+          right: 'right'
+        }
+      },
+      verticalAlign: {
+        options: {
+          top: 'top',
+          middle: 'middle',
+          bottom: 'bottom'
+        }
+      },
+      position: {
+        options: echarts.util.reduce(posList, function (map, pos) {
+          map[pos] = pos;
+          return map;
+        }, {})
+      },
+      distance: {
+        min: 0,
+        max: 100
+      }
+    };
+
+    app.config = {
+      rotate: 90,
+      align: 'left',
+      verticalAlign: 'middle',
+      position: 'insideBottom',
+      distance: 15,
+      onChange: function () {
+        var labelOption = {
+          normal: {
+            rotate: app.config.rotate,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            position: app.config.position,
+            distance: app.config.distance
+          }
+        };
+        myChart.setOption({
+          series: [{
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }]
+        });
+      }
+    };
+
+
+    var labelOption = {
+      normal: {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: '{c}  {name|{a}}',
+        fontSize: 16,
+        rich: {
+          name: {
+            textBorderColor: '#fff'
+          }
+        }
+      }
+    };
+
+    option = {
+      color: ['rgb(0, 150, 136)', 'rgba(229, 160, 28, 0.97)', '#e5323e'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        data: ['销量', '销售金额', '订单数量']
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          axisTick: {show: false},
+          data: ['销量', '销售金额', '订单数量']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '销量',
+          type: 'bar',
+          barGap: 0,
+          label: labelOption,
+          data: ['323','232','431']
+        },
+        {
+          name: '销售金额',
+          type: 'bar',
+          label: labelOption,
+          data: ['111','222','333']
+        },
+        {
+          name: '订单数量',
+          type: 'bar',
+          label: labelOption,
+          data: ['323','232','159']
+        }
+      ]
+    };
+    if (option && typeof option === "object") {
+      myChart.setOption(option, true);
+    }
+  }
+
+</script>
+
+<script>
+  function backAction() {
+    window.location.href = "GoodsStatisticsBar.html"
+  }
+  function normalGoodsDetail() {
+  }
+</script>
+</body>
+</html>
