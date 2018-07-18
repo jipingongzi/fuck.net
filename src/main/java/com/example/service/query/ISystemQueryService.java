@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface ISystemQueryService {
 
-    List<String> getUserIds(String serviceId);
+    List<String> getUserAccounts(long serviceId);
 }

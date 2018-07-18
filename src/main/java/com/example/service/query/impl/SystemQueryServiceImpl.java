@@ -15,7 +15,7 @@ public class SystemQueryServiceImpl implements ISystemQueryService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<String> getUserIds(String serviceId) {
+    public List<String> getUserAccounts(long serviceId) {
         String sql = "SELECT Phone FROM YUNYI_Member WHERE ServiceID = ?";
         return jdbcTemplate.queryForList(sql,serviceId).
                 stream().
