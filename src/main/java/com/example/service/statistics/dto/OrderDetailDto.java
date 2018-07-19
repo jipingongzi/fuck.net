@@ -60,9 +60,18 @@ public class OrderDetailDto {
         this.userAccount = userAccount;
         this.siteName = siteName;
         this.orderAmountTotal = orderAmountTotal;
+        if(orderTime.contains(".")){
+            orderTime = orderTime.split("\\.")[0];
+        }
         this.orderTime = orderTime;
         this.shouldPickDate = shouldPickDate;
         this.pickStatusDisplay = pickStatusDisplay;
+        if(realPickTime.contains(".")){
+            realPickTime = realPickTime.split("\\.")[0];
+        }
+        if(realPickTime.contains("/")){
+            realPickTime = realPickTime.replaceAll("/","-");
+        }
         this.realPickTime = realPickTime;
     }
 

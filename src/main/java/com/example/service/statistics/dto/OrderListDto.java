@@ -7,7 +7,6 @@ import lombok.Data;
  * 订单列表dto
  */
 @Data
-@AllArgsConstructor
 public class OrderListDto {
     /**
      * 订单id
@@ -61,4 +60,29 @@ public class OrderListDto {
      * 实际领货时间 yyyy-MM-dd HH:mm:ss
      */
     private String realPickTime;
+
+    public OrderListDto(String orderId, String orderNo, String userAccount, String siteName, String supplyName, int productNumber, double orderAmountTotal, double orderAmountRecharge, double orderAmountSubsidy, String orderTime, String shouldPickDate, String pickStatusDisplay, String realPickTime) {
+        this.orderId = orderId;
+        this.orderNo = orderNo;
+        this.userAccount = userAccount;
+        this.siteName = siteName;
+        this.supplyName = supplyName;
+        this.productNumber = productNumber;
+        this.orderAmountTotal = orderAmountTotal;
+        this.orderAmountRecharge = orderAmountRecharge;
+        this.orderAmountSubsidy = orderAmountSubsidy;
+        if(orderTime.contains(".")){
+            orderTime = orderTime.split("\\.")[0];
+        }
+        this.orderTime = orderTime;
+        this.shouldPickDate = shouldPickDate;
+        this.pickStatusDisplay = pickStatusDisplay;
+        if(realPickTime.contains(".")){
+            realPickTime = realPickTime.split("\\.")[0];
+        }
+        if(realPickTime.contains("/")){
+            realPickTime = realPickTime.replaceAll("/","-");
+        }
+        this.realPickTime = realPickTime;
+    }
 }

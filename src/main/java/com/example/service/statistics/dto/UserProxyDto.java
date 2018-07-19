@@ -1,6 +1,5 @@
 package com.example.service.statistics.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -32,6 +31,9 @@ public class UserProxyDto {
 
     public UserProxyDto(double total,double balance,double subsidy,String time,String tip,String handler,String admin){
         this.amountSummary = buildAmountSummary(total,balance,subsidy);
+        if(time.contains(".")){
+            time = time.split("\\.")[0];
+        }
         this.time = time;
         this.tip = tip;
         this.handler = handler;

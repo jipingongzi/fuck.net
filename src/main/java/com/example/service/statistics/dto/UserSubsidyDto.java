@@ -7,7 +7,6 @@ import lombok.Data;
  * 用户补贴记录dto
  */
 @Data
-@AllArgsConstructor
 public class UserSubsidyDto {
     /**
      * 充值金额
@@ -17,4 +16,12 @@ public class UserSubsidyDto {
      * 充值时间 yyyy-MM-dd HH:mm:ss
      */
     private String time;
+
+    public UserSubsidyDto(double amount, String time) {
+        this.amount = amount;
+        if(time.contains(".")){
+            time = time.split("\\.")[0];
+        }
+        this.time = time;
+    }
 }

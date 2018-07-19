@@ -7,7 +7,6 @@ import lombok.Data;
  * 订单明细dto
  */
 @Data
-@AllArgsConstructor
 public class OrderItemDto {
 
     /**
@@ -39,4 +38,17 @@ public class OrderItemDto {
      * 退货日期 yyyy-MM-dd HH:mm:ss
      */
     private String refundTime;
+
+    public OrderItemDto(String productType, String productCategory, String productName, int productNumber, String refundStatusDisplay, double refundAmount, String refundTime) {
+        this.productType = productType;
+        this.productCategory = productCategory;
+        this.productName = productName;
+        this.productNumber = productNumber;
+        this.refundStatusDisplay = refundStatusDisplay;
+        this.refundAmount = refundAmount;
+        if(refundTime.contains(".")){
+            refundTime = refundTime.split("\\.")[0];
+        }
+        this.refundTime = refundTime;
+    }
 }
