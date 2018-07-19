@@ -171,7 +171,7 @@ public class UserStatisticsImpl implements IUserStatistics {
                 "FROM YUNYI_WithholdLog w " +
                 "LEFT JOIN YUNYI_Member m ON m.ID = w.MemberID " +
                 "LEFT JOIN YUNYI_ServiceOffice s ON m.ServiceID = s.ID " +
-                "WHERE o.State = 2 AND (m.Phone LIKE ? OR s.ServiceName LIKE ?) ");
+                "WHERE (m.Phone LIKE ? OR s.ServiceName LIKE ?) ");
         if(serviceId != 0){
             proxySql.append(" AND m.ServiceID = " + serviceId);
         }
