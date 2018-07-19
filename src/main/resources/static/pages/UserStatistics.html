@@ -9,17 +9,20 @@
   <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
   <title>用户统计</title>
   <style>
-    .nav{position:relative; width:100%;height: 44px}
+    .nav{position:relative; width:100%;height: 10vh}
     .nav img{width:100%;}
-    .nav middle{position:absolute;width:100%;height:44px;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
-    .nav left{position:absolute;width:200px;height:44px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
-    .nav right{position:absolute;width:200px;height:44px;right:10px;bottom:0px;top:10px;color: white;text-align: right}
+    .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+    .nav right{position:absolute;width:200px;right:10px;bottom:0px;top:10px;color: white;text-align: right}
 
-    .search{position:relative; width:100%;height: 45px;background-color: #e4e4e4}
+    .search{
+      width: 800px;
+      line-height: 38px;
+      display: flex;
+    }
     .search startTime{
       position:absolute;
       width:100px;
-      height:45px;
       left:10px;
       bottom:0px;
       top:10px;
@@ -30,7 +33,6 @@
     .search startTimeBtn{
       position:absolute;
       width:200px;
-      height:35px;
       margin-left:115px;
       bottom:0px;
       top:5px;
@@ -45,7 +47,6 @@
     .search endTime{
       position:absolute;
       width:100px;
-      height:45px;
       margin-left:320px;
       bottom:0px;
       top:10px;
@@ -56,7 +57,6 @@
     .search endTimeBtn{
       position:absolute;
       width:200px;
-      height:35px;
       margin-left:425px;
       bottom:0px;
       top:5px;
@@ -70,105 +70,375 @@
   </style>
 </head>
 <body>
-<div class="nav" style="width: 100%">
+<div class="nav">
   <img src="../imgs/nav.jpg">
   <middle>用户统计</middle>
   <left onclick="backAction()">返回</left>
   <right onclick="userList()">用户详细信息</right>
 </div>
 <div class="search">
-  <startTime>开始时间</startTime>
-  <startTimeBtn style="border-radius: 3px;border-color: #55A845">2018年1月</startTimeBtn>
-  <endTime>截止时间</endTime>
-  <endTimeBtn style="border-radius: 3px;border-color: #55A845">2018年1月</endTimeBtn>
+  <div class="col-sm-6">
+    <div class="form-group" style="display: flex;">
+      <label class="col-sm-4 control-label">开始时间：</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control start-date" id="start-date" readonly  placeholder="开始时间">
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group" style="display: flex;">
+      <label class="col-sm-4 control-label">截止时间：</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control end-date" id="end-date" readonly  placeholder="截止时间">
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
 </div>
+<div id="container1" style="height:200px;margin-bottom:20px;width: 100%"></div>
+<div style="width: 100%;height: 1px;background-color: #e4e4e4"></div>
+<div id="container2" style="height:380px;margin-top:20px;width: 100%"></div>
 
-<div>
-  <div id="container" style="height:300px"></div>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
-  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
-  <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
-  <script type="text/javascript">
-    var dom = document.getElementById("container");
-    var myChart = echarts.init(dom);
-    var app = {};
-    option = null;
-    option = {
-      tooltip : {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            backgroundColor: '#6a7985'
-          }
-        }
-      },
-      legend: {
-        data:['用户数量','用户订单数量','用户订单金额']
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis : [
-        {
-          type : 'category',
-          boundaryGap : false,
-          data : ['2018-01','2018-02','2018-03','2018-04','2018-05','2018-06','2018-07','2018-08','2018-09','2018-10','2018-11','2018-12']
-        }
-      ],
-      yAxis : [
-        {
-          type : 'value'
-        }
-      ],
-      series : [
-        {
-          name:'用户数量',
-          type:'line',
-          stack: '总量',
-          areaStyle: {normal: {}},
-          data:[120, 132, 101, 134, 90, 230, 210, 101, 134, 90, 230, 210]
-        },
-        {
-          name:'用户订单数量',
-          type:'line',
-          stack: '总量',
-          areaStyle: {normal: {}},
-          data:[220, 182, 191, 234, 290, 330, 310,150, 232, 201, 154, 190]
-        },
-        {
-          name:'用户订单金额',
-          type:'line',
-          stack: '总量',
-          areaStyle: {normal: {}},
-          data:[150, 232, 201, 154, 190, 330, 410, 134, 90, 230, 210, 101]
-        }
-      ]
-    };
-    ;
-    if (option && typeof option === "object") {
-      myChart.setOption(option, true);
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+    initLoading();
+    $(function () {
+        // 配置时间控件
+        $.fn.datepicker.dates['cn'] = {   //切换为中文显示
+            days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
+            daysMin: ["日", "一", "二", "三", "四", "五", "六", "七"],
+            months: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"],
+            monthsShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"],
+            today: "今天",
+            clear: "清除"
+        };
+        //初始化时间控件
+        $('#start-date').datepicker({
+            autoclose: true, //自动关闭
+            beforeShowDay: $.noop,    //在显示日期之前调用的函数
+            calendarWeeks: false,     //是否显示今年是第几周
+            clearBtn: false,          //显示清除按钮
+            daysOfWeekDisabled: [],   //星期几不可选
+            endDate: Infinity,        //日历结束日期
+            forceParse: true,         //是否强制转换不符合格式的字符串
+            format: 'yyyy-mm',     //日期格式
+            keyboardNavigation: true, //是否显示箭头导航
+            language: 'cn',           //语言
+            orientation: "auto",      //方向
+            rtl: false,
+            startDate: -Infinity,     //日历开始日期
+            startView: 'months', //开始视图层，为月视图层
+            maxViewMode:'years', //最大视图层，为年视图层
+            minViewMode:'months', //最小视图层，为月视图层
+            todayBtn: false,          //今天按钮
+            todayHighlight: false,    //今天高亮
+            weekStart: 0              //星期几是开始
+        }).on("click",function(){
+            $("#start-date").datepicker("setEndDate",$("#end-date").val())
+        });
+        $('#end-date').datepicker({
+            autoclose: true, //自动关闭
+            beforeShowDay: $.noop,    //在显示日期之前调用的函数
+            calendarWeeks: false,     //是否显示今年是第几周
+            clearBtn: false,          //显示清除按钮
+            daysOfWeekDisabled: [],   //星期几不可选
+            endDate: Infinity,        //日历结束日期
+            forceParse: true,         //是否强制转换不符合格式的字符串
+            format: 'yyyy-mm',     //日期格式
+            keyboardNavigation: true, //是否显示箭头导航
+            language: 'cn',           //语言
+            orientation: "auto",      //方向
+            rtl: false,
+            startDate: -Infinity,     //日历开始日期
+            startView: 'months', //开始视图层，为月视图层
+            maxViewMode:'years', //最大视图层，为年视图层
+            minViewMode:'months', //最小视图层，为月视图层
+            todayBtn: false,          //今天按钮
+            todayHighlight: false,    //今天高亮
+            weekStart: 0              //星期几是开始
+        }).on("click",function(){
+            $("#end-date").datepicker("setStartDate",$("#start-date").val())
+        });
+    });
+
+    /**********************************************************/
+
+    function initLoading(){
+        $("body").append("<!-- loading -->" +
+            "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+            "<div class='modal-dialog' role='document'>" +
+            "<div class='modal-content'>" +
+            "<div class='modal-header'>" +
+            "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+            "</div>" +
+            "<div id='loadingText' class='modal-body'>" +
+            "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+            "处理中，请稍候。。。" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>"
+        );
     }
-  </script>
-</div>
 
-<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    function showLoading(text){
+        $("#loadingText").html(text);
+        $("#loading").modal("show");
+    }
+
+    function hideLoading(){
+        $("#loading").modal("hide");
+    }
+
+    function getCookie(c_name)
+    {
+        if (document.cookie.length>0)
+        {
+            c_start=document.cookie.indexOf(c_name + "=")
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1
+                c_end=document.cookie.indexOf(";",c_start)
+                if (c_end==-1) c_end=document.cookie.length
+                return unescape(document.cookie.substring(c_start,c_end))
+            }
+        }
+        return ""
+    }
+
+    //获取统计数据
+    function requestBaseUserStatistics (startDate ,endDate) {
+        $.ajax({
+            type: 'GET',
+            url:"/user/base",
+            data:{
+                serviceId : getCookie("serviceId"),
+                startTime : startDate,
+                endTime : endDate
+            },
+            success : function (res) {
+                hideLoading();
+                if (res.data) {
+                    console.log(res.data);
+                    lineEcharts(res.data);
+                }
+            },
+            error: function () {
+                hideLoading();
+                $("#info").removeAttr("hidden");
+            }
+        });
+    }
+
+    //获取统计数据
+    function requestPowerfulUsers (startDate ,endDate) {
+        showLoading("加载中...");
+        $.ajax({
+            type: 'GET',
+            url:"/user/order/number/most",
+            data:{
+                serviceId : getCookie("serviceId"),
+                startTime : startDate,
+                endTime : endDate
+            },
+            success : function (res) {
+                if (res.data) {
+                    console.log(res.data);
+                    requestBaseUserStatistics(startDate,endDate);
+                    ringEcharts(res.data);
+                }
+            },
+            error: function () {
+                requestBaseUserStatistics(startDate,endDate);
+                $("#info").removeAttr("hidden");
+            }
+        });
+    }
+
+    function lineEcharts(statisticData) {
+        var dates = []; // 月份
+        var orderNumbers = []; // 订单数量
+        var userNumbers = []; // 用户数量
+        var orderAmounts = []; // 订单金额
+        for (var i=0; i<statisticData.length; i++) {
+            orderNumbers.push(statisticData[i].orderNumber);
+            userNumbers.push(statisticData[i].userNumber);
+            orderAmounts.push(statisticData[i].orderAmount);
+            dates.push(statisticData[i].time);
+        }
+
+      var dom = document.getElementById("container2");
+      var myChart = echarts.init(dom);
+      var app = {};
+      option = null;
+      option = {
+          title : {
+              text: '用户基础数据统计',
+              x:'center',
+              textStyle:{
+                  fontSize:18
+              }
+          },
+          tooltip : {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'cross',
+                  label: {
+                      backgroundColor: '#6a7985'
+                  }
+              },
+              show:true
+          },
+          legend: {
+              data:['用户数量','用户订单数量','用户订单金额'],
+              selectedMode:'single',
+              top:30
+          },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
+          xAxis : [
+              {
+                  type : 'category',
+                  boundaryGap : false,
+                  data : dates
+              }
+          ],
+          yAxis : [
+              {
+                  type : 'value'
+              }
+          ],
+          series : [
+              {
+                  name:'用户数量',
+                  type:'line',
+                  stack: '用户数量',
+                  areaStyle: {normal: {}},
+                  data:userNumbers
+              },
+              {
+                  name:'用户订单数量',
+                  type:'line',
+                  stack: '订单数量',
+                  areaStyle: {normal: {}},
+                  data:orderNumbers
+              },
+              {
+                  name:'用户订单金额',
+                  type:'line',
+                  stack: '订单金额',
+                  areaStyle: {normal: {}},
+                  data:orderAmounts
+              }
+          ]
+      };
+      if (option && typeof option === "object") {
+          myChart.setOption(option, true);
+      }
+  }
+
+  function ringEcharts(statisticData) {
+      var userNames = []; //
+      var userValues = []; //
+      for (var i=0; i<statisticData.length; i++) {
+          userNames.push(statisticData[i].userAccount);
+          var userValue = {value:statisticData[i].orderNumber , name:statisticData[i].userAccount};
+          userValues.push(userValue);
+      }
+      var dom = document.getElementById("container1");
+      var myChart = echarts.init(dom);
+      var app = {};
+      option = null;
+      option = {
+          title : {
+              text: '下单数量前五用户',
+              x:'center',
+              textStyle:{
+                  fontSize:18
+              }
+          },
+          tooltip : {
+              trigger: 'item',
+              formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          legend: {
+              orient: 'vertical',
+              left: 'left',
+              data: userNames,
+              top:30,
+              left:40
+          },
+          series : [
+              {
+                  type: 'pie',
+                  radius : '55%',
+                  center: ['50%', '60%'],
+                  data:userValues,
+                  itemStyle: {
+                      emphasis: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  }
+              }
+          ]
+      };
+      if (option && typeof option === "object") {
+          myChart.setOption(option, true);
+      }
+  }
+
+    requestPowerfulUsers("","");
+</script>
+
 <script>
   function backAction() {
     window.location.href = "nav.html"
   }
   function userList() {
+  }
+
+  // 转换日期至时间戳
+  function timeStamp (val) {
+      if (val) {
+          return new Date(val).getTime();
+      } else {
+          return '';
+      }
+  }
+
+  function getStartDateValue() {
+      var inputValue = document.getElementById("start-date").value;
+      console.log(inputValue);
+      return inputValue
+  }
+
+  function getEndDateValue() {
+      var inputValue = document.getElementById("end-date").value;
+      console.log(inputValue);
+      return inputValue
+  }
+
+
+  function searchDate() {
+      requestPowerfulUsers(timeStamp(getStartDateValue()),timeStamp(getEndDateValue()));
   }
 </script>
 </body>
