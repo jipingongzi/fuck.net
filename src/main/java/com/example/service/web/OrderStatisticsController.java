@@ -66,6 +66,6 @@ public class OrderStatisticsController {
      */
     @RequestMapping("/detail")
     public RestResponse orderDetail(@RequestParam("orderId")String orderId){
-        return RestResponse.buildResponse("");
+        return RestResponse.buildResponse(orderStatistics.getOrderDetail(orderId));
     }
 }

@@ -2,7 +2,9 @@ package com.example.service.statistics.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +67,9 @@ public class OrderDetailDto {
     }
 
     public OrderDetailDto addItem(OrderItemDto item){
+        if(CollectionUtils.isEmpty(this.items)){
+            this.items = new ArrayList<>();
+        }
         this.items.add(item);
         return this;
     }

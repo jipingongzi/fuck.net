@@ -146,8 +146,8 @@ public class OrderStatisticsImpl implements IOrderStatistics {
                 "s.Name\n" +
                 "FROM YUNYI_Order o\n" +
                 "LEFT JOIN YUNYI_Supply s ON o.SupplyID = s.ID\n" +
-                "LEFT JOIN YUNYI_Member m ON o.MemberID = m.ID\n";
-        Map<String,Object> detail = jdbcTemplate.queryForList(detailSql).get(0);
+                "LEFT JOIN YUNYI_Member m ON o.MemberID = m.ID WHERE o.ID = ?\n";
+        Map<String,Object> detail = jdbcTemplate.queryForList(detailSql,orderId).get(0);
         String orderNo = detail.get("OrderNo").toString();
         String userAccount = detail.get("Phone").toString();
         String siteName = detail.get("Name").toString();
@@ -179,11 +179,13 @@ public class OrderStatisticsImpl implements IOrderStatistics {
             int productNumber = Integer.valueOf(i.get("Amount").toString());
             int refundStatus = Integer.valueOf(i.get("RefundState").toString());
             String refundStatusDisplay = "-";
+            double refundAmount = 0;
+            String refundTime = "-";
             if(refundStatus != 0){
                 refundStatusDisplay = "已退款";
+                refundAmount = Double.valueOf(i.get("RefundPrice").toString());
+                refundTime = i.get("RefundTime").toString();
             }
-            double refundAmount = Double.valueOf(i.get("RefundPrice").toString());
-            String refundTime = i.get("RefundTime").toString();
             result.addItem(new OrderItemDto(productType,productCategory,productName,productNumber,refundStatusDisplay,refundAmount,refundTime));
         });
         return result;
