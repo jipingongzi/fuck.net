@@ -40,10 +40,10 @@ public class UserStatisticsImpl implements IUserStatistics {
         "LEFT JOIN YUNYI_Member m ON m.ID = temp.MemberID\n");
         //serviceId等于0是管理局人员
         if(serviceId != 0){
-            sql.append("WHERE m.ServiceID  = ?\n");
+            sql.append("WHERE m.ServiceID  = \n" + serviceId);
         }
         sql.append("ORDER BY number DESC");
-        return jdbcTemplate.queryForList(sql.toString(),serviceId).stream().map(i -> {
+        return jdbcTemplate.queryForList(sql.toString()).stream().map(i -> {
             long userId = Long.valueOf(i.get("ID").toString());
             String userAccount = i.get("Phone").toString();
             int orderNumber = Integer.valueOf(i.get("number").toString());
