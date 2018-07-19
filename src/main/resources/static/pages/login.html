@@ -78,8 +78,8 @@ function login() {
         },
         dataType: "json",
         success:function (data) {
-            $.cookie("login",data.userName, { expires: 7 });
-            $.cookie("serviceId",data.serviceId, { expires: 7 });
+            $.cookie("login",data.data.userName, { expires: 7 });
+            $.cookie("serviceId",data.data.serviceId, { expires: 7 });
             window.location.href = "nav.html";
         },
         error: function () {
