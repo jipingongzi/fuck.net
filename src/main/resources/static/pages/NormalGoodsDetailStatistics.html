@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <title>普通商品</title>
+
+  <style>
+    .nav{position:relative; width:100%;height: 10vh}
+    .nav img{width:100%;}
+    .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+
+    .search{
+      width: 800px;
+      line-height: 38px;
+      display: flex;
+    }
+    .search startTime{
+      position:absolute;
+      width:100px;
+      left:10px;
+      bottom:0px;
+      top:10px;
+      color:#333333;
+      text-align: center
+    }
+
+    .search startTimeBtn{
+      position:absolute;
+      width:200px;
+      margin-left:115px;
+      bottom:0px;
+      top:5px;
+      text-align: center;
+      color:#55A845;
+      border-radius: 3px;
+      background-color: white;
+      border-color:#55A845 ;
+      font-size: 16px;
+    }
+
+    .search endTime{
+      position:absolute;
+      width:100px;
+      margin-left:320px;
+      bottom:0px;
+      top:10px;
+      color:#333333;
+      text-align: center
+    }
+
+    .search endTimeBtn{
+      position:absolute;
+      width:200px;
+      margin-left:425px;
+      bottom:0px;
+      top:5px;
+      text-align: center;
+      color:#55A845;
+      border-radius: 3px;
+      border-color:#55A845 ;
+      background-color: white;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+<div class="nav">
+  <img src="../imgs/nav.jpg">
+  <middle>普通商品</middle>
+  <left onclick="backAction()">返回</left>
+</div>
+<div class="search">
+  <div class="col-sm-6">
+    <div class="form-group" style="display: flex;">
+      <label class="col-sm-4 control-label">开始时间：</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control user-age" id="start-date" readonly  placeholder="开始时间">
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group" style="display: flex;">
+      <label class="col-sm-4 control-label">截止时间：</label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control user-age" id="end-date" readonly  placeholder="截止时间">
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>-->
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>-->
+<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>-->
+<!--<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>-->
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+    initLoading();
+    // 初始化获取统计数据
+    searchDate();
+    // 配置时间控件
+    $.fn.datepicker.dates['cn'] = {   //切换为中文显示
+      days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
+      daysMin: ["日", "一", "二", "三", "四", "五", "六", "七"],
+      months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      today: "今天",
+      clear: "清除"
+    };
+    //初始化时间控件
+    $('.user-age').datepicker({
+      autoclose: true, //自动关闭
+      beforeShowDay: $.noop,    //在显示日期之前调用的函数
+      calendarWeeks: false,     //是否显示今年是第几周
+      clearBtn: false,          //显示清除按钮
+      daysOfWeekDisabled: [],   //星期几不可选
+      endDate: Infinity,        //日历结束日期
+      forceParse: true,         //是否强制转换不符合格式的字符串
+      format: 'yyyy-mm-dd',     //日期格式
+      keyboardNavigation: true, //是否显示箭头导航
+      language: 'cn',           //语言
+      minViewMode: 0,
+      orientation: "auto",      //方向
+      rtl: false,
+      startDate: -Infinity,     //日历开始日期
+      startView: 0,             //开始显示
+      todayBtn: false,          //今天按钮
+      todayHighlight: false,    //今天高亮
+      weekStart: 0              //星期几是开始
+    });
+  });
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+
+  //获取统计数据
+  function searchDate () {
+    var startDate = timeStamp($('#start-date').val());
+    var endDate = timeStamp($('#end-date').val());
+    // showLoading("加载中...");
+    // $.ajax({
+    //   type: 'GET',
+    //   url:"/goods/base",
+    //   data:{
+    //     startTime : startDate,
+    //     endTime : endDate
+    //   },
+    //   success : function (res) {
+    //     hideLoading();
+    //     if (res.data) {
+    //       console.log(res.data);
+    //       renderEcharts(res.data);
+    //     }
+    //   },
+    //   error: function () {
+    //     hideLoading();
+    //     $("#info").removeAttr("hidden");
+    //   }
+    // });
+  }
+
+  // 转换日期至时间戳
+  function timeStamp (val) {
+    if (val) {
+      return new Date(val).getTime();
+    } else {
+      return '';
+    }
+  }
+
+</script>
+
+<script>
+  function backAction() {
+    window.location.href = "NormalGoodsStatistics.html"
+  }
+</script>
+</body>
+</html>

@@ -24,7 +24,10 @@
 <left onclick="backAction()">返回</left>
   <right onclick="normalGoodsDetail()">查看详情</right>
 </div>
-
+<div style="display: flex">
+  <div style="width: 50%">最畅销商品</div>
+  <div style="width: 50%">最不畅销商品</div>
+</div>
 <div style="display: flex">
   <div id="container1" style="height: 88vh;width:50%"></div>
   <div id="container2" style="height: 88vh;width:50%"></div>
@@ -42,10 +45,90 @@
 <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
-  renderEcharts1();
-  renderEcharts2();
+  initLoading();
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+  requestGoodData();
 
-  function renderEcharts1 () {
+  //获取统计数据
+  function requestGoodData () {
+    showLoading("加载中...");
+    $.ajax({
+      type: 'GET',
+      url:"/goods/sale/best",
+      data:{
+        goodType : 1
+      },
+      success : function (res) {
+        if (res.data) {
+          console.log(res.data);
+          requestWorstData();
+          configGoodChart(res.data);
+        }
+      },
+      error: function () {
+        requestWorstData();
+        $("#info").removeAttr("hidden");
+      }
+    });
+  }
+
+  //获取统计数据
+  function requestWorstData () {
+    showLoading("加载中...");
+    $.ajax({
+      type: 'GET',
+      url:"/goods/sale/worst",
+      data:{
+        goodType : 1
+      },
+      success : function (res) {
+        hideLoading();
+        if (res.data) {
+          console.log(res.data);
+          configWorstChart(res.data);
+        }
+      },
+      error: function () {
+        hideLoading();
+        $("#info").removeAttr("hidden");
+      }
+    });
+  }
+
+  function configGoodChart (statisticData) {
+    var goodsName = []; // X轴title
+    var storeNumber = []; // 库存
+    var saleNumber = []; // 销量
+    for (var i=0; i<statisticData.length; i++) {
+      goodsName.push(statisticData[i].goodsName);
+      storeNumber.push(statisticData[i].storeNumber);
+      saleNumber.push(statisticData[i].saleNumber);
+    }
+
+
     var dom = document.getElementById("container1");
     var myChart = echarts.init(dom);
     var app = {};
@@ -128,7 +211,7 @@
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
         formatter: '{c}  {name|{a}}',
-        fontSize: 16,
+        fontSize: 14,
         rich: {
           name: {
             textBorderColor: '#fff'
@@ -146,14 +229,14 @@
         }
       },
       legend: {
-        data: ['销量', '销售金额', '订单数量']
+        data: ['库存','销量']
       },
       calculable: true,
       xAxis: [
         {
           type: 'category',
           axisTick: {show: false},
-          data: ['销量', '销售金额', '订单数量']
+          data: goodsName
         }
       ],
       yAxis: [
@@ -163,23 +246,17 @@
       ],
       series: [
         {
-          name: '销量',
+          name: '库存',
           type: 'bar',
           barGap: 0,
           label: labelOption,
-          data: ['111','222','333']
+          data: storeNumber
         },
         {
-          name: '销售金额',
+          name: '销量',
           type: 'bar',
           label: labelOption,
-          data: ['111','222','333']
-        },
-        {
-          name: '订单数量',
-          type: 'bar',
-          label: labelOption,
-          data: ['111','222','333']
+          data: saleNumber
         }
       ]
     };
@@ -188,7 +265,17 @@
     }
   }
 
-  function renderEcharts2 () {
+  function configWorstChart (statisticData) {
+    var goodsName = []; // X轴title
+    var storeNumber = []; // 库存
+    var saleNumber = []; // 销量
+    for (var i=0; i<statisticData.length; i++) {
+      goodsName.push(statisticData[i].goodsName);
+      storeNumber.push(statisticData[i].storeNumber);
+      saleNumber.push(statisticData[i].saleNumber);
+    }
+
+
     var dom = document.getElementById("container2");
     var myChart = echarts.init(dom);
     var app = {};
@@ -271,7 +358,7 @@
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
         formatter: '{c}  {name|{a}}',
-        fontSize: 16,
+        fontSize: 14,
         rich: {
           name: {
             textBorderColor: '#fff'
@@ -289,14 +376,14 @@
         }
       },
       legend: {
-        data: ['销量', '销售金额', '订单数量']
+        data: ['库存','销量']
       },
       calculable: true,
       xAxis: [
         {
           type: 'category',
           axisTick: {show: false},
-          data: ['销量', '销售金额', '订单数量']
+          data: goodsName
         }
       ],
       yAxis: [
@@ -306,23 +393,17 @@
       ],
       series: [
         {
-          name: '销量',
+          name: '库存',
           type: 'bar',
           barGap: 0,
           label: labelOption,
-          data: ['323','232','431']
+          data: storeNumber
         },
         {
-          name: '销售金额',
+          name: '销量',
           type: 'bar',
           label: labelOption,
-          data: ['111','222','333']
-        },
-        {
-          name: '订单数量',
-          type: 'bar',
-          label: labelOption,
-          data: ['323','232','159']
+          data: saleNumber
         }
       ]
     };
@@ -338,6 +419,7 @@
     window.location.href = "GoodsStatisticsBar.html"
   }
   function normalGoodsDetail() {
+    window.location.href = "NormalGoodsDetailStatistics.html"
   }
 </script>
 </body>
