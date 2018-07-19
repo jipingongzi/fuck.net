@@ -67,6 +67,48 @@
       background-color: white;
       font-size: 16px;
     }
+    .header{
+      position: fixed;
+      left: 0;
+      margin-top: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      width: 100%;
+      height: 40px;
+    }
+    .header a{
+      position: relative;
+      display: block;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+      line-height: 40px;
+      text-align: center;
+      color: #666;
+      background-color: #eee;
+      text-decoration: none;
+    }
+    .header a:before{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 1px;
+      height: 20px;
+      background-color: #ccc;
+    }
+    .header a:first-child:before{
+      display: none;
+    }
+    .content{
+      width: 100%;
+      height: 400px;
+      background-color: red;
+    }
+
   </style>
 </head>
 <body>
@@ -94,24 +136,26 @@
   </div>
   <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
 </div>
-
-<script src="../js/jquery.min.js"></script>
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>-->
-<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>-->
-<!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>-->
-<!--<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>-->
+<div class="header">
+  <a class="item">序号</a>
+  <a class="item">商品名称</a>
+  <a class="item">商品分类</a>
+  <a class="item">商品编号</a>
+  <a class="item">价格</a>
+  <a class="item">重量</a>
+  <a class="item">商品已售数量</a>
+  <a class="item">商品已售金额</a>
+  <a class="item">当前库存</a>
+</div>
+<div style="background-color: red;bottom: 0px;margin-top: 0px"></div>
+<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
   $(function () {
-    initLoading();
     // 初始化获取统计数据
-    searchDate();
+    searchDate(0,20);
     // 配置时间控件
     $.fn.datepicker.dates['cn'] = {   //切换为中文显示
       days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
@@ -170,29 +214,31 @@
   }
 
   //获取统计数据
-  function searchDate () {
+  function searchDate (pageNumber,pageSize) {
     var startDate = timeStamp($('#start-date').val());
     var endDate = timeStamp($('#end-date').val());
-    // showLoading("加载中...");
-    // $.ajax({
-    //   type: 'GET',
-    //   url:"/goods/base",
-    //   data:{
-    //     startTime : startDate,
-    //     endTime : endDate
-    //   },
-    //   success : function (res) {
-    //     hideLoading();
-    //     if (res.data) {
-    //       console.log(res.data);
-    //       renderEcharts(res.data);
-    //     }
-    //   },
-    //   error: function () {
-    //     hideLoading();
-    //     $("#info").removeAttr("hidden");
-    //   }
-    // });
+    showLoading("加载中...");
+    $.ajax({
+      type: 'GET',
+      url:"/goods/list",
+      data:{
+        pageNumber:pageNumber,
+        pageSize:pageSize,
+        goodType : 1,
+        startTime : startDate,
+        endTime : endDate
+      },
+      success : function (res) {
+        hideLoading();
+        if (res.data) {
+          console.log(res.data);
+        }
+      },
+      error: function () {
+        hideLoading();
+        $("#info").removeAttr("hidden");
+      }
+    });
   }
 
   // 转换日期至时间戳
@@ -203,7 +249,6 @@
       return '';
     }
   }
-
 </script>
 
 <script>
