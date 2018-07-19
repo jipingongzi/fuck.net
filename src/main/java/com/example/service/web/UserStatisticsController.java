@@ -82,8 +82,8 @@ public class UserStatisticsController {
      * 代扣总金额（元） 代扣充值金额（元） 代扣补贴金额（元）
      */
     @RequestMapping("/detail")
-    public RestResponse detail(@RequestParam(value = "userId")String userId){
-        return RestResponse.buildResponse("");
+    public RestResponse detail(@RequestParam(value = "userId")long userId){
+        return RestResponse.buildResponse(userStatistics.getUserDetail(userId));
     }
 
     /**

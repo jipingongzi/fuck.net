@@ -202,7 +202,7 @@ public class UserStatisticsImpl implements IUserStatistics {
         Map<String,Object> detailResult = jdbcTemplate.queryForList(detailSql,userId).get(0);
         String userAccount = detailResult.get("Phone").toString();
         String siteName = detailResult.get("SupplyName").toString();
-        String serviceName = detailResult.get("ServiceName").toString();
+        String serviceName = detailResult.get("ServiceName") != null ? detailResult.get("ServiceName").toString() : "";
 
         double amountTotal = Double.valueOf(detailResult.get("TotalPrice").toString());
         double amountRecharge = Double.valueOf(detailResult.get("Balance").toString());
