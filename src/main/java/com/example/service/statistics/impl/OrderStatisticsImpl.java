@@ -75,10 +75,12 @@ public class OrderStatisticsImpl implements IOrderStatistics {
             String orderNo = i.get("OrderNo").toString();
             String userAccount = i.get("Phone").toString();
             String siteName = i.get("Name").toString();
-            StringBuilder supplyName = new StringBuilder("");
+            StringBuilder supplyName = new StringBuilder();
             farmResult.forEach(f -> {
-                if(orderId.equals(f.get("OrderID").toString()) && supplyName.toString().contains(f.get("Name").toString())){
-                    supplyName.append(f.get("Name").toString() + " ");
+                if(orderId.equals(f.get("OrderID").toString())){
+                    if(f.get("Name") != null && !supplyName.toString().contains(f.get("Name").toString())){
+                        supplyName.append(f.get("Name").toString() + " ");
+                    }
                 }
             });
             int productNumber = Integer.valueOf(i.get("GoodsAmount").toString());
