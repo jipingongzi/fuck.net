@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,24 +47,27 @@ public class OrderStatisticsImpl implements IOrderStatistics {
                 "LEFT JOIN YUNYI_Member m ON o.MemberID = m.ID\n" +
                 "WHERE o.State = 2 AND m.ID = ?");
         if(pickStartTime != null){
-            baseSql.append(" AND o.PickupDate >= " + DateUtil.timeStamp2Date(pickStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            baseSql.append(" AND o.PickupDate >= '" + DateUtil.timeStamp2Date(pickStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(pickEndTime != null){
-            baseSql.append(" AND o.PickupDate <= " + DateUtil.timeStamp2Date(pickEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            baseSql.append(" AND o.PickupDate <= '" + DateUtil.timeStamp2Date(pickEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(orderStartTime != null){
-            baseSql.append(" AND o.InsertTime >= " + DateUtil.timeStamp2Date(orderStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            baseSql.append(" AND o.InsertTime >= '" + DateUtil.timeStamp2Date(orderStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(orderEndTime != null){
-            baseSql.append(" AND o.InsertTime <= " + DateUtil.timeStamp2Date(orderEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            baseSql.append(" AND o.InsertTime <= '" + DateUtil.timeStamp2Date(orderEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         List<Map<String,Object>> result = jdbcTemplate.queryForList(getPageQuery(baseSql.toString(),"InsertTime",pageSize,pageNumber),userId);
+        if(CollectionUtils.isEmpty(result)){
+            return Collections.EMPTY_LIST;
+        }
         List<String> orderIds = result.stream().map(i -> i.get("ID").toString()).collect(Collectors.toList());
 
         String farmSql = "SELECT DISTINCT f.Name ,og.OrderID\n" +
                 "FROM YUNYI_OrderGoods og \n" +
                 "LEFT JOIN YUNYI_Farm f ON f.ID = og.FarmID\n" +
-                "WHERE og.OrderID in (" + orderIds.stream().map(i -> "'" + i + ",").collect(Collectors.joining(",")) + ")";
+                "WHERE og.OrderID in (" + orderIds.stream().map(i -> "'" + i + "'").collect(Collectors.joining(",")) + ")";
         List<Map<String,Object>> farmResult = jdbcTemplate.queryForList(farmSql);
 
         return result.stream().map(i -> {
