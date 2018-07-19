@@ -88,17 +88,13 @@ public class UserStatisticsImpl implements IUserStatistics {
             String time = item.get("year").toString() + "-" + item.get("mouth");
             int number = Integer.valueOf(item.get("number").toString());
             double amount = Double.valueOf(item.get("amount").toString());
-            int userNumber = 0;
             for (Map<String,Object> u : userResult) {
                 String userTime = u.get("year").toString() + "-" + u.get("mouth").toString();
-                if(userTime.equals(time)){
-                    userNumber = Integer.valueOf(u.get("number").toString());
-                    if(!userTime.equals("2017-12")){
-                        userNumber += initUserCount;
-                    }
+                if(userTime.equals(time) && !userTime.equals("2017-12")){
+                    initUserCount += Integer.valueOf(u.get("number").toString());
                 }
             }
-            result.add(new UserMouthDto(time,userNumber,number,amount));
+            result.add(new UserMouthDto(time,initUserCount,number,amount));
         }
         return result;
     }
