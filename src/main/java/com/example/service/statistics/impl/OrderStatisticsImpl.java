@@ -107,18 +107,18 @@ public class OrderStatisticsImpl implements IOrderStatistics {
                 "FROM YUNYI_Order o\n" +
                 "LEFT JOIN YUNYI_Supply s ON o.SupplyID = s.ID\n" +
                 "LEFT JOIN YUNYI_Member m ON o.MemberID = m.ID\n" +
-                "WHERE o.State = 2 AND m.ID = ?)");
+                "WHERE o.State = 2 AND m.ID = ? ");
         if(pickStartTime != null){
-            sql.append(" AND o.PickupDate >= " + DateUtil.timeStamp2Date(pickStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            sql.append(" AND o.PickupDate >= '" + DateUtil.timeStamp2Date(pickStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(pickEndTime != null){
-            sql.append(" AND o.PickupDate <= " + DateUtil.timeStamp2Date(pickEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            sql.append(" AND o.PickupDate <= '" + DateUtil.timeStamp2Date(pickEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(orderStartTime != null){
-            sql.append(" AND o.InsertTime >= " + DateUtil.timeStamp2Date(orderStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            sql.append(" AND o.InsertTime >= '" + DateUtil.timeStamp2Date(orderStartTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(orderEndTime != null){
-            sql.append(" AND o.InsertTime <= " + DateUtil.timeStamp2Date(orderEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
+            sql.append(" AND o.InsertTime <= '" + DateUtil.timeStamp2Date(orderEndTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         List<Map<String,Object>> result = jdbcTemplate.queryForList(sql.toString(),userId);
         if(CollectionUtils.isEmpty(result)){
