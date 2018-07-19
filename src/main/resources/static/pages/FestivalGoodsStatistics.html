@@ -7,101 +7,31 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-  <title>商品统计</title>
+  <title>节日商品统计</title>
 
   <style>
     .nav{position:relative; width:100%;height: 10vh}
     .nav img{width:100%;}
     .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
     .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
-
-    .search{
-      width: 800px;
-      line-height: 38px;
-      display: flex;
-    }
-    .search startTime{
-      position:absolute;
-      width:100px;
-      left:10px;
-      bottom:0px;
-      top:10px;
-      color:#333333;
-      text-align: center
-    }
-
-    .search startTimeBtn{
-      position:absolute;
-      width:200px;
-      margin-left:115px;
-      bottom:0px;
-      top:5px;
-      text-align: center;
-      color:#55A845;
-      border-radius: 3px;
-      background-color: white;
-      border-color:#55A845 ;
-      font-size: 16px;
-    }
-
-    .search endTime{
-      position:absolute;
-      width:100px;
-      margin-left:320px;
-      bottom:0px;
-      top:10px;
-      color:#333333;
-      text-align: center
-    }
-
-    .search endTimeBtn{
-      position:absolute;
-      width:200px;
-      margin-left:425px;
-      bottom:0px;
-      top:5px;
-      text-align: center;
-      color:#55A845;
-      border-radius: 3px;
-      border-color:#55A845 ;
-      background-color: white;
-      font-size: 16px;
-    }
+    .nav right{position:absolute;width:200px;right:10px;bottom:0px;top:10px;color: white;text-align: right}
   </style>
 </head>
 <body>
 <div class="nav">
-  <img src="../imgs/nav.jpg">
-  <middle>商品统计</middle>
-  <left onclick="backAction()">返回</left>
+<img src="../imgs/nav.jpg">
+<middle>节日商品统计</middle>
+<left onclick="backAction()">返回</left>
+  <right onclick="normalGoodsDetail()">查看详情</right>
 </div>
-<div class="search">
-  <div class="col-sm-6">
-    <div class="form-group" style="display: flex;">
-      <label class="col-sm-4 control-label">开始时间：</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control user-age" id="start-date" readonly  placeholder="开始时间">
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="form-group" style="display: flex;">
-      <label class="col-sm-4 control-label">截止时间：</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control user-age" id="end-date" readonly  placeholder="截止时间">
-      </div>
-    </div>
-  </div>
-  <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
+<div style="display: flex">
+  <div style="width: 50%">最畅销商品</div>
+  <div style="width: 50%">最不畅销商品</div>
 </div>
-
-<div>
-  <span style="margin-left: 10px"><button class="btn btn-primary" style="height: 35px;background: teal;" onclick="normalGoods()">普通商品</button></span>
-  <span><button class="btn btn-primary" style="height: 35px;background: teal;" onclick="festivalGoods()">节日商品</button></span>
-  <span><button class="btn btn-primary" style="height: 35px;background: teal;" onclick="procurementGoods()">代购商品</button></span>
+<div style="display: flex">
+  <div id="container1" style="height: 88vh;width:50%"></div>
+  <div id="container2" style="height: 88vh;width:50%"></div>
 </div>
-
-<div id="container" style="height: 80vh"></div>
 <script src="../js/jquery.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
@@ -115,42 +45,7 @@
 <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
-  $(function () {
-    initLoading();
-    // 初始化获取统计数据
-    searchDate();
-    // 配置时间控件
-    $.fn.datepicker.dates['cn'] = {   //切换为中文显示
-      days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-      daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
-      daysMin: ["日", "一", "二", "三", "四", "五", "六", "七"],
-      months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-      monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-      today: "今天",
-      clear: "清除"
-    };
-    //初始化时间控件
-    $('.user-age').datepicker({
-      autoclose: true, //自动关闭
-      beforeShowDay: $.noop,    //在显示日期之前调用的函数
-      calendarWeeks: false,     //是否显示今年是第几周
-      clearBtn: false,          //显示清除按钮
-      daysOfWeekDisabled: [],   //星期几不可选
-      endDate: Infinity,        //日历结束日期
-      forceParse: true,         //是否强制转换不符合格式的字符串
-      format: 'yyyy-mm-dd',     //日期格式
-      keyboardNavigation: true, //是否显示箭头导航
-      language: 'cn',           //语言
-      minViewMode: 0,
-      orientation: "auto",      //方向
-      rtl: false,
-      startDate: -Infinity,     //日历开始日期
-      startView: 0,             //开始显示
-      todayBtn: false,          //今天按钮
-      todayHighlight: false,    //今天高亮
-      weekStart: 0              //星期几是开始
-    });
-  });
+  initLoading();
   function initLoading(){
     $("body").append("<!-- loading -->" +
       "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
@@ -175,24 +70,45 @@
   function hideLoading(){
     $("#loading").modal("hide");
   }
+  requestGoodData();
 
   //获取统计数据
-  function searchDate () {
-    var startDate = timeStamp($('#start-date').val());
-    var endDate = timeStamp($('#end-date').val());
+  function requestGoodData () {
     showLoading("加载中...");
     $.ajax({
       type: 'GET',
-      url:"/goods/base",
+      url:"/goods/sale/best",
       data:{
-        startTime : startDate,
-        endTime : endDate
+        goodType : 2
+      },
+      success : function (res) {
+        if (res.data) {
+          console.log(res.data);
+          requestWorstData();
+          configGoodChart(res.data);
+        }
+      },
+      error: function () {
+        requestWorstData();
+        $("#info").removeAttr("hidden");
+      }
+    });
+  }
+
+  //获取统计数据
+  function requestWorstData () {
+    showLoading("加载中...");
+    $.ajax({
+      type: 'GET',
+      url:"/goods/sale/worst",
+      data:{
+        goodType : 2
       },
       success : function (res) {
         hideLoading();
         if (res.data) {
           console.log(res.data);
-          renderEcharts(res.data);
+          configWorstChart(res.data);
         }
       },
       error: function () {
@@ -202,28 +118,18 @@
     });
   }
 
-  // 转换日期至时间戳
-  function timeStamp (val) {
-    if (val) {
-      return new Date(val).getTime();
-    } else {
-      return '';
-    }
-  }
-
-  function renderEcharts (statisticData) {
-    var goodType = []; // X轴title
-    var orderNumber = []; // 订单数量
-    var saleAmount = []; // 销售金额
-    var saleNumber = []; // 销售数量
+  function configGoodChart (statisticData) {
+    var goodsName = []; // X轴title
+    var storeNumber = []; // 库存
+    var saleNumber = []; // 销量
     for (var i=0; i<statisticData.length; i++) {
-      goodType.push(statisticData[i].goodType);
-      orderNumber.push(statisticData[i].orderNumber);
-      saleAmount.push(statisticData[i].saleAmount);
+      goodsName.push(statisticData[i].goodsName);
+      storeNumber.push(statisticData[i].storeNumber);
       saleNumber.push(statisticData[i].saleNumber);
     }
 
-    var dom = document.getElementById("container");
+
+    var dom = document.getElementById("container1");
     var myChart = echarts.init(dom);
     var app = {};
     option = null;
@@ -305,7 +211,7 @@
         verticalAlign: app.config.verticalAlign,
         rotate: app.config.rotate,
         formatter: '{c}  {name|{a}}',
-        fontSize: 16,
+        fontSize: 14,
         rich: {
           name: {
             textBorderColor: '#fff'
@@ -323,14 +229,14 @@
         }
       },
       legend: {
-        data: ['销量', '销售金额', '订单数量']
+        data: ['库存','销量']
       },
       calculable: true,
       xAxis: [
         {
           type: 'category',
           axisTick: {show: false},
-          data: goodType
+          data: goodsName
         }
       ],
       yAxis: [
@@ -340,23 +246,17 @@
       ],
       series: [
         {
-          name: '销量',
+          name: '库存',
           type: 'bar',
           barGap: 0,
           label: labelOption,
+          data: storeNumber
+        },
+        {
+          name: '销量',
+          type: 'bar',
+          label: labelOption,
           data: saleNumber
-        },
-        {
-          name: '销售金额',
-          type: 'bar',
-          label: labelOption,
-          data: saleAmount
-        },
-        {
-          name: '订单数量',
-          type: 'bar',
-          label: labelOption,
-          data: orderNumber
         }
       ]
     };
@@ -364,20 +264,162 @@
       myChart.setOption(option, true);
     }
   }
+
+  function configWorstChart (statisticData) {
+    var goodsName = []; // X轴title
+    var storeNumber = []; // 库存
+    var saleNumber = []; // 销量
+    for (var i=0; i<statisticData.length; i++) {
+      goodsName.push(statisticData[i].goodsName);
+      storeNumber.push(statisticData[i].storeNumber);
+      saleNumber.push(statisticData[i].saleNumber);
+    }
+
+
+    var dom = document.getElementById("container2");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var posList = [
+      'left', 'right', 'top', 'bottom',
+      'inside',
+      'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+      'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+      rotate: {
+        min: -90,
+        max: 90
+      },
+      align: {
+        options: {
+          left: 'left',
+          center: 'center',
+          right: 'right'
+        }
+      },
+      verticalAlign: {
+        options: {
+          top: 'top',
+          middle: 'middle',
+          bottom: 'bottom'
+        }
+      },
+      position: {
+        options: echarts.util.reduce(posList, function (map, pos) {
+          map[pos] = pos;
+          return map;
+        }, {})
+      },
+      distance: {
+        min: 0,
+        max: 100
+      }
+    };
+
+    app.config = {
+      rotate: 90,
+      align: 'left',
+      verticalAlign: 'middle',
+      position: 'insideBottom',
+      distance: 15,
+      onChange: function () {
+        var labelOption = {
+          normal: {
+            rotate: app.config.rotate,
+            align: app.config.align,
+            verticalAlign: app.config.verticalAlign,
+            position: app.config.position,
+            distance: app.config.distance
+          }
+        };
+        myChart.setOption({
+          series: [{
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }, {
+            label: labelOption
+          }]
+        });
+      }
+    };
+
+
+    var labelOption = {
+      normal: {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: '{c}  {name|{a}}',
+        fontSize: 14,
+        rich: {
+          name: {
+            textBorderColor: '#fff'
+          }
+        }
+      }
+    };
+
+    option = {
+      color: ['rgb(0, 150, 136)', 'rgba(229, 160, 28, 0.97)', '#e5323e'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      legend: {
+        data: ['库存','销量']
+      },
+      calculable: true,
+      xAxis: [
+        {
+          type: 'category',
+          axisTick: {show: false},
+          data: goodsName
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
+      series: [
+        {
+          name: '库存',
+          type: 'bar',
+          barGap: 0,
+          label: labelOption,
+          data: storeNumber
+        },
+        {
+          name: '销量',
+          type: 'bar',
+          label: labelOption,
+          data: saleNumber
+        }
+      ]
+    };
+    if (option && typeof option === "object") {
+      myChart.setOption(option, true);
+    }
+  }
+
 </script>
 
 <script>
-  function normalGoods() {
-    window.location.href = "NormalGoodsStatistics.html"
-  }
-  function festivalGoods() {
-    window.location.href = "FestivalGoodsStatistics.html"
-  }
-  function procurementGoods() {
-      window.location.href = "AgentGoodsStatistics.html"
-  }
   function backAction() {
-    window.location.href = "nav.html"
+    window.location.href = "GoodsStatisticsBar.html"
+  }
+  function normalGoodsDetail() {
+      //TODO
   }
 </script>
 </body>
