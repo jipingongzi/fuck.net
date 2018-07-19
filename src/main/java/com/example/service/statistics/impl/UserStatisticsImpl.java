@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +54,8 @@ public class UserStatisticsImpl implements IUserStatistics {
     @Override
     public List<UserMouthDto> userMouth(Long startTime, Long endTime, long serviceId) {
         List<UserMouthDto> result = new ArrayList<>();
-        int initUserCount = 216;
+        //初始用户量 2017-12 开始
+        int userCount = 216;
         StringBuilder orderSql = new StringBuilder("SELECT YEAR(o.InsertTime) AS year,MONTH(o.InsertTime) AS mouth,COUNT(o.ID) AS number,SUM(o.TotalPrice) AS amount \n" +
                 "FROM YUNYI_Order o\n" +
                 "LEFT JOIN YUNYI_Member m ON o.MemberID = m.ID\n" +
@@ -62,10 +64,10 @@ public class UserStatisticsImpl implements IUserStatistics {
             orderSql.append(" AND m.ServiceId = " + serviceId);
         }
         if(startTime != null){
-            orderSql.append(" AND o.InsertTime >= '" + DateUtil.timeStamp2Date(startTime,"yyyy-MM-dd HH:mm:ss") + ", ");
+            orderSql.append(" AND o.InsertTime >= '" + DateUtil.timeStamp2Date(startTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(endTime != null){
-            orderSql.append(" AND o.InsertTime <= '" + DateUtil.timeStamp2Date(endTime,"yyyy-MM-dd HH:mm:ss") + ", ");
+            orderSql.append(" AND o.InsertTime <= '" + DateUtil.timeStamp2Date(endTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         orderSql.append(" GROUP BY YEAR(o.InsertTime),MONTH(o.InsertTime) ORDER BY year , mouth ");
         StringBuilder userSql = new StringBuilder("SELECT YEAR(m.InsertTime) AS year,MONTH(m.InsertTime) AS mouth ,COUNT(ID) AS number" +
@@ -74,27 +76,29 @@ public class UserStatisticsImpl implements IUserStatistics {
         if(serviceId != 0){
             userSql.append(" AND m.ServiceId = " + serviceId);
         }
-        if(startTime != null){
-            userSql.append(" AND m.InsertTime >= '" + DateUtil.timeStamp2Date(startTime,"yyyy-MM-dd HH:mm:ss") + ", ");
-        }
-        if(endTime != null){
-            userSql.append(" AND m.InsertTime <= '" + DateUtil.timeStamp2Date(endTime,"yyyy-MM-dd HH:mm:ss") + ", ");
-        }
         userSql.append(" GROUP BY YEAR(m.InsertTime),MONTH(m.InsertTime) ORDER BY year , mouth;");
         List<Map<String,Object>> orderResult = jdbcTemplate.queryForList(orderSql.toString());
         List<Map<String,Object>> userResult = jdbcTemplate.queryForList(userSql.toString());
+        //月份与用户数映射 key:yyyy-MM value:userCount
+        Map<String,Integer> userCountTimeMap = new HashMap<>();
+        for (int i = 0; i < userResult.size(); i++) {
+            Map<String,Object> u = userResult.get(i);
+            String userTime = u.get("year").toString() + "-" + u.get("mouth").toString();
+            if(userTime.equals("2017-12")){
+                userCount = 0;
+            }
+            userCount +=Integer.valueOf(u.get("number").toString());
+            userCountTimeMap.put(userTime,userCount);
+        }
+        int lastUserCount = 0;
         for (int i = 0; i < orderResult.size(); i++) {
             Map<String,Object> item = orderResult.get(i);
             String time = item.get("year").toString() + "-" + item.get("mouth");
             int number = Integer.valueOf(item.get("number").toString());
             double amount = Double.valueOf(item.get("amount").toString());
-            for (Map<String,Object> u : userResult) {
-                String userTime = u.get("year").toString() + "-" + u.get("mouth").toString();
-                if(userTime.equals(time) && !userTime.equals("2017-12")){
-                    initUserCount += Integer.valueOf(u.get("number").toString());
-                }
-            }
-            result.add(new UserMouthDto(time,initUserCount,number,amount));
+            int userNumber = userCountTimeMap.get(time) != null ? userCountTimeMap.get(time) : lastUserCount;
+            lastUserCount = userNumber;
+            result.add(new UserMouthDto(time,userNumber,number,amount));
         }
         return result;
     }
