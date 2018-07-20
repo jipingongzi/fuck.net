@@ -112,8 +112,8 @@
 <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
-    initLoading();
     $(function () {
+        initLoading();
         // 配置时间控件
         $.fn.datepicker.dates['cn'] = {   //切换为中文显示
             days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
@@ -184,22 +184,24 @@
             "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
             "</div>" +
             "<div id='loadingText' class='modal-body'>" +
-            "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
-            "处理中，请稍候。。。" +
+            "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>加载中,请稍后</span>"+
             "</div>" +
             "</div>" +
             "</div>" +
             "</div>"
         );
+        requestBaseUserStatistics("","");
     }
 
     function showLoading(text){
-        $("#loadingText").html(text);
+        // $("#loadingText").html(text);
         $("#loading").modal("show");
+        // $('#loading').show();
     }
 
     function hideLoading(){
         $("#loading").modal("hide");
+        // $('#loading').hide();
     }
 
     function getCookie(c_name)
@@ -220,31 +222,32 @@
 
     //获取统计数据
     function requestBaseUserStatistics (startDate ,endDate) {
-        $.ajax({
-            type: 'GET',
-            url:"/user/base",
-            data:{
-                serviceId : getCookie("serviceId"),
-                startTime : startDate,
-                endTime : endDate
-            },
-            success : function (res) {
-                hideLoading();
-                if (res.data) {
-                    console.log(res.data);
-                    lineEcharts(res.data);
+        showLoading("加载中...");
+        setTimeout(function () {
+            $.ajax({
+                type: 'GET',
+                url:"/user/base",
+                data:{
+                    serviceId : getCookie("serviceId"),
+                    startTime : startDate,
+                    endTime : endDate
+                },
+                success : function (res) {
+                    if (res.data) {
+                        requestPowerfulUsers(startDate ,endDate);
+                        lineEcharts(res.data);
+                    }
+                },
+                error: function () {
+                    hideLoading();
+                    $("#info").removeAttr("hidden");
                 }
-            },
-            error: function () {
-                hideLoading();
-                $("#info").removeAttr("hidden");
-            }
-        });
+            });
+        }, 500);
     }
 
     //获取统计数据
     function requestPowerfulUsers (startDate ,endDate) {
-        showLoading("加载中...");
         $.ajax({
             type: 'GET',
             url:"/user/order/number/most",
@@ -254,14 +257,14 @@
                 endTime : endDate
             },
             success : function (res) {
+                hideLoading();
                 if (res.data) {
                     console.log(res.data);
-                    requestBaseUserStatistics(startDate,endDate);
                     ringEcharts(res.data);
                 }
             },
             error: function () {
-                requestBaseUserStatistics(startDate,endDate);
+                hideLoading();
                 $("#info").removeAttr("hidden");
             }
         });
@@ -404,8 +407,6 @@
           myChart.setOption(option, true);
       }
   }
-
-    requestPowerfulUsers("","");
 </script>
 
 <script>
@@ -438,7 +439,7 @@
 
 
   function searchDate() {
-      requestPowerfulUsers(timeStamp(getStartDateValue()),timeStamp(getEndDateValue()));
+      requestBaseUserStatistics(timeStamp(getStartDateValue()),timeStamp(getEndDateValue()));
   }
 </script>
 </body>
