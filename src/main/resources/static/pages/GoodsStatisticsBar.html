@@ -93,6 +93,7 @@
     </div>
   </div>
   <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
+  <button class="btn btn-primary" style="height: 38px;margin-left: 20px;" onclick="resetDate()">重置</button>
 </div>
 
 <div>
@@ -200,6 +201,11 @@
         $("#info").removeAttr("hidden");
       }
     });
+  }
+
+  function resetDate () {
+    $('#start-date').val("");
+    $('#end-date').val("");
   }
 
   // 转换日期至时间戳

@@ -14,7 +14,7 @@
 
 
 
-  <title>普通商品</title>
+  <title>节日商品</title>
 
   <style>
     * { touch-action: none; }
@@ -127,7 +127,7 @@
 <body>
 <div class="nav">
   <img src="../imgs/nav.jpg">
-  <middle>普通商品</middle>
+  <middle>节日商品</middle>
   <left onclick="backAction()">返回</left>
 </div>
 <div class="search">
@@ -272,7 +272,7 @@
         data:{
           pageNumber:pageNumber,
           pageSize:pageSize,
-          goodType : 1,
+          goodType : 2,
           startTime : startDate,
           endTime : endDate
         },
@@ -337,7 +337,7 @@
 
 <script>
   function backAction() {
-    window.location.href = "NormalGoodsStatistics.html"
+    window.location.href = "FestivalGoodsStatistics.html"
   }
 </script>
 </body>
