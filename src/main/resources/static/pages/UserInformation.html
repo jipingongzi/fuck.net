@@ -7,6 +7,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+  <script src="../js/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+
+  <!-- Latest compiled and minified Locales -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
   <title>用户信息</title>
 
   <style>
@@ -54,17 +68,21 @@
   <button class="btn btn-primary" style="height: 38px;margin-left: 10px;" onclick="resetDate()">重置</button>
 </div>
 
-<div id="container" style="height: 80vh"></div>
-<script src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<table id="table"></table>
+
+
+
+
 <script type="text/javascript">
+  var page=1,row=10;
+  var tableData;
   $(function () {
     initLoading();
     // 初始化获取统计数据
     searchDate();
     // 配置时间控件
+
     $.fn.datepicker.dates['cn'] = {   //切换为中文显示
       days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
       daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
@@ -95,6 +113,33 @@
       todayHighlight: false,    //今天高亮
       weekStart: 0              //星期几是开始
     });
+      getUserList(page,row)
+
+
+
+      $('#table').bootstrapTable({
+          pagination: true,
+          pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+          pageSize: row,
+          columns: [
+             {field: 'Phone', title: '用户账号'},
+             {field: 'SupplyName', title: '所属服务处'},
+             {field: 'WithholdTotal', title: '余额总额'},
+             {field: 'WithholdSubsidyTotal', title: '充值余额'},
+             {field: 'WithholdRechargePrice', title: '补贴余额'},
+             {field: 'OrderPrice', title: '订单总金额'},
+             {field: 'OrderRechargeTotal', title: '订单充值金额'},
+             {field: 'OrderSubsidyTotal', title: '订单补贴金额'},
+             {field: 'detail', title: '操作'},
+
+          ],
+          data: tableData,
+          onLoadSuccess: function () {
+          },
+          onLoadError: function () {
+              showTips("数据加载失败！");
+          },
+      });
   });
   function initLoading(){
     $("body").append("<!-- loading -->" +
@@ -113,6 +158,32 @@
       "</div>"
     );
   }
+
+  function getUserList(page,row){
+      $.ajax({
+          type: "post",
+          url: "http://www.doclever.cn:8090/mock/5b1779b6362f91495c07a0fc/Backstage/Member/GetDatagrid",
+          data: {
+              "condition.Status":0,
+              "page":page,
+              "rows":row,
+          },
+          cache: false,
+          async : false,
+          dataType: "json",
+          success: function (data)
+          {
+              console.log(data.rows);
+              tableData=data.rows;
+              tableData.forEach(function (v,k) {
+                  tableData[k]['detail']="<div onclick='openDetails("+v.ID+")' >详情</div>"
+              })
+          },
+          error:function (XMLHttpRequest, textStatus, errorThrown) {
+              alert("请求失败！");
+          }
+      });
+  }
   function showLoading(text){
     $("#loadingText").html(text);
     $("#loading").modal("show");
@@ -120,7 +191,9 @@
   function hideLoading(){
     $("#loading").modal("hide");
   }
-
+  function openDetails(id){
+      alert(id)
+  }
   //获取统计数据
   function searchDate () {
     // var startDate = timeStamp($('#start-date').val());
