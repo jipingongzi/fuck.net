@@ -194,10 +194,9 @@ public class UserStatisticsImpl implements IUserStatistics {
         String orderSql = "SELECT ISNULL(SUM(TotalPrice),0) AS TotalPrice,ISNULL(SUM(Balance),0) AS Balance,ISNULL(SUM(Subsidy),0) AS Subsidy\n" +
                 "FROM YUNYI_Order o\n" +
                 "WHERE MemberID = ? AND State = 2";
-        String proxySql = "SELECT TOP 1 ISNULL(Money, 0) AS TotalPrice ,BalanceTotal,SubsidyTotal\n" +
+        String proxySql = "SELECT ISNULL(SUM(Money), 0) AS TotalPrice ,ISNULL(SUM(BalanceTotal),0) AS BalanceTotal,ISNULL(SUM(SubsidyTotal),0) AS SubsidyTotal\n" +
                 "FROM YUNYI_WithholdLog w \n" +
-                "WHERE w.MemberID = ?\n" +
-                "ORDER BY InsertTime DESC ";
+                "WHERE w.MemberID = ?\n";
 
         Map<String,Object> detailResult = jdbcTemplate.queryForList(detailSql,userId).get(0);
         String userAccount = detailResult.get("Phone").toString();
@@ -228,9 +227,9 @@ public class UserStatisticsImpl implements IUserStatistics {
         List<Map<String,Object>> proxyResult = jdbcTemplate.queryForList(proxySql,userId);
         if(!CollectionUtils.isEmpty(proxyResult)){
             Map<String,Object> item = proxyResult.get(0);
-            orderAmountTotal = Double.valueOf(item.get("TotalPrice").toString());
-            orderAmountRecharge = Double.valueOf(item.get("BalanceTotal").toString());
-            orderAmountSubsidy = Double.valueOf(item.get("SubsidyTotal").toString());
+            proxyAmountTotal = Double.valueOf(item.get("TotalPrice").toString());
+            proxyAmountRecharge = Double.valueOf(item.get("BalanceTotal").toString());
+            proxyAmountSubsidy = Double.valueOf(item.get("SubsidyTotal").toString());
         }
         return new UserDetailDto(userId,userAccount,siteName,serviceName).
                 buildAmount(amountTotal,amountRecharge,amountSubsidy,refundAmountTotal).
