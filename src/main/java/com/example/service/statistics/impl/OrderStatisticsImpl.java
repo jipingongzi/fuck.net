@@ -161,7 +161,7 @@ public class OrderStatisticsImpl implements IOrderStatistics {
         }
         OrderDetailDto result = new OrderDetailDto(orderId,orderNo,userAccount,siteName,orderAmountTotal,orderTime,shouldPickDate,pickStatusDisplay,realPickTime);
         String itemSql = "SELECT \n" +
-                "TypeID,CategoryName,GoodsName,Amount,Price,RefundState,ISNULL(RefundPrice,0),RefundTime\n" +
+                "TypeID,CategoryName,GoodsName,Amount,Price,RefundState,ISNULL(RefundPrice,0) AS RefundPrice ,RefundTime\n" +
                 "FROM YUNYI_OrderGoods og\n" +
                 "WHERE og.OrderID = ?";
         jdbcTemplate.queryForList(itemSql,orderId).forEach(i -> {
