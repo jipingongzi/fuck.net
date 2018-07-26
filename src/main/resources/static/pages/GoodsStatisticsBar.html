@@ -182,25 +182,27 @@
     var startDate = timeStamp($('#start-date').val());
     var endDate = timeStamp($('#end-date').val());
     showLoading("加载中...");
-    $.ajax({
-      type: 'GET',
-      url:"/goods/base",
-      data:{
-        startTime : startDate,
-        endTime : endDate
-      },
-      success : function (res) {
-        hideLoading();
-        if (res.data) {
-          console.log(res.data);
-          renderEcharts(res.data);
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/goods/base",
+        data:{
+          startTime : startDate,
+          endTime : endDate
+        },
+        success : function (res) {
+          hideLoading();
+          if (res.data) {
+            console.log(res.data);
+            renderEcharts(res.data);
+          }
+        },
+        error: function () {
+          hideLoading();
+          $("#info").removeAttr("hidden");
         }
-      },
-      error: function () {
-        hideLoading();
-        $("#info").removeAttr("hidden");
-      }
-    });
+      });
+    }, 500);
   }
 
   function resetDate () {
