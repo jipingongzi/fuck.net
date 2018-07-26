@@ -7,7 +7,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
@@ -20,36 +19,43 @@
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
   <script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
   <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-
-  <title>用户信息</title>
-
+  <title>用户订单</title>
   <style>
     .nav{position:relative; width:100%;height: 10vh}
     .nav img{width:100%;}
     .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
     .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
-
-    table{width:100vw}
-    #table tbody tr td{overflow-x: scroll}
-    table table-hover{width:100vw !important;}
+    tablelist{width:100vw}
+    #tablelist tbody tr td{overflow-x: scroll}
+    tablelist table-hover{width:100vw !important;}
     .fixed-table-body{height:75vh;}
-    .search{
-      width: 750px;
-      line-height: 38px;
-      display: flex;
+    .fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner{
+      padding:0;font-size: 1vw;white-space:normal;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 <div class="nav">
   <img src="../imgs/nav.jpg">
-  <middle>用户信息</middle>
+  <middle>用户订单</middle>
   <left onclick="backAction()">返回</left>
 </div>
 <div class="search">
-  <div class="col-sm-3">
+  <div class="col-sm-5">
     <div class="form-group" style="display: flex;">
-      <input id="textfield" placeholder="输入账号/供应点" style="background-color: #e4e4e4;border-radius: 5px;">
+      <label class="col-sm-4" style="font-size: 12px">开始时间：</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control user-age" id="order-start-date" readonly  placeholder="下单时间">
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-5">
+    <div class="form-group" style="display: flex;">
+      <label class="col-sm-4 control-label" style="font-size: 12px">~</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control user-age" id="order-end-date" readonly  placeholder="下单截止时间">
+      </div>
     </div>
   </div>
   <div class="col-sm-5">
@@ -75,18 +81,22 @@
 <div>
   <label style="margin-left: 10px;color: red" id="total"></label>
 </div>
-<table id="table" style="top: 100px;width: 100vw;table-layout: fixed;"   data-height="70%"  data-mobile-responsive="true"></table>
+<table id="tablelist" style="top: 100px;width: 100vw;table-layout: fixed;"   data-height="70%"  data-mobile-responsive="true"></table>
 
 <script type="text/javascript">
-  var pageNumber=0,pageSize=500;
-  var tableData;
-  $(function () {
-    initLoading();
-    getUserList();
-    // 初始化获取统计数据
-    // searchDate();
-    // 配置时间控件
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+  }
 
+   var pageNumber=0,pageSize=500;
+   var tableData;
+   var userId=getQueryString("id");
+   initLoading();
+
+    getUserList();
+    // 配置时间控件
     $.fn.datepicker.dates['cn'] = {   //切换为中文显示
       days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
       daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
@@ -118,20 +128,24 @@
       weekStart: 0              //星期几是开始
     });
 
-    $('#table').bootstrapTable({
+    $('#tablelist').bootstrapTable({
       columns: [
+        {field: 'orderNo', title: '订单编号'},
         {field: 'userAccount', title: '用户账号'},
-        {field: 'serviceName', title: '所属服务处'},
-        {field: 'amountTotal', title: '余额总额'},
-        {field: 'amountRecharge', title: '充值余额'},
-        {field: 'amountSubsidy', title: '补贴余额'},
-        {field: 'orderAmountTotal', title: '订单总金额'},
+        {field: 'productNumber', title: '商品数量'},
+        {field: 'orderAmountTotal', title: '订单金额'},
         {field: 'orderAmountRecharge', title: '订单充值金额'},
         {field: 'orderAmountSubsidy', title: '订单补贴金额'},
+        {field: 'orderTime', title: '下单时间'},
+        {field: 'shouldPickDate', title: '取货日期'},
+        {field: 'siteName', title: '所属供应点'},
+        {field: 'pickStatusDisplay', title: '是否取货'},
+        {field: 'supplyName', title: '货源名称'},
+        {field: 'realPickTime', title: '领取时间'},
         {field: 'detail', title: '操作'},
       ]
     });
-  });
+ 
 
   function queryParams (params) {
     var keyWord = ($('#textfield').val());
@@ -142,7 +156,7 @@
       endTime : endDate,
       pageNumber:pageNumber,
       pageSize: pageSize,
-      serviceId : getCookie("serviceId"),
+      userId : getQueryString("id"),
       keyWord:keyWord
     };
   }
@@ -164,28 +178,40 @@
       "</div>"
     );
   }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
 
   function getUserList(){
     var keyWord = ($('#textfield').val());
-    var startDate = timeStamp($('#start-date').val());
-    var endDate = timeStamp($('#end-date').val());
+    var orderStartTime = timeStamp($('#order-start-date').val());
+    var orderEndTime = timeStamp($('#order-end-date').val());
+    var pickStartTime = timeStamp($('#start-date').val());
+    var pickEndTime = timeStamp($('#end-date').val());
     showLoading("加载中...");
     setTimeout(function () {
       $.ajax({
         type: "GET",
-        url: "/user/list",
+        url: "/order/list",
         data: {
-          startTime : startDate,
-          endTime : endDate,
-          pageNumber:pageNumber,
+          userId:getQueryString('id'),
+          orderStartTime : orderStartTime,
+          orderEndTime : orderEndTime,
+          pickStartTime : pickStartTime,
+          pickEndTime : pickEndTime,
+          keyWord:keyWord,
           pageSize:pageSize,
-          serviceId : getCookie("serviceId"),
-          keyWord:keyWord
+          pageNumber:pageNumber,
         },
         success : function (data) {
           tableData=data.data;
+          console.log(tableData)
           tableData.forEach(function (v,k) {
-            tableData[k]['detail']="<div onclick='openDetails("+v.userId+")' >详情</div>"
+            tableData[k]['detail']="<div onclick='openOrderDetails("+'"'+v.orderId+'"'+")' >详情</div>"
           });
           hideLoading();
           configTable(tableData);
@@ -202,26 +228,31 @@
 
   function getTotalData() {
     var keyWord = ($('#textfield').val());
-    var startDate = timeStamp($('#start-date').val());
-    var endDate = timeStamp($('#end-date').val());
+    var orderStartTime = timeStamp($('#order-start-date').val());
+    var orderEndTime = timeStamp($('#order-end-date').val());
+    var pickStartTime = timeStamp($('#start-date').val());
+    var pickEndTime = timeStamp($('#end-date').val());
     showLoading("加载中...");
     setTimeout(function () {
       $.ajax({
         type: "GET",
-        url: "/user/list/statistics",
+        url: "/order/list/statistics",
         data: {
-          startTime : startDate,
-          endTime : endDate,
-          serviceId : getCookie("serviceId"),
-          keyWord:keyWord
+          orderStartTime : orderStartTime,
+          orderEndTime : orderEndTime,
+          pickStartTime : pickStartTime,
+          pickEndTime : pickEndTime,
+          userId:getQueryString('id'),
+          keyWord:keyWord,
+          pageSize:pageSize,
+          pageNumber:pageNumber,
         },
         success : function (data) {
           console.log(data.data);
           var orderNumber = '当前搜索结果统计：订单数量:'+data.data.orderNumber;
           var orderAmount = '  订单总金额：￥'+data.data.orderAmount;
-          var proxyAmount = '  代扣总金额：￥'+data.data.proxyAmount;
-          var total = orderNumber+orderAmount+proxyAmount;
-          console.log(orderNumber,orderAmount,proxyAmount);
+          var total = orderNumber+orderAmount;
+          console.log(orderNumber,orderAmount);
           $('#total').text(''+total);
           hideLoading();
         },
@@ -233,38 +264,18 @@
     }, 500);
   }
   function configTable(tableData) {
-    $('#table').bootstrapTable('load', tableData);
+    $('#tablelist').bootstrapTable('load', tableData);
   }
 
-  function showLoading(text){
-    $("#loadingText").html(text);
-    $("#loading").modal("show");
-  }
-  function hideLoading(){
-    $("#loading").modal("hide");
-  }
 
-  function getCookie(c_name)
-  {
-    if (document.cookie.length>0)
-    {
-      c_start=document.cookie.indexOf(c_name + "=")
-      if (c_start!=-1)
-      {
-        c_start=c_start + c_name.length+1
-        c_end=document.cookie.indexOf(";",c_start)
-        if (c_end==-1) c_end=document.cookie.length
-        return unescape(document.cookie.substring(c_start,c_end))
-      }
-    }
-    return ""
-  }
 
-  function openDetails(id){
-      location.href="UserInformationDetails.html?id="+id
+  function openOrderDetails(orderId){
+    window.location.href="OrderDetail.html?orderId="+orderId+"&userId="+userId
   }
 
   function resetDate () {
+    $('#order-start-date').val("");
+    $('#order-end-date').val("");
     $('#start-date').val("");
     $('#end-date').val("");
   }
@@ -281,8 +292,11 @@
 
 <script>
   function backAction() {
-    window.location.href = "UserStatistics.html"
+    var id = getQueryString('id')
+    window.location.href = "UserInformationDetails.html?id="+id
   }
+
 </script>
+
 </body>
 </html>

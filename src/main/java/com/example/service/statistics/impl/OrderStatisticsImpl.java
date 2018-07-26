@@ -178,6 +178,7 @@ public class OrderStatisticsImpl implements IOrderStatistics {
             String productName = i.get("GoodsName").toString();
             int productNumber = Integer.valueOf(i.get("Amount").toString());
             int refundStatus = Integer.valueOf(i.get("RefundState").toString());
+            double productAmount = Double.valueOf(i.get("Price").toString());
             String refundStatusDisplay = "-";
             double refundAmount = 0;
             String refundTime = "-";
@@ -186,7 +187,7 @@ public class OrderStatisticsImpl implements IOrderStatistics {
                 refundAmount = Double.valueOf(i.get("RefundPrice").toString());
                 refundTime = i.get("RefundTime").toString();
             }
-            result.addItem(new OrderItemDto(productType,productCategory,productName,productNumber,refundStatusDisplay,refundAmount,refundTime));
+            result.addItem(new OrderItemDto(productType,productCategory,productName,productNumber,productAmount,refundStatusDisplay,refundAmount,refundTime));
         });
         return result;
     }

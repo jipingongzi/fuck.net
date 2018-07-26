@@ -27,6 +27,10 @@ public class OrderItemDto {
      */
     private int productNumber;
     /**
+     * 商品单价
+     */
+    private double productAmount;
+    /**
      * 退货状态
      */
     private String refundStatusDisplay;
@@ -39,11 +43,12 @@ public class OrderItemDto {
      */
     private String refundTime;
 
-    public OrderItemDto(String productType, String productCategory, String productName, int productNumber, String refundStatusDisplay, double refundAmount, String refundTime) {
+    public OrderItemDto(String productType, String productCategory, String productName, int productNumber,double productAmount, String refundStatusDisplay, double refundAmount, String refundTime) {
         this.productType = productType;
         this.productCategory = productCategory;
         this.productName = productName;
         this.productNumber = productNumber;
+        this.productAmount = productAmount;
         this.refundStatusDisplay = refundStatusDisplay;
         this.refundAmount = refundAmount;
         if(refundTime.contains(".")){

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="../js/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <title>订单详情</title>
+  <style>
+    .nav{position:relative; width:100%;height: 10vh}
+    .nav img{width:100%;}
+    .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+    #myTab li{border-bottom: none}
+    .nav-tabs>li>a{border: 1px solid #ddd;color:#555}
+    table{text-align:center }
+    .table1 tr td:nth-child(2n+1){background: #efefef;text-align: right}
+    .table2 thead tr th{background: #efefef;text-align: center}
+    .fixed-table-loading{display: none ;}
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{color: #337ab7}
+
+    #cz{height:30vw;overflow:scroll}
+
+
+  </style>
+</head>
+<body>
+<div class="nav">
+  <img src="../imgs/nav.jpg">
+  <middle>订单详情</middle>
+  <left onclick="backAction()">返回</left>
+</div>
+
+<table class="table table-bordered table1" >
+  <tr>
+    <td>订单号:</td>
+    <td id="orderNo"></td>
+    <td>下单用户:</td>
+    <td id="userAccount"></td>
+  </tr>
+
+  <tr>
+    <td>订单金额:</td>
+    <td id="orderAmountTotal"></td>
+    <td>所属供应点:</td>
+    <td id="siteName"></td>
+  </tr>
+  <tr>
+    <td>下单时间:</td>
+    <td id="orderTime"></td>
+    <td>取货日期:</td>
+    <td id="realPickTime"></td>
+  </tr>
+  <tr>
+    <td>是否取货:</td>
+    <td id="pickStatusDisplay"></td>
+  </tr>
+</table>
+<ul id="myTab" class="nav nav-tabs" style="height: auto;">
+  <li class="active"><a href="#cz" data-toggle="tab">订单商品</a></li>
+</ul>
+<div id="myTabContent" class="tab-content" >
+  <div class="tab-pane fade in active" id="cz">
+    <table class="table table-bordered table2"  id="table">
+    </table>
+  </div>
+</div>
+</table>
+<script type="text/javascript">
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+  }
+  $(function () {
+    initLoading();
+    // 初始化获取统计数据
+    getDetailData();
+  });
+  function backAction() {
+    var id = getQueryString("userId");
+    window.location.href = "OrderList.html?id="+id
+  }
+
+
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+
+  function getDetailData() {
+    showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/order/detail",
+        data:{
+          orderId:getQueryString('orderId')
+        },
+        success : function (data) {
+          hideLoading();
+          if (data.data) {
+            console.log(data.data);
+            $('#orderNo').html(data.data.orderNo)
+            $('#userAccount').html(data.data.userAccount)
+            $('#orderAmountTotal').html(data.data.orderAmountTotal)
+            $('#siteName').html(data.data.siteName)
+            $('#orderTime').html(data.data.orderTime)
+            $('#realPickTime').html(data.data.realPickTime)
+            $('#pickStatusDisplay').html(data.data.pickStatusDisplay)
+
+            $('#table').bootstrapTable({
+
+              columns: [
+                {field: 'productType', title: '分类类别'},
+                {field: 'productCategory', title: '商品分类'},
+                {field:'productName',title:'商品名称'},
+                {field:'productNumber',title:'数量'},
+                {field:'productAmount',title:'金额'},
+                {field:'refundStatusDisplay',title:'退货状态'},
+                {field:'refundAmount',title:'退款金额'},
+                {field:'refundTime',title:'退款时间'},
+              ]
+            });
+            $('#table').bootstrapTable('load', data.data.items);
+          }
+        },
+        error: function () {
+          hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+</script>
+
+</body>
+</html>
