@@ -26,6 +26,9 @@ public class SystemApplicationServiceImpl implements ISystemApplicationService {
         JSONObject admin = new JSONObject();
         admin.put("userName",result.get(0).get("LoginName"));
         admin.put("serviceId",result.get(0).get("ServiceId"));
+        if(admin.getIntValue("serviceId") == 2){
+            admin.put("serviceId",0);
+        }
         return admin;
     }
 }
