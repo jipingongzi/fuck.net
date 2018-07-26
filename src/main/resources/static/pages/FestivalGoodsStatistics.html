@@ -75,24 +75,26 @@
   //获取统计数据
   function requestGoodData () {
     showLoading("加载中...");
-    $.ajax({
-      type: 'GET',
-      url:"/goods/sale/best",
-      data:{
-        goodType : 2
-      },
-      success : function (res) {
-        if (res.data) {
-          console.log(res.data);
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/goods/sale/best",
+        data:{
+          goodType : 2
+        },
+        success : function (res) {
+          if (res.data) {
+            console.log(res.data);
+            requestWorstData();
+            configGoodChart(res.data);
+          }
+        },
+        error: function () {
           requestWorstData();
-          configGoodChart(res.data);
+          $("#info").removeAttr("hidden");
         }
-      },
-      error: function () {
-        requestWorstData();
-        $("#info").removeAttr("hidden");
-      }
-    });
+      });
+    }, 500);
   }
 
   //获取统计数据
