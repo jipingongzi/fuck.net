@@ -30,8 +30,8 @@
     .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
 
     table{width:100vw}
-    #table tbody tr td{overflow-x: scroll}
-    table table-hover{width:100vw !important;}
+    #tablelist tbody tr td{overflow-x: scroll}
+    tablelist table-hover{width:100vw !important;}
     .fixed-table-body{height:75vh;}
     .search{
       width: 750px;
@@ -75,7 +75,7 @@
 <div>
   <label style="margin-left: 10px;color: red" id="total"></label>
 </div>
-<table id="table" style="top: 100px;width: 100vw;table-layout: fixed;"   data-height="70%"  data-mobile-responsive="true"></table>
+<table id="tablelist" style="top: 100px;width: 100vw;table-layout: fixed;"   data-height="70%"  data-mobile-responsive="true"></table>
 
 <script type="text/javascript">
   var pageNumber=0,pageSize=500;
@@ -118,7 +118,7 @@
       weekStart: 0              //星期几是开始
     });
 
-    $('#table').bootstrapTable({
+    $('#tablelist').bootstrapTable({
       columns: [
         {field: 'userAccount', title: '用户账号'},
         {field: 'serviceName', title: '所属服务处'},
@@ -233,7 +233,7 @@
     }, 500);
   }
   function configTable(tableData) {
-    $('#table').bootstrapTable('load', tableData);
+    $('#tablelist').bootstrapTable('load', tableData);
   }
 
   function showLoading(text){
