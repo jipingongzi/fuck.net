@@ -300,22 +300,22 @@
   }
 
   function renderTable (tableData, flag) {
-    tableData.map((item, index) => {
-      var str = `<tr>
-                    <td style="width: 218px;">${item.goodsName}</td>
-                    <td style="width: 178px;">${item.goodType}</td>
-                    <td style="width: 89px;">${item.goodNo}</td>
-                    <td style="width: 138px;">${item.goodPrice}</td>
-                    <td style="width: 89px;">${item.goodUnit}</td>
-                    <td style="width: 90px;">${item.storeNumber}</td>
-                    <td style="width: 90px;">${item.saleNumber}</td>
-                    <td style="width: 139px;">${item.saleAmount}</td>
-                 </tr>`;
-      setTimeout(() => {
+    tableData.map(function (item, index)  {
+      var str = '<tr>' +
+'                    <td style="width: 218px;">'+item.goodsName+'</td>' +
+'                    <td style="width: 178px;">'+item.goodType+'</td>' +
+'                    <td style="width: 89px;">'+item.goodNo+'</td>' +
+'                    <td style="width: 138px;">'+item.goodPrice+'</td>' +
+'                    <td style="width: 89px;">'+item.goodUnit+'</td>' +
+'                    <td style="width: 90px;">'+item.storeNumber+'</td>' +
+'                    <td style="width: 90px;">'+item.saleNumber+'</td>' +
+'                    <td style="width: 139px;">'+item.saleAmount+'</td>' +
+'                 </tr>';
+      setTimeout(function () {
         $('#table-body').append(str);
       }, 500);
     });
-    if (flag || tableData.length === 0) {
+    if (flag || tableData.length == 0) {
       $('#table-body').children('tr').remove();
     }
   }

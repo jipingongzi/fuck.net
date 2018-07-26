@@ -46,8 +46,8 @@
     <span class="logout" id="logout" onclick="logout()">[退出]</span>
 </div>
   <div align="left" class="frame" id="type1" style="margin-top: 30px">
-    <img src="../imgs/userInfo.jpg" width="295" height="255px" margin-top="20px" margin-left="20px" onclick="userInfo()" id="userInfo">
-    <img src="../imgs/goodsInfo.jpg" width="295" height="255px" margin-top="20px" margin-left="20px" onclick="goodsInfo()" id="goodsInfo">
+    <img src="../imgs/userInfo.jpg" width="295" height="255px" margin-top="20px" margin-left="20px" onclick="userInfo()" id="userInfoID" />
+    <img src="../imgs/goodsInfo.jpg" width="295" height="255px" margin-top="20px" margin-left="20px" onclick="goodsInfo()" id="goodsInfoID" />
   </div>
 
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
@@ -71,8 +71,8 @@
   }
 
   var id = getCookie("serviceId");
-  var imgUser = document.getElementById("userInfo");
-  var imgGoods = document.getElementById("goodsInfo");
+  var imgUser = document.getElementById("userInfoID");
+  var imgGoods = document.getElementById("goodsInfoID");
   console.log(id);
   if (id == 0){
     imgUser.hidden = false;
