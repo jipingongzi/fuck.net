@@ -167,7 +167,7 @@ public class UserStatisticsImpl implements IUserStatistics {
             orderSql.append(" AND m.ServiceID = " + serviceId);
         }
 
-        StringBuilder proxySql = new StringBuilder("SELECT SUM(Money) AS amount " +
+        StringBuilder proxySql = new StringBuilder("SELECT ISNULL(SUM(Money),0) AS amount " +
                 "FROM YUNYI_WithholdLog w " +
                 "LEFT JOIN YUNYI_Member m ON m.ID = w.MemberID " +
                 "LEFT JOIN YUNYI_ServiceOffice s ON m.ServiceID = s.ID " +
