@@ -105,20 +105,20 @@ public class UserStatisticsImpl implements IUserStatistics {
 
     @Override
     public List<UserListDto> getUserList(Long startTime, Long endTime, String keyWord, long serviceId, int pageNumber, int pageSize) {
-        StringBuilder sql = new StringBuilder("SELECT s.ServiceName,temp.*,m.ID,m.Phone,(m.Balance + m.Subsidy) AS TotalPrice,m.Balance,m.Subsidy\n" +
-                "FROM\n" +
-                "(\n" +
-                "SELECT MAX(o.PickupDate) AS PickupDate,o.MemberID,SUM(o.TotalPrice) AS OrderTotalPrice,SUM(o.Balance) AS OrderBalance,SUM(o.Subsidy) AS OrderSubsidy FROM YUNYI_Order o \n" +
-                "WHERE o.State = 2\n");
+        StringBuilder sql = new StringBuilder("SELECT s.ServiceName,temp.PickupDate,temp.MemberID,ISNULL(temp.OrderTotalPrice,0) AS OrderTotalPrice,ISNULL(temp.OrderBalance,0)AS OrderBalance,ISNULL(temp.OrderSubsidy,0)AS OrderSubsidy,m.ID,m.Phone,ISNULL((m.Balance + m.Subsidy),0) AS TotalPrice,ISNULL(m.Balance,0) AS Balance,ISNULL(m.Subsidy,0) AS Subsidy\n" +
+                "FROM YUNYI_Member m\n");
+        sql.append(" LEFT JOIN ( SELECT MAX(o.PickupDate) AS PickupDate,o.MemberID,ISNULL(SUM(o.TotalPrice),0) AS OrderTotalPrice,ISNULL(SUM(o.Balance),0) AS OrderBalance,ISNULL(SUM(o.Subsidy),0) AS OrderSubsidy FROM YUNYI_Order o " +
+                " WHERE o.State = 2");
+
         if(startTime != null){
             sql.append(" AND o.PickupDate >= " + DateUtil.timeStamp2Date(startTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
         if(endTime != null){
             sql.append(" AND o.PickupDate <= " + DateUtil.timeStamp2Date(endTime,"yyyy-MM-dd HH:mm:ss") + "' ");
         }
-        sql.append("GROUP BY o.MemberID\n" +
+        sql.append(" GROUP BY o.MemberID\n" +
                 ") temp\n" +
-                "LEFT JOIN YUNYI_Member m ON temp.MemberID = m.ID\n" +
+                " ON temp.MemberID = m.ID\n" +
                 "LEFT JOIN YUNYI_ServiceOffice s ON m.ServiceID = s.ID\n" +
                 "WHERE m.IsDeleted = 0 ");
         sql.append(" AND (m.Phone LIKE ? OR s.ServiceName LIKE ?) ");
