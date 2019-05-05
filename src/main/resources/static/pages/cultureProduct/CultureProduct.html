@@ -5,12 +5,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="../../js/mui.min.js"></script>
   <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
   <title>订单管理</title>
   <style>
     * { touch-action: none; }
-    .nav{position:relative; width:100%;height: 8vh}
+    .nav{position:relative; width:100%;height: 10vh}
     .nav img{width:100%;height: 100%}
     .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
     .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
@@ -128,14 +131,14 @@
     <div class="col-xs-4">
       <div class="input-group">
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">关键词 <span class="caret"></span></button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">关键词<span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a href="#">订单号</a></li>
-            <li><a href="#">演出名称</a></li>
-            <li><a href="#">下单用户</a></li>
+            <li>订单号</li>
+            <li>演出名称</li>
+            <li>下单用户</li>
           </ul>
         </div><!-- /btn-group -->
-        <input type="text" class="form-control" aria-label="..." placeholder="输入搜索信息">
+        <input type="text" class="form-control" id="searchInfo" aria-label="..." placeholder="输入搜索信息">
       </div><!-- /input-group -->
     </div><!-- /.col-lg-6 -->
     <div class="col-xs-2">
@@ -146,11 +149,9 @@
         </button>
         <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
         <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li>演出剧场 1</li>
+          <li>演出剧场 2</li>
+          <li>演出剧场 3</li>
         </ul>
       </div>
     </div>
@@ -162,12 +163,11 @@
         </button>
         <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
         <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-        </ul>      </div>
+          <li>演出厅 1</li>
+          <li>演出厅 2</li>
+          <li>演出厅 3</li>
+        </ul>
+      </div>
     </div>
     <div class="col-xs-2">
       <div class="input-group">
@@ -177,11 +177,9 @@
         </button>
         <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
         <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="#">演出分类 1</a></li>
+          <li>演出分类 2</li>
+          <li>演出分类 3</li>
         </ul>
       </div>
     </div>
@@ -193,12 +191,11 @@
         </button>
         <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
         <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-        </ul>           </div>
+          <li>订单状态 1</li>
+          <li>订单状态 2</li>
+          <li>订单状态 3</li>
+        </ul>
+      </div>
     </div>
   </div><!-- /.row -->
   <div class="flex-row">
@@ -255,5 +252,212 @@
     </table>
   </div>
 </div>
+
+<script type="text/javascript" src="../../js/bootstrap-table.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+  mui.init({
+    pullRefresh : {
+      container : '#pullrefresh',
+      up : {
+        contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+        contentnomore : '没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+        callback : pullupRefresh
+      }
+    }
+  });
+
+  function pullupRefresh() {
+    pageNumber += 1;
+    searchDate(pageNumber, 20, false);
+    _this = this;
+
+  }
+  var tableData = [];
+  var performName;
+  var orderId;
+  var user;
+  var performTheater;
+  var performRoom;
+  var performCategory;
+  var ordrStatus;
+  var performStartTime;
+  var performEndTime;
+  var orderStartTime;
+  var orderEndTime;
+  var pageNumber;
+  var pageSize;
+  var _this;
+  initLoading();
+  $(function () {
+    // 初始化获取统计数据
+    searchDate(pageNumber, 20, false);
+    // 配置时间控件
+    $.fn.datepicker.dates['cn'] = {   //切换为中文显示
+      days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      daysShort: ["日", "一", "二", "三", "四", "五", "六", "七"],
+      daysMin: ["日", "一", "二", "三", "四", "五", "六", "七"],
+      months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      today: "今天",
+      clear: "清除"
+    };
+    //初始化时间控件
+    $('.user-age').datepicker({
+      autoclose: true, //自动关闭
+      beforeShowDay: $.noop,    //在显示日期之前调用的函数
+      calendarWeeks: false,     //是否显示今年是第几周
+      clearBtn: false,          //显示清除按钮
+      daysOfWeekDisabled: [],   //星期几不可选
+      endDate: Infinity,        //日历结束日期
+      forceParse: true,         //是否强制转换不符合格式的字符串
+      format: 'yyyy-mm-dd',     //日期格式
+      keyboardNavigation: true, //是否显示箭头导航
+      language: 'cn',           //语言
+      minViewMode: 0,
+      orientation: "auto",      //方向
+      rtl: false,
+      startDate: -Infinity,     //日历开始日期
+      startView: 0,             //开始显示
+      todayBtn: false,          //今天按钮
+      todayHighlight: false,    //今天高亮
+      weekStart: 0              //星期几是开始
+    });
+  });
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+
+  //获取统计数据
+  function searchDate (pageNumber,pageSize, flag) {
+    var startDate = timeStamp($('#start-date').val());
+    var performName = $('searchInfo').val();
+    // var orderId = $('searchInfo')).val();
+    // var user = $('searchInfo')).val();
+    // var performTheater = $('searchInfo')).val();
+    // var performRoom = $('searchInfo')).val();
+    // var performCategory = $('searchInfo')).val();
+    // var ordrStatus = $('searchInfo')).val();
+    // var performStartTime = $('searchInfo')).val();
+    // var performEndTime = $('searchInfo')).val();
+    // var orderStartTime = $('searchInfo')).val();
+    // var orderEndTime = $('searchInfo')).val();
+    showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/perform/orders",
+        data:{
+          //演出名称
+          performName:performName,
+          //订单编号
+          orderId:orderId,
+          // 下单用户
+          user:user,
+          //演出剧场
+          performTheater:performTheater,
+          //演出厅
+          performRoom:performRoom,
+          //演出分类
+          performCategory:performCategory,
+          //订单状态
+          ordrStatus:ordrStatus,
+          //演出开始时间
+          performStartTime:performStartTime,
+          //演出结束时间
+          performEndTime:performEndTime,
+          //下单开始时间
+          orderStartTime:orderStartTime,
+          //下单结束时间
+          orderEndTime:orderEndTime,
+          //页码
+          pageNumber:pageNumber,
+          //页大小
+          pageSize:pageSize
+        },
+        success : function (res) {
+          hideLoading();
+          renderTable(res.data, flag);
+          if (res.data) {
+            if (pageNumber > 0) {
+              mui('#pullrefresh').pullRefresh().disablePullupToRefresh();
+              if (res.data.length > 0) {
+                mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
+                _this.endPullupToRefresh(false);
+              } else {
+                _this.endPullupToRefresh(true);
+              }
+            }
+          }
+        },
+        error: function () {
+          hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+
+  function renderTable (tableData, flag) {
+    tableData.map(function (item, index)  {
+      var str = '<tr>' +
+        '                    <td style="width: 218px;">'+item.goodsName+'</td>' +
+        '                    <td style="width: 178px;">'+item.goodType+'</td>' +
+        '                    <td style="width: 89px;">'+item.goodNo+'</td>' +
+        '                    <td style="width: 138px;">'+item.goodPrice+'</td>' +
+        '                    <td style="width: 89px;">'+item.goodUnit+'</td>' +
+        '                    <td style="width: 90px;">'+item.storeNumber+'</td>' +
+        '                    <td style="width: 90px;">'+item.saleNumber+'</td>' +
+        '                    <td style="width: 139px;">'+item.saleAmount+'</td>' +
+        '                 </tr>';
+      setTimeout(function () {
+        $('#table-body').append(str);
+      }, 500);
+    });
+    if (flag || tableData.length == 0) {
+      $('#table-body').children('tr').remove();
+    }
+  }
+
+  function resetDate () {
+    $('#start-date').val("");
+    $('#end-date').val("");
+  }
+
+  // 转换日期至时间戳
+  function timeStamp (val) {
+    if (val) {
+      return new Date(val).getTime();
+    } else {
+      return '';
+    }
+  }
+</script>
+<script>
+  function backAction() {
+    window.location.href = "../nav.html"
+  }
+</script>
 </body>
 </html>

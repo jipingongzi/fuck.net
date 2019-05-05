@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class PerformOrderVo {
+    //序号
+    private Integer number;
     //演出名称
     private String performName;
     //订单编号
@@ -28,4 +30,8 @@ public class PerformOrderVo {
     private LocalDateTime orderStartTime;
     //下单结束时间
     private LocalDateTime orderEndTime;
+    //页码
+    private Integer pageNumber;
+    //页大小
+    private Integer pageSize;
 }
