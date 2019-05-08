@@ -5,8 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="../../js/mui.min.js"></script>
   <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
   <title>垂钓订单管理</title>
   <style>
     * { touch-action: none; }
@@ -104,17 +108,17 @@
     .header a:first-child:before{
       display: none;
     }
-    #table{
-      width: 100%;
-      line-height: 32px;
-      text-align: center;
-    }
-    .table tr{
-      border: 1px rgba(167, 167, 167, 0.59) solid;
-    }
-    .table td{
-      border: 1px rgba(167, 167, 167, 0.59) solid;
-    }
+    /*#table{*/
+    /*  width: 100%;*/
+    /*  line-height: 32px;*/
+    /*  text-align: center;*/
+    /*}*/
+    /*.table tr{*/
+    /*  border: 1px rgba(167, 167, 167, 0.59) solid;*/
+    /*}*/
+    /*.table td{*/
+    /*  border: 1px rgba(167, 167, 167, 0.59) solid;*/
+    /*}*/
 
   </style>
 
@@ -129,94 +133,242 @@
   <div class="flex-row">
     <div class="col-xs-4">
       <div class="input-group">
-        <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">关键词 <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">订单号</a></li>
-            <li><a href="#">保障点名称</a></li>
-            <li><a href="#">用户</a></li>
-          </ul>
-        </div><!-- /btn-group -->
-        <input type="text" class="form-control" aria-label="..." placeholder="输入搜索信息">
-      </div><!-- /input-group -->
-    </div><!-- /.col-lg-6 -->
-    <div class="col-xs-2">
-      <div class="input-group">
-        <span class="input-group-addon" id="supplyId">保障点</span>
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          请选择<span class="caret"></span>
-        </button>
-        <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-xs-2">
-      <div class="input-group">
-        <span class="input-group-addon" id="order-status">订单状态</span>
-        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          请选择<span class="caret"></span>
-        </button>
-        <!--        <input type="text" class="form-control" placeholder="演出剧场" aria-describedby="basic-addon1">-->
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-        </ul>
+        <span class="input-group-addon">订单编号</span>
+        <input id="orderNumber" type="text" class="form-control" placeholder="输入订单编号" aria-describedby="basic-addon1">
       </div>
     </div>
     <div class="col-xs-4">
-      <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
-      <button class="btn btn-primary" style="height: 38px;margin-left: 20px;background-color: #025aa5" onclick="resetDate()">重置</button>
-      <button class="btn btn-primary" style="height: 38px;margin-left: 20px;background-color: #025aa5" onclick="dataExport()">导出</button>
+      <div class="input-group">
+        <span class="input-group-addon">用户名</span>
+        <input id="userName" type="text" class="form-control" placeholder="输入用户名" aria-describedby="basic-addon1">
+      </div>
     </div>
+    <div class="col-xs-2">
+      <div class="input-group">
+        <span class="input-group-addon">保障点</span>
+        <select id="guaranteeSite" style="height: 33px" class="selectpicker">
+          <option value="">全部</option>
+          <option value="上辛堡农副业基地生产点">上辛堡农副业基地生产点</option>
+        </select>
+      </div>
+    </div>
+<!--    <div class="col-xs-2">-->
+<!--      <div class="input-group">-->
+<!--        <span class="input-group-addon">订单状态</span>-->
+<!--        <select id="orderstatus" style="height: 33px" class="selectpicker">-->
+<!--          <option value="">全部</option>-->
+<!--          <option value="2">广西省</option>-->
+<!--          <option value="3">福建省</option>-->
+<!--          <option value="4">湖南省</option>-->
+<!--          <option value="5">山东省</option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
   </div><!-- /.row -->
   <div class="flex-row">
     <div class="col-xs-6">
       <div class="input-group">
-        <span class="input-group-addon" id="perform-date">  前往时间</span>
-        <input type="date" class="form-control" placeholder="开始时间" aria-describedby="basic-addon1">
+        <span class="input-group-addon" id="perform-date">前往时间</span>
+        <input id="leaveForStartTime" type="date" class="form-control" placeholder="开始时间" aria-describedby="basic-addon1">
         <span class="input-group-addon">至</span>
-        <input type="date" class="form-control" placeholder="结束时间" aria-describedby="basic-addon1">
+        <input id="leaveForEndTime" type="date" class="form-control" placeholder="结束时间" aria-describedby="basic-addon1">
       </div>
     </div>
     <div class="col-xs-5">
       <div class="input-group">
         <span class="input-group-addon" id="order-date">下单时间</span>
-        <input type="date" class="form-control" placeholder="开始时间" aria-describedby="basic-addon1">
+        <input id="orderStartTime" type="date" class="form-control" placeholder="开始时间" aria-describedby="basic-addon1">
         <span class="input-group-addon">至</span>
-        <input type="date" class="form-control" placeholder="结束时间" aria-describedby="basic-addon1">
+        <input id="orderEndTime" type="date" class="form-control" placeholder="结束时间" aria-describedby="basic-addon1">
       </div>
     </div>
   </div>
-</div>
-<table class="table table-bordered">
-  <thead>
-  <tr>
-    <th>序号</th>
-    <th>订单编号</th>
-    <th>下单用户</th>
-    <th>保障点</th>
-    <th>前往时间</th>
-    <th>接待项目数</th>
-    <th>下单时间</th>
-    <th>订单金额</th>
-    <th>订单充值金额</th>
-    <th>订单补贴金额</th>
-    <th>订单状态</th>
-    <th>操作</th>
-  </tr>
-  </thead>
-</table>
-<div id="pullrefresh" class="mui-content mui-scroll-wrapper" style="top: 198px;height: 82%;background-color:white">
-  <div class="mui-scroll">
-    <table class="table" id="table">
-      <tbody id="table-body"></tbody>
-    </table>
+  <div>
+    <div class="col-xs-2">
+      <div class="input-group">
+        <span class="input-group-addon">订单状态</span>
+        <select id="orderstatus" style="height: 33px" class="selectpicker">
+          <option value="">全部</option>
+          <option value="1">已预约</option>
+          <option value="2">预约成功</option>
+          <option value="3">已取消</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <button class="btn btn-primary" style="height: 38px;background: teal;" onclick="searchDate()">查询</button>
+      <button class="btn btn-primary" style="height: 38px;margin-left: 20px;background-color: #025aa5" onclick="resetData()">重置</button>
+    </div>
   </div>
 </div>
+
+<table class="table table-bordered table-condensed table-responsive"  id="tablelist" data-mobile-responsive="true"></table>
+
+<script type="text/javascript">
+  mui.init({
+    pullRefresh : {
+      container : '#pullrefresh',
+      up : {
+        contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+        contentnomore : '没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+        callback : pullupRefresh
+      }
+    }
+  });
+
+  function pullupRefresh() {
+    pageNumber += 1;
+    searchDate(pageNumber, 20, false);
+    _this = this;
+
+  }
+  var tableData = [];
+  var pageNumber;
+  var pageSize;
+  var _this;
+  initLoading();
+
+  $('#tablelist').bootstrapTable({
+    columns: [
+      {field: 'number', title: '序号'},
+      {field: 'orderId', title: '订单编号'},
+      {field: 'userName', title: '下单用户'},
+      {field: 'guaranteeSite', title: '保障点'},
+      {field: 'leaveForTime', title: '前往时间'},
+      {field: 'receptionProjectCount', title: '接待项目数'},
+      {field: 'ctime', title: '下单时间'},
+      {field: 'orderTotalMoney', title: '订单金额'},
+      {field: 'orderBalancTotal', title: '订单充值金额'},
+      {field: 'orderSubsidyTotal', title: '订单补贴金额'},
+      {field: 'status', title: '订单状态'},
+      {field: 'operation', title: '操作'},
+    ]
+  });
+
+  $(function () {
+    // 初始化获取统计数据
+    searchDate(pageNumber, 20, false);
+  });
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+
+  function configTable(tableData) {
+    $('#tablelist').bootstrapTable('load', tableData);
+  }
+
+  //获取统计数据
+  function searchDate(pageNumberArg,pageSize, flag) {
+    // var startDate = timeStamp($('#start-date').val());
+    var orderNumber = $('#orderNumber').val();
+    var userName = $('#userName').val();
+    var guaranteeSite = $('#guaranteeSite').val();
+    var leaveForStartTime = $('#leaveForStartTime').val();
+    var leaveForEndTime = $('#leaveForEndTime').val();
+    var Status = $('#orderstatus').val();
+    var orderStartTime = $('#orderStartTime').val();
+    var orderEndTime = $('#orderEndTime').val();
+    if(pageNumberArg == null){
+      pageNumberArg = 1;
+    }
+    var pageNumber = pageNumberArg;
+    var pageSize = pageSize;
+
+    showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        data:{
+          //订单编号
+          orderId:orderNumber,
+          //下单用户
+          user:userName,
+          //保障点
+          guaranteeSite:guaranteeSite,
+          //前往开始时间
+          leaveForStartTime:leaveForStartTime,
+          //前往结束时间
+          leaveForEndTime:leaveForEndTime,
+          //订单状态
+          Status:Status,
+          //下单开始时间
+          orderStartTime:orderStartTime,
+          //下单结束时间
+          orderEndTime:orderEndTime,
+          //页码
+          pageNumber:pageNumber,
+          //页大小
+          pageSize:pageSize
+        },
+        url:"/fishing/orders",
+        success : function (res) {
+          hideLoading();
+          tableData=res.data;
+          configTable(tableData);
+          tableData.forEach(function (v,k) {
+            tableData[k]['operation']="<div onclick='openDetails("+v.userId+")' >详情</div>"
+          });
+          $('.fixed-table-loading').hide();
+        },
+        error: function () {
+          hideLoading();
+          $("#info").removeAttr("hidden");
+          $('.fixed-table-loading').hide();
+        }
+      });
+    }, 500);
+  }
+
+  function resetData () {
+    $('#orderNumber').val("");
+    $('#userName').val("");
+    $('#guaranteeSite').val("");
+    $('#leaveForStartTime').val("");
+    $('#leaveForEndTime').val("");
+    $('#orderstatus').val("");
+    $('#orderStartTime').val("");
+    $('#orderEndTime').val("");
+  }
+
+  function openDetails(id){
+    // window.location.href="UserInformationDetails.html?id="+id
+    window.open(url="https://www.baidu.com")
+  }
+
+  // 转换日期至时间戳
+  function timeStamp (val) {
+    if (val) {
+      return new Date(val).getTime();
+    } else {
+      return '';
+    }
+  }
+</script>
+<script>
+  function backAction() {
+    window.location.href = "../nav.html"
+  }
+</script>
 </body>
 </html>

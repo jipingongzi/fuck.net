@@ -12,19 +12,19 @@ public class FishingTicketVo {
     //订单编号
     private String orderId;
     //下单用户
-    private String user;
+    private String userName;
     //保障点
     private String guaranteeSite;
     //前往时间
-    private LocalDateTime leaveForTime;
+    private String leaveForTime;
     //接待项目数
     private Integer ReceptionProjectCount;
     //下单时间
-    private LocalDateTime CTime;
+    private String CTime;
     //订单金额
     private BigDecimal OrderTotalMoney;
     //订单账户余额
-    private String OrderBalancTotal;
+    private BigDecimal OrderBalancTotal;
     //订单补贴金额
     private BigDecimal OrderSubsidyTotal;
     //订单状态
@@ -34,11 +34,13 @@ public class FishingTicketVo {
     //页大小
     private Integer pageSize;
     //前往时间开始时间
-    private LocalDateTime leaveForStartTime;
+    private String leaveForStartTime;
     //前往时间结束时间
-    private LocalDateTime leaveForEndTime;
+    private String leaveForEndTime;
     //下单开始时间
-    private LocalDateTime orderStartTime;
+    private String orderStartTime;
     //下单结束时间
-    private LocalDateTime orderEndTime;
+    private String orderEndTime;
+    //操作
+    private String operation;
 }
