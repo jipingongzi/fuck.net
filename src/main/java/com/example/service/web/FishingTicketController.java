@@ -22,13 +22,14 @@ public class FishingTicketController {
     public FishingTicketController(FishingTicketStatictis fishingTicketStatictis) {
         this.fishingTicketStatictis = fishingTicketStatictis;
     }
+    //垂钓订单查询-垂钓管理
     @GetMapping(value = "/orders")
     public RestResponse getFishingOrders(@RequestParam(required = false) String orderId,
                                          @RequestParam(required = false) String user,
                                          @RequestParam(required = false) String guaranteeSite,
                                          @RequestParam(required = false) String leaveForStartTime,
                                          @RequestParam(required = false) String leaveForEndTime,
-                                         @RequestParam(required = false) Integer Status,
+                                         @RequestParam(required = false) String Status,
                                          @RequestParam(required = false) String orderStartTime,
                                          @RequestParam(required = false) String orderEndTime,
                                          @RequestParam(required = false,defaultValue = "1") Integer pageNumber,
@@ -48,5 +49,16 @@ public class FishingTicketController {
         fishingTicketVoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
         log.info("获取垂钓订单信息");
         return RestResponse.buildResponse(fishingTicketVoList);
+    }
+
+    //垂钓订单查询-垂钓管理详情
+    @GetMapping(value = "orderDetail")
+    public RestResponse getOrderDetail(@RequestParam String orderId){
+        FishingTicketVo fishingTicketVo = new FishingTicketVo();
+        fishingTicketVo.setOrderId(orderId);
+        List<FishingTicketVo> fishingTicketDtoList = new ArrayList<>();
+        fishingTicketDtoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
+        log.info("获取垂钓订单详情");
+        return RestResponse.buildResponse(fishingTicketDtoList.get(0));
     }
 }

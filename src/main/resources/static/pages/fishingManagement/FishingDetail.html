@@ -2,9 +2,308 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link href="../../css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="../../js/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <title>订单详情</title>
+  <style>
+    .nav{position:relative; width:100%;height: 10vh}
+    .nav img{width:100%;}
+    .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
+    .nav left{position:absolute;width:200px;left:10px;bottom:0px;top:10px;color: white;text-align: left}
+    .nav right{position:absolute;width:200px;right:10px;bottom:0px;top:10px;color: white;text-align: right}
+    #myTab li{border-bottom: none}
+    .nav-tabs>li>a{border: 1px solid #ddd;color:#555}
+    table{text-align:center }
+
+    .table1 tr td:nth-child(2n+1){background: #efefef;text-align: right}
+    .table2 thead tr th{background: #efefef;text-align: center}
+    #butie {position: relative;z-index:999}
+    #bt thead{position: fixed;width:100%;z-index: 999;}
+    #bt td,#bt th{width:50vw}
+    #bt tbody{position: absolute;width:100vw;margin-top:38px;
+    }
+
+
+
+    #myTabContent .tab-pane{overflow-x: hidden;overflow-y: scroll;height:50vh}
+
+
+    .fixed-table-loading{display: none ;}
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{color: #337ab7}
+    .search{
+      width: 750px;
+      line-height: 38px;
+      display: flex;
+    }
+  </style>
 </head>
 <body>
+<div class="nav">
+  <img src="../../imgs/nav.jpg">
+  <middle>订单详情</middle>
+  <left onclick="backAction()">返回</left>
+</div>
 
+<table class="table table-bordered table1" >
+  <tr>
+    <td>订单编号:</td>
+    <td id="orderId"></td>
+    <td>下单用户:</td>
+    <td id="userName"></td>
+    <td>保障点:</td>
+    <td id="guaranteeSite"></td>
+  </tr>
+
+  <tr>
+    <td>前往时间:</td>
+    <td id="leaveForTime"></td>
+    <td>下单时间:</td>
+    <td id="CTime"></td>
+    <td>订单金额:</td>
+    <td id="OrderTotalMoney"></td>
+  </tr>
+  <tr>
+    <td>订单充值金额:</td>
+    <td id="OrderBalancTotal"></td>
+    <td>订单补贴金额:</td>
+    <td id="OrderSubsidyTotal"></td>
+    <td>订单状态:</td>
+    <td id="Status"></td>
+  </tr>
+  <tr>
+    <td>接待项目数:</td>
+    <td id="ReceptionProjectCount"></td>
+  </tr>
+
+</table>
+
+<ul id="myTab" class="nav nav-tabs" style="height: auto;">
+  <li class="active"><a href="#cz" data-toggle="tab">充值记录</a></li>
+  <li><a href="#bt" data-toggle="tab">补贴记录</a></li>
+  <li><a href="#dk" data-toggle="tab">代扣记录</a></li>
+</ul>
+<div id="myTabContent" class="tab-content" >
+  <div class="tab-pane fade in active" id="cz">
+    <table class="table table-bordered table2" id="chongzhi">
+    </table>
+  </div>
+  <div class="tab-pane fade" id="bt" >
+    <table class="table table-bordered table2" id="butie" >
+    </table>
+  </div>
+  <div class="tab-pane fade" id="dk">
+    <table class="table table-bordered table2" id="daikou">
+    </table>
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+  $(function () {
+    initLoading();
+    // 初始化获取统计数据
+    getDetailData();
+
+  });
+  function initLoading(){
+    $("body").append("<!-- loading -->" +
+      "<div class='modal fade' id='loading' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>" +
+      "<div class='modal-dialog' role='document'>" +
+      "<div class='modal-content'>" +
+      "<div class='modal-header'>" +
+      "<h4 class='modal-title' id='myModalLabel'>提示</h4>" +
+      "</div>" +
+      "<div id='loadingText' class='modal-body'>" +
+      "<span style='color: black' class='glyphicon glyphicon-refresh' aria-hidden='true'>1</span>" +
+      "处理中，请稍候。。。" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function getDetailData() {
+    showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/fishing/orderDetial",
+        data:{
+          //订单编号
+          orderId:getQueryString('orderId')
+        },
+        success : function (data) {
+          getRechargeData();
+          // hideLoading();
+          if (data.data) {
+            console.log(data.data);
+            $('#orderId').html(data.data.orderId)
+            $('#userName').html(data.data.userName)
+            $('#guaranteeSite').html(data.data.guaranteeSite)
+            $('#leaveForTime').html(data.data.leaveForTime)
+            $('#CTime').html(data.data.CTime)
+            $('#OrderTotalMoney').html(data.data.OrderTotalMoney)
+            $('#OrderBalancTotal').html(data.data.OrderBalancTotal)
+            $('#OrderSubsidyTotal').html(data.data.OrderSubsidyTotal)
+            $('#Status').html(data.data.Status)
+            $('#ReceptionProjectCount').html(data.data.ReceptionProjectCount)
+          }
+        },
+        error: function () {
+          getRechargeData();
+          // hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+
+  function getRechargeData() {
+    // showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/user/recharge/list",
+        data:{
+          pageNumber:0,
+          pageSize:500,
+          userId:getQueryString('id')
+        },
+        success : function (data) {
+          getSubsidyData();
+          // hideLoading();
+          if (data.data) {
+            console.log(data.data);
+
+            $('#chongzhi').bootstrapTable({
+              columns: [
+                {field: 'amount', title: '充值金额'},
+                {field: 'time', title: '充值时间'},
+              ]
+            });
+
+            $('#chongzhi').bootstrapTable('load', data.data);
+          }
+        },
+        error: function () {
+          getSubsidyData();
+          // hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+
+  function getSubsidyData() {
+    // showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/user/subsidy/list",
+        data:{
+          pageNumber:0,
+          pageSize:500,
+          userId:getQueryString('id')
+        },
+        success : function (data) {
+          getProxyData();
+          // hideLoading();
+          if (data.data) {
+            console.log(data.data);
+            $('#butie').bootstrapTable({
+              columns: [
+                {field: 'amount', title: '补贴金额'},
+                {field: 'time', title: '补贴时间'},
+              ]
+            });
+
+            $('#butie').bootstrapTable('load', data.data);
+          }
+        },
+        error: function () {
+          getProxyData();
+          // hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+
+  function getProxyData() {
+    showLoading("加载中...");
+    setTimeout(function () {
+      $.ajax({
+        type: 'GET',
+        url:"/user/proxy/list",
+        data:{
+          pageNumber:0,
+          pageSize:500,
+          userId:getQueryString('id')
+        },
+        success : function (data) {
+          hideLoading();
+          if (data.data) {
+            console.log(data.data);
+            $('#daikou').bootstrapTable({
+              columns: [
+                {field: 'amountSummary', title: '代扣金额'},
+                {field: 'time', title: '代扣时间'},
+                {field: 'tip', title: '摘要'},
+                {field: 'handler', title: '经手人'},
+                {field: 'admin', title: '操作人'},
+              ]
+            });
+
+
+            $('#daikou').bootstrapTable('load', data.data);
+          }
+        },
+        error: function () {
+          hideLoading();
+          $("#info").removeAttr("hidden");
+        }
+      });
+    }, 500);
+  }
+
+  function showLoading(text){
+    $("#loadingText").html(text);
+    $("#loading").modal("show");
+  }
+  function hideLoading(){
+    $("#loading").modal("hide");
+  }
+
+</script>
+
+<script>
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+  }
+
+  function backAction() {
+    window.location.href = "UserInformation.html"
+  }
+  function orderList() {
+    var id = getQueryString('id')
+    window.location.href="OrderList.html?id="+id
+  }
+</script>
 </body>
 </html>

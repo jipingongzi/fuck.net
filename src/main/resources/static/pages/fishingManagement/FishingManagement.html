@@ -325,10 +325,10 @@
         success : function (res) {
           hideLoading();
           tableData=res.data;
-          configTable(tableData);
           tableData.forEach(function (v,k) {
-            tableData[k]['operation']="<div onclick='openDetails("+v.userId+")' >详情</div>"
+            v.operation='<div onclick="openDetails('+v.orderId.toLocaleString()+')">详情</div>';
           });
+          configTable(tableData);
           $('.fixed-table-loading').hide();
         },
         error: function () {
@@ -351,9 +351,9 @@
     $('#orderEndTime').val("");
   }
 
-  function openDetails(id){
-    // window.location.href="UserInformationDetails.html?id="+id
-    window.open(url="https://www.baidu.com")
+  function openDetails(orderId){
+    console.log(orderId);
+    window.location.href="FishingDetail.html?orderId=" + orderId;
   }
 
   // 转换日期至时间戳

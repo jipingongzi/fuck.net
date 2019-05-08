@@ -28,7 +28,7 @@ public class FishingTicketVo {
     //订单补贴金额
     private BigDecimal OrderSubsidyTotal;
     //订单状态
-    private Integer Status;
+    private String Status;
     //页码
     private Integer pageNumber;
     //页大小

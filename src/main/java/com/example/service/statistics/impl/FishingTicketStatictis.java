@@ -55,14 +55,28 @@ public class FishingTicketStatictis {
                 .addScalar("Status",StandardBasicTypes.INTEGER)
                 .setResultTransformer(Transformers.aliasToBean(FishingTicketDto.class));
         List<FishingTicketDto> fishingTicketDtoList = query.getResultList();
-        //增加序号和详情
+        //增加序号、修改订单状态
         List<FishingTicketVo> fishingTicketVoList = new ArrayList<>();
         Integer i = 1;
         for(FishingTicketDto fishingTicketDto:fishingTicketDtoList){
             FishingTicketVo fishingTicketVo1 = new FishingTicketVo();
             BeanUtils.copyProperties(fishingTicketDto,fishingTicketVo1);
             fishingTicketVo1.setNumber(i++);
-            fishingTicketVo1.setOperation("详情");
+//            fishingTicketVo1.setOperation("详情");
+//            fishingTicketVo.setOrderTotalMoney(fishingTicketDto.getOrderBalancTotal().add(fishingTicketDto.getOrderSubsidyTotal()));
+            switch (fishingTicketDto.getStatus()){
+                case 1:
+                    fishingTicketVo1.setStatus("已预约");
+                    break;
+                case 2:
+                    fishingTicketVo1.setStatus("预约成功");
+                    break;
+                case 3:
+                    fishingTicketVo1.setStatus("已取消");
+                    break;
+                default:
+                    break;
+            }
             fishingTicketVoList.add(fishingTicketVo1);
         }
         return fishingTicketVoList;
