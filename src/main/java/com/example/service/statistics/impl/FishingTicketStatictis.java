@@ -1,5 +1,6 @@
 package com.example.service.statistics.impl;
 
+import com.example.service.statistics.dto.FishingDetailDto;
 import com.example.service.statistics.dto.FishingTicketDto;
 import com.example.service.statistics.vo.FishingTicketVo;
 import com.example.service.statistics.vo.PerformOrderVo;
@@ -18,15 +19,17 @@ import java.util.List;
 
 @Service
 public class FishingTicketStatictis {
-    @Autowired
+
     private final EntityManager entityManager;
 
+    @Autowired
     public FishingTicketStatictis(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     public List<FishingTicketVo> getFishingTicketInfo(FishingTicketVo fishingTicketVo){
         StringBuilder stringBuilder = new StringBuilder("SELECT\n" +
+                "\tt1.ID AS id,\n" +
                 "\tt1.OrderNumber AS OrderId,\n" +
                 "\tt2.Phone AS userName,\n" +
                 "\tt3.NAME AS guaranteeSite,\n" +
@@ -43,7 +46,8 @@ public class FishingTicketStatictis {
                 "\tLEFT JOIN YUNYI_GuaranteeServiceManage t3 ON t1.GSMID = t3.ID");
         stringBuilder.append(sqlCondition(fishingTicketVo));
         Query query = entityManager.createNativeQuery(stringBuilder.toString());
-        query.unwrap(SQLQuery.class).addScalar("orderId", StandardBasicTypes.STRING)
+        query.unwrap(SQLQuery.class).addScalar("id",StandardBasicTypes.INTEGER)
+                .addScalar("orderId", StandardBasicTypes.STRING)
                 .addScalar("userName",StandardBasicTypes.STRING)
                 .addScalar("guaranteeSite",StandardBasicTypes.STRING)
                 .addScalar("leaveForTime",StandardBasicTypes.STRING)
@@ -119,5 +123,31 @@ public class FishingTicketStatictis {
 //                    .append("' AND '").append(fishingTicketVo.getOrderEndTime()).append("'\n");
 //        }
         return stringBuilder.toString();
+    }
+
+    public List<FishingDetailDto> getOrderDetsil(Integer orderId){
+        StringBuilder stringBuilder = new StringBuilder("SELECT *\n" +
+                "FROM YUNYI_GuaranteeServiceOrderDetails t2\n" +
+                "WHERE t2.OrderID = ");
+        stringBuilder.append(orderId);
+        Query query = entityManager.createNativeQuery(stringBuilder.toString());
+        query.unwrap(SQLQuery.class).addScalar("ID",StandardBasicTypes.INTEGER)
+                .addScalar("OrderID",StandardBasicTypes.INTEGER)
+                .addScalar("GSPMID",StandardBasicTypes.INTEGER)
+                .addScalar("GSPMTypeID",StandardBasicTypes.INTEGER)
+                .addScalar("GSPMTypeID2",StandardBasicTypes.INTEGER)
+                .addScalar("ParticipantCount",StandardBasicTypes.INTEGER)
+                .addScalar("RetinueCount",StandardBasicTypes.INTEGER)
+                .addScalar("RepastRoomID",StandardBasicTypes.INTEGER)
+                .addScalar("AnglingWeight",StandardBasicTypes.INTEGER)
+                .addScalar("AnglingStatus",StandardBasicTypes.INTEGER)
+                .addScalar("OverStepWeight",StandardBasicTypes.INTEGER)
+                .addScalar("Price",StandardBasicTypes.DOUBLE)
+                .addScalar("TotalMoney",StandardBasicTypes.DOUBLE)
+                .addScalar("OperatorPerson",StandardBasicTypes.STRING)
+                .setResultTransformer(Transformers.aliasToBean(FishingDetailDto.class));
+        List<FishingDetailDto> fishingDetailDtoList = new ArrayList<>();
+        fishingDetailDtoList = query.getResultList();
+        return fishingDetailDtoList;
     }
 }

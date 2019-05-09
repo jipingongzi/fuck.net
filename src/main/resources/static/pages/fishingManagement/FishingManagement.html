@@ -326,9 +326,12 @@
           hideLoading();
           tableData=res.data;
           tableData.forEach(function (v,k) {
-            v.operation='<div onclick="openDetails('+v.orderId.toLocaleString()+')">详情</div>';
+            var orderIdString = new String(v.orderId);
+            // v.operation='<div onclick="openDetails('+orderIdString+')">详情</div>';
+            v.operation="<a onclick = openDetails('"+orderIdString+"');>详情</a>";
+            console.log(orderIdString);
           });
-          configTable(tableData);
+            configTable(tableData);
           $('.fixed-table-loading').hide();
         },
         error: function () {

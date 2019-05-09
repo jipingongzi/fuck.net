@@ -1,6 +1,7 @@
 package com.example.service.web;
 
 import com.example.service.common.RestResponse;
+import com.example.service.statistics.dto.FishingDetailDto;
 import com.example.service.statistics.dto.FishingTicketDto;
 import com.example.service.statistics.impl.FishingTicketStatictis;
 import com.example.service.statistics.vo.FishingTicketVo;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,7 @@ public class FishingTicketController {
         return RestResponse.buildResponse(fishingTicketVoList);
     }
 
-    //垂钓订单查询-垂钓管理详情
+//    垂钓订单查询-垂钓管理详情
     @GetMapping(value = "orderDetail")
     public RestResponse getOrderDetail(@RequestParam String orderId){
         FishingTicketVo fishingTicketVo = new FishingTicketVo();
@@ -60,5 +62,13 @@ public class FishingTicketController {
         fishingTicketDtoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
         log.info("获取垂钓订单详情");
         return RestResponse.buildResponse(fishingTicketDtoList.get(0));
+    }
+
+    @GetMapping(value = "orderType")
+    public RestResponse getOrderForType(@RequestParam Integer orderId){
+        List<FishingDetailDto> fishingDetailDtoList = new ArrayList<>();
+        fishingDetailDtoList = fishingTicketStatictis.getOrderDetsil(orderId);
+        log.info("获取垂钓订单的项目分类情况");
+        return RestResponse.buildResponse(fishingDetailDtoList);
     }
 }

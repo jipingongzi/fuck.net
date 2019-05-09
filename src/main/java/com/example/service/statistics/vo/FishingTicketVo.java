@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 public class FishingTicketVo {
     //序号
     private Integer number;
+    //订单ID，主键
+    private Integer id;
     //订单编号
     private String orderId;
     //下单用户

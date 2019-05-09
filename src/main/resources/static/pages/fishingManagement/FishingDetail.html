@@ -88,22 +88,42 @@
 
 </table>
 
-<ul id="myTab" class="nav nav-tabs" style="height: auto;">
-  <li class="active"><a href="#cz" data-toggle="tab">充值记录</a></li>
-  <li><a href="#bt" data-toggle="tab">补贴记录</a></li>
-  <li><a href="#dk" data-toggle="tab">代扣记录</a></li>
+<!--<ul id="myTab" class="nav nav-tabs" style="height: auto;">-->
+<!--  <li class="active"><a href="#cz" data-toggle="tab">垂钓</a></li>-->
+<!--  <li><a href="#bt" data-toggle="tab">就餐</a></li>-->
+<!--  <li><a href="#dk" data-toggle="tab">场区参观</a></li>-->
+<!--  <li><a href="#dk" data-toggle="tab">棋牌娱乐</a></li>-->
+<!--  <li><a href="#dk" data-toggle="tab">书法</a></li>-->
+<!--</ul>-->
+
+<ul id="myTab" class="nav nav-tabs" style="height: auto">
+  <li id="fishingButton" class="active" data-toggle="tab"><a href="#fishing">垂钓</a></li>
+  <li id="mealButton" data-toggle="tab"><a href="#meal">就餐</a></li>
+  <li id="visitingButton"><a href="#visiting">场区参观</a></li>
+  <li id="entertainmentButton"><a href="#entertaiment">棋牌娱乐</a></li>
+  <li id="handwritingButton"><a href="#handwriting">书法</a></li>
 </ul>
+
+
 <div id="myTabContent" class="tab-content" >
-  <div class="tab-pane fade in active" id="cz">
-    <table class="table table-bordered table2" id="chongzhi">
+  <div class="tab-pane fade in active" id="fishing">
+    <table class="table table-bordered table2" id="chuidiao">
     </table>
   </div>
-  <div class="tab-pane fade" id="bt" >
-    <table class="table table-bordered table2" id="butie" >
+  <div class="tab-pane fade" id="meal" >
+    <table class="table table-bordered table2" id="jiucan" >
     </table>
   </div>
-  <div class="tab-pane fade" id="dk">
-    <table class="table table-bordered table2" id="daikou">
+  <div class="tab-pane fade" id="visiting">
+    <table class="table table-bordered table2" id="canguan">
+    </table>
+  </div>
+  <div class="tab-pane fade" id="entertainment">
+    <table class="table table-bordered table2" id="yule">
+    </table>
+  </div>
+  <div class="tab-pane fade" id="handwriting" style="visibility: hidden">
+    <table class="table table-bordered table2" id="shufa">
     </table>
   </div>
 
@@ -134,33 +154,41 @@
       "</div>" +
       "</div>"
     );
+    $('#fishingButton').css('display','none');
+    $('#mealButton').css('display','none');
+    $('#visitingButton').css('display','none');
+    $('#entertainmentButton').css('display','none');
+    $('#handwritingButton').css('display','none');
   }
 
   function getDetailData() {
     showLoading("加载中...");
     setTimeout(function () {
+      orderId;
+      var orderNumber = new String(getQueryString('orderId'));
       $.ajax({
         type: 'GET',
-        url:"/fishing/orderDetial",
+        url:"/fishing/orderDetail",
         data:{
           //订单编号
-          orderId:getQueryString('orderId')
+          orderId:orderNumber
         },
         success : function (data) {
-          getRechargeData();
-          // hideLoading();
+          getFishingData();
+          hideLoading();
           if (data.data) {
-            console.log(data.data);
+            orderId=data.data.id;
+            console.log(orderId);
             $('#orderId').html(data.data.orderId)
             $('#userName').html(data.data.userName)
             $('#guaranteeSite').html(data.data.guaranteeSite)
             $('#leaveForTime').html(data.data.leaveForTime)
-            $('#CTime').html(data.data.CTime)
-            $('#OrderTotalMoney').html(data.data.OrderTotalMoney)
-            $('#OrderBalancTotal').html(data.data.OrderBalancTotal)
-            $('#OrderSubsidyTotal').html(data.data.OrderSubsidyTotal)
-            $('#Status').html(data.data.Status)
-            $('#ReceptionProjectCount').html(data.data.ReceptionProjectCount)
+            $('#CTime').html(data.data.ctime)
+            $('#OrderTotalMoney').html(data.data.orderTotalMoney)
+            $('#OrderBalancTotal').html(data.data.orderBalancTotal)
+            $('#OrderSubsidyTotal').html(data.data.orderSubsidyTotal)
+            $('#Status').html(data.data.status)
+            $('#ReceptionProjectCount').html(data.data.receptionProjectCount)
           }
         },
         error: function () {
@@ -172,108 +200,52 @@
     }, 500);
   }
 
-  function getRechargeData() {
+  function getFishingData() {
     // showLoading("加载中...");
     setTimeout(function () {
       $.ajax({
         type: 'GET',
-        url:"/user/recharge/list",
+        url:"/fishing/orderType",
         data:{
-          pageNumber:0,
-          pageSize:500,
-          userId:getQueryString('id')
+          orderId:orderId
         },
-        success : function (data) {
-          getSubsidyData();
+        success : function (res) {
+          var data;
           // hideLoading();
-          if (data.data) {
-            console.log(data.data);
+          if (res.data) {
+            console.log(res.data);
+            for(var i = 0;i < res.data.length;i++){
+              var temp = res.data[i];
+              if(temp.gspmtypeID == 1){
+                $('#fishingButton').css('display','block');
+                $('#chuidiao').bootstrapTable({
+                  columns: [
+                    {field: 'participantCount', title: '垂钓人数'},
+                    {field: 'anglingWeight', title: '垂钓斤数'}
+                  ]
+                });
+                $('#chuidiao').bootstrapTable('load',getArray(temp));
+              }
+              if(temp.gspmtypeID == 2){
+                $('#mealButton').css('display','block');
+                $('#jiucan').bootstrapTable({
+                  columns: [
+                    {field: 'gspmtypeID2', title: '就餐种类'},
+                    {field: 'participantCount', title: '首长及家属、亲朋人数'},
+                    {field: 'retinueCount', title: '随从工作人员人数'},
+                    {field: 'repastRoomID', title: '就餐房间'},
+                  ]
+                });
+                $('#jiucan').bootstrapTable('load',getArray(temp));
 
-            $('#chongzhi').bootstrapTable({
-              columns: [
-                {field: 'amount', title: '充值金额'},
-                {field: 'time', title: '充值时间'},
-              ]
-            });
+              }
+            }
 
-            $('#chongzhi').bootstrapTable('load', data.data);
           }
         },
         error: function () {
           getSubsidyData();
           // hideLoading();
-          $("#info").removeAttr("hidden");
-        }
-      });
-    }, 500);
-  }
-
-  function getSubsidyData() {
-    // showLoading("加载中...");
-    setTimeout(function () {
-      $.ajax({
-        type: 'GET',
-        url:"/user/subsidy/list",
-        data:{
-          pageNumber:0,
-          pageSize:500,
-          userId:getQueryString('id')
-        },
-        success : function (data) {
-          getProxyData();
-          // hideLoading();
-          if (data.data) {
-            console.log(data.data);
-            $('#butie').bootstrapTable({
-              columns: [
-                {field: 'amount', title: '补贴金额'},
-                {field: 'time', title: '补贴时间'},
-              ]
-            });
-
-            $('#butie').bootstrapTable('load', data.data);
-          }
-        },
-        error: function () {
-          getProxyData();
-          // hideLoading();
-          $("#info").removeAttr("hidden");
-        }
-      });
-    }, 500);
-  }
-
-  function getProxyData() {
-    showLoading("加载中...");
-    setTimeout(function () {
-      $.ajax({
-        type: 'GET',
-        url:"/user/proxy/list",
-        data:{
-          pageNumber:0,
-          pageSize:500,
-          userId:getQueryString('id')
-        },
-        success : function (data) {
-          hideLoading();
-          if (data.data) {
-            console.log(data.data);
-            $('#daikou').bootstrapTable({
-              columns: [
-                {field: 'amountSummary', title: '代扣金额'},
-                {field: 'time', title: '代扣时间'},
-                {field: 'tip', title: '摘要'},
-                {field: 'handler', title: '经手人'},
-                {field: 'admin', title: '操作人'},
-              ]
-            });
-
-
-            $('#daikou').bootstrapTable('load', data.data);
-          }
-        },
-        error: function () {
-          hideLoading();
           $("#info").removeAttr("hidden");
         }
       });
@@ -288,6 +260,11 @@
     $("#loading").modal("hide");
   }
 
+  function getArray(data) {
+    var result = new Array(data);
+    return result;
+  }
+
 </script>
 
 <script>
@@ -300,10 +277,7 @@
   function backAction() {
     window.location.href = "UserInformation.html"
   }
-  function orderList() {
-    var id = getQueryString('id')
-    window.location.href="OrderList.html?id="+id
-  }
+
 </script>
 </body>
 </html>

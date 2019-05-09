@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class FishingTicketDto {
+    //订单id
+    private Integer id;
     //订单编号
     private String orderId;
     //下单用户
