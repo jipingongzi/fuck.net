@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>查看垂钓服务订单详情</title>
+  <link href="/Content/easyui/themes/insdep/easyui.css" rel="stylesheet" />
+  <link href="/Content/css/style.css" rel="stylesheet" />
+  <link href="/Content/css/icon.css" rel="stylesheet" />
+  <link href="/Content/css/gridtable.css" rel="stylesheet" />
+
+  <script src="/Content/js/jquery-1.9.1.min.js"></script>
+  <script src="/Content/easyui/jquery.easyui.min.js"></script>
+  <script src="/Content/easyui/locale/easyui-lang-zh_CN.js"></script>
+  <script src="/Content/js/jquery.form.js"></script>
+  <script src="/Content/js/jquery.validate.min.js"></script>
+  <script src="/Content/js/common.admin.js"></script>
+  <style>
+    .maincontainer {
+      border: 1px solid #95b8e7;
+      height: calc(100% - 2px);
+      width: calc(100%);
+    }
+  </style>
+</head>
+<body>
+
+<style type="text/css">
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+</style>
+
+<table class="gridtable">
+  <tr>
+    <td style="width: 20%">订单编号：</td>
+    <td>
+      2019050516483863734448
+    </td>
+    <td>下单用户：</td>
+    <td>
+      Z0012Z
+    </td>
+  </tr>
+  <tr>
+    <td>保障点：</td>
+    <td>
+      上辛堡农副业基地生产点
+    </td>
+    <td>前往时间：</td>
+    <td>
+      2019-05-06
+    </td>
+  </tr>
+  <tr>
+    <td>下单时间：</td>
+    <td>
+      2019/5/5 16:48:38
+    </td>
+    <td>订单金额：</td>
+    <td>
+      160.00
+    </td>
+  </tr>
+  <tr>
+    <td>订单充值金额：</td>
+    <td>
+      160.00
+    </td>
+    <td>订单补贴金额：</td>
+    <td>
+      0.00
+    </td>
+  </tr>
+  <tr>
+    <td>订单状态：</td>
+    <td>
+      已取消
+    </td>
+    <td>接待项目数：</td>
+    <td>
+      2
+    </td>
+  </tr>
+</table>
+<div class="easyui-tabs" data-options="border:false">
+  <div title="垂钓" style="padding: 5px 10px 5px 10px;">
+    <table class="gridtable" style="text-align: center;">
+      <tr>
+        <td style="text-align: center">垂钓人数</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">4</td>
+      </tr>
+    </table>
+  </div>
+  <div title="就餐" style="padding: 5px 10px 5px 10px;">
+    <table class="gridtable" style="text-align: center;">
+      <tr>
+        <td style="text-align: center;">就餐种类</td>
+        <td>首长及家属、亲朋人数</td>
+        <td style="text-align: center;">随从工作人员人数</td>
+        <td>就餐房间</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">炒菜</td>
+        <td>4</td>
+        <td style="text-align: center;">2</td>
+        <td>1号</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<table class="gridtable">
+  <tr>
+    <td style="width: 20%; vertical-align: top;">取消订单原因：</td>
+    <td>
+      就餐设置错误        </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  $(function () {
+    parent.window.buttons.cancelBtn.linkbutton("disable");
+
+    window.saveModel = function (dialogWindow, parentCancelBtn) {
+      if ($("#CancelReason").length == 0) return;
+      var reason = $("#CancelReason").val().replace(/\s+/g, "");
+      if (reason.length == 0) {
+        msgShow('提示', '请核对相关信息!', 'warning');
+        return;
+      }
+      var data = {
+        id : 1,
+        mId: 66,
+        reason: reason
+      };
+      parentCancelBtn.linkbutton('disable');
+      $.ajax({
+        type: "POST",
+        url: "/Backstage/guaranteeserviceorder/cancelorder", //用与处理ajax的地址及函数
+        data: data,
+        dataType: "json",
+        success: function (res) {
+          parentCancelBtn.linkbutton('enable');
+          if (res.success) {
+            msgAlert(res.message, function () {
+              parent.clearSelections();
+              parent.reload(1);
+              dialogWindow.dialog('destroy'); //关闭新建窗口
+            });
+          } else {
+            msgShow('提示', res.message, 'warning');
+          }
+        },
+        error: function () {
+          parentCancelBtn.linkbutton('enable');
+        }
+      });
+    }
+  });
+</script>
+
+
+</body>
+</html>

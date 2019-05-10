@@ -96,33 +96,50 @@
 <!--  <li><a href="#dk" data-toggle="tab">书法</a></li>-->
 <!--</ul>-->
 
-<ul id="myTab" class="nav nav-tabs" style="height: auto">
-  <li id="fishingButton" class="active" data-toggle="tab"><a href="#fishing">垂钓</a></li>
-  <li id="mealButton" data-toggle="tab"><a href="#meal">就餐</a></li>
-  <li id="visitingButton"><a href="#visiting">场区参观</a></li>
-  <li id="entertainmentButton"><a href="#entertaiment">棋牌娱乐</a></li>
-  <li id="handwritingButton"><a href="#handwriting">书法</a></li>
+<!--<ul id="myTab" class="nav nav-tabs" style="height: auto">-->
+<!--  <li id="fishingButton" class="active" data-toggle="tab"><a href="#fishing">垂钓</a></li>-->
+<!--  <li id="mealButton" data-toggle="tab"><a href="#meal">就餐</a></li>-->
+<!--  <li id="visitingButton"><a href="#visiting">场区参观</a></li>-->
+<!--  <li id="entertainmentButton"><a href="#entertaiment">棋牌娱乐</a></li>-->
+<!--  <li id="handwritingButton"><a href="#handwriting">书法</a></li>-->
+<!--</ul>-->
+<ul class="nav nav-tabs" role="tablist">
+  <li id="fishingButton" class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#fishing">垂钓</a>
+  </li>
+  <li id="mealButton" class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#meal">就餐</a>
+  </li>
+  <li id="visitingButton" class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#visiting">游园</a>
+  </li>
+  <li id="entertainmentButton" class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#entertainment">棋牌娱乐</a>
+  </li>
+  <li id="handwritingButton" class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#handwriting">书法</a>
+  </li>
 </ul>
 
 
 <div id="myTabContent" class="tab-content" >
-  <div class="tab-pane fade in active" id="fishing">
+  <div class="tab-pane container active" id="fishing">
     <table class="table table-bordered table2" id="chuidiao">
     </table>
   </div>
-  <div class="tab-pane fade" id="meal" >
+  <div class="tab-pane container fade" id="meal" >
     <table class="table table-bordered table2" id="jiucan" >
     </table>
   </div>
-  <div class="tab-pane fade" id="visiting">
+  <div class="tab-pane container fade" id="visiting">
     <table class="table table-bordered table2" id="canguan">
     </table>
   </div>
-  <div class="tab-pane fade" id="entertainment">
+  <div class="tab-pane container fade" id="entertainment">
     <table class="table table-bordered table2" id="yule">
     </table>
   </div>
-  <div class="tab-pane fade" id="handwriting" style="visibility: hidden">
+  <div class="tab-pane container fade" id="handwriting" style="visibility: hidden">
     <table class="table table-bordered table2" id="shufa">
     </table>
   </div>
@@ -239,6 +256,15 @@
                 $('#jiucan').bootstrapTable('load',getArray(temp));
 
               }
+              if(temp.gspmtypeID == 3) {
+                $('#visitingButton').css('display', 'block');
+                $('#canguan').bootstrapTable({
+                  columns: [
+                    {field: 'participantCount', title: '参与人数'},
+                  ]
+                });
+                $('#canguan').bootstrapTable('load', getArray(temp));
+              }
             }
 
           }
@@ -275,7 +301,7 @@
   }
 
   function backAction() {
-    window.location.href = "UserInformation.html"
+    window.location.href = "FishingManagement.html"
   }
 
 </script>
