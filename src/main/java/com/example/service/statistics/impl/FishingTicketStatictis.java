@@ -87,6 +87,9 @@ public class FishingTicketStatictis {
     }
     private String sqlCondition(FishingTicketVo fishingTicketVo){
         StringBuilder stringBuilder = new StringBuilder(" where 1 = 1\n");
+        if(fishingTicketVo.getServiceId() != 0){
+            stringBuilder.append(" AND t2.ServiceID = ").append(fishingTicketVo.getServiceId()).append("\n");
+        }
         if(fishingTicketVo == null){
             return "";
         }
@@ -126,9 +129,20 @@ public class FishingTicketStatictis {
     }
 
     public List<FishingDetailDto> getOrderDetsil(Integer orderId){
-        StringBuilder stringBuilder = new StringBuilder("SELECT *\n" +
-                "FROM YUNYI_GuaranteeServiceOrderDetails t2\n" +
-                "WHERE t2.OrderID = ");
+        StringBuilder stringBuilder = new StringBuilder("SELECT\n" +
+                "\tt2.*,\n" +
+                "CASE\n" +
+                "\tt2.GSPMTypeID2 \n" +
+                "\tWHEN 1 THEN\n" +
+                "\t'炒菜' \n" +
+                "\tWHEN 2 THEN\n" +
+                "\t'火锅' \n" +
+                "\tEND AS MealType, t3.NAME AS tabName \n" +
+                "FROM\n" +
+                "\tYUNYI_GuaranteeServiceOrderDetails t2\n" +
+                "\tLEFT JOIN YUNYI_GuaranteeServiceProjectManage t3 ON t2.GSPMID = t3.ID \n" +
+                "WHERE\n" +
+                "\tt2.OrderID = ");
         stringBuilder.append(orderId);
         Query query = entityManager.createNativeQuery(stringBuilder.toString());
         query.unwrap(SQLQuery.class).addScalar("ID",StandardBasicTypes.INTEGER)
@@ -145,6 +159,8 @@ public class FishingTicketStatictis {
                 .addScalar("Price",StandardBasicTypes.DOUBLE)
                 .addScalar("TotalMoney",StandardBasicTypes.DOUBLE)
                 .addScalar("OperatorPerson",StandardBasicTypes.STRING)
+                .addScalar("MealType",StandardBasicTypes.STRING)
+                .addScalar("tabName",StandardBasicTypes.STRING)
                 .setResultTransformer(Transformers.aliasToBean(FishingDetailDto.class));
         List<FishingDetailDto> fishingDetailDtoList = new ArrayList<>();
         fishingDetailDtoList = query.getResultList();

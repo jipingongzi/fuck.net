@@ -103,21 +103,12 @@
 <!--  <li id="entertainmentButton"><a href="#entertaiment">棋牌娱乐</a></li>-->
 <!--  <li id="handwritingButton"><a href="#handwriting">书法</a></li>-->
 <!--</ul>-->
-<ul class="nav nav-tabs" role="tablist">
+<ul id="myTab" class="nav nav-tabs" role="tablist">
   <li id="fishingButton" class="nav-item">
     <a class="nav-link active" data-toggle="tab" href="#fishing">垂钓</a>
   </li>
   <li id="mealButton" class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#meal">就餐</a>
-  </li>
-  <li id="visitingButton" class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#visiting">游园</a>
-  </li>
-  <li id="entertainmentButton" class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#entertainment">棋牌娱乐</a>
-  </li>
-  <li id="handwritingButton" class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#handwriting">书法</a>
   </li>
 </ul>
 
@@ -129,18 +120,6 @@
   </div>
   <div class="tab-pane container fade" id="meal" >
     <table class="table table-bordered table2" id="jiucan" >
-    </table>
-  </div>
-  <div class="tab-pane container fade" id="visiting">
-    <table class="table table-bordered table2" id="canguan">
-    </table>
-  </div>
-  <div class="tab-pane container fade" id="entertainment">
-    <table class="table table-bordered table2" id="yule">
-    </table>
-  </div>
-  <div class="tab-pane container fade" id="handwriting" style="visibility: hidden">
-    <table class="table table-bordered table2" id="shufa">
     </table>
   </div>
 
@@ -171,11 +150,27 @@
       "</div>" +
       "</div>"
     );
-    $('#fishingButton').css('display','none');
-    $('#mealButton').css('display','none');
-    $('#visitingButton').css('display','none');
-    $('#entertainmentButton').css('display','none');
-    $('#handwritingButton').css('display','none');
+    // $('#fishingButton').css('display','none');
+    // $('#mealButton').css('display','none');
+    // $('#visitingButton').css('display','none');
+    // $('#entertainmentButton').css('display','none');
+    // $('#handwritingButton').css('display','none');
+    $('.nav-item').css('display','none');
+
+    $('#chuidiao').bootstrapTable({
+      columns: [
+        {field: 'participantCount', title: '垂钓人数'},
+        {field: 'anglingWeight', title: '垂钓斤数'}
+      ]
+    });
+    $('#jiucan').bootstrapTable({
+      columns: [
+        {field: 'mealType', title: '就餐种类'},
+        {field: 'participantCount', title: '首长及家属、亲朋人数'},
+        {field: 'retinueCount', title: '随从工作人员人数'},
+        {field: 'repastRoomID', title: '就餐房间'},
+      ]
+    });
   }
 
   function getDetailData() {
@@ -235,36 +230,27 @@
               var temp = res.data[i];
               if(temp.gspmtypeID == 1){
                 $('#fishingButton').css('display','block');
-                $('#chuidiao').bootstrapTable({
-                  columns: [
-                    {field: 'participantCount', title: '垂钓人数'},
-                    {field: 'anglingWeight', title: '垂钓斤数'}
-                  ]
-                });
                 $('#chuidiao').bootstrapTable('load',getArray(temp));
-              }
+              }else
               if(temp.gspmtypeID == 2){
                 $('#mealButton').css('display','block');
-                $('#jiucan').bootstrapTable({
-                  columns: [
-                    {field: 'gspmtypeID2', title: '就餐种类'},
-                    {field: 'participantCount', title: '首长及家属、亲朋人数'},
-                    {field: 'retinueCount', title: '随从工作人员人数'},
-                    {field: 'repastRoomID', title: '就餐房间'},
-                  ]
-                });
                 $('#jiucan').bootstrapTable('load',getArray(temp));
-
               }
-              if(temp.gspmtypeID == 3) {
-                $('#visitingButton').css('display', 'block');
-                $('#canguan').bootstrapTable({
-                  columns: [
-                    {field: 'participantCount', title: '参与人数'},
-                  ]
-                });
-                $('#canguan').bootstrapTable('load', getArray(temp));
+              else {
+                loadTable(i);
+                addOtherTab(temp.tabName,i);
+                // loadTable(i);
+                loadTableContent(temp,i);
               }
+              // if(temp.gspmtypeID == 3) {
+              //   $('#visitingButton').css('display', 'block');
+              //   $('#canguan').bootstrapTable({
+              //     columns: [
+              //       {field: 'participantCount', title: '参与人数'},
+              //     ]
+              //   });
+              //   $('#canguan').bootstrapTable('load', getArray(temp));
+              // }
             }
 
           }
@@ -289,6 +275,30 @@
   function getArray(data) {
     var result = new Array(data);
     return result;
+  }
+  //导航栏新增一条
+  function addOtherTab(title,i) {
+    document.getElementById('myTab').innerHTML += '<li class="nav-item">\n' +
+      '    <a class="nav-link" data-toggle="tab" href="#tabItem'+i+'">'+title+'</a>\n' +
+      '  </li>';
+    console.log(document.getElementById('myTab').innerHTML);
+  }
+  //动态加载新增的导航栏跳转表格
+  function loadTable(i) {
+    document.getElementById('myTabContent').innerHTML += '<div class="tab-pane container fade" id="tabItem'+i+'">\n' +
+      '    <table class="table table-bordered table2" id="tableItem'+i+'">\n' +
+      '    </table>\n' +
+      '  </div>';
+    console.log(document.getElementById('myTabContent').innerHTML);
+    $('#tableItem'+i).bootstrapTable({
+      columns: [
+        {field: 'participantCount', title: '参与人数'}
+      ]
+    });
+  }
+  //加载动态表格内容
+  function loadTableContent(temp,i) {
+    $('#tableItem'+i).bootstrapTable('load',getArray(temp));
   }
 
 </script>

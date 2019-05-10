@@ -45,4 +45,5 @@ public class FishingTicketVo {
     private String orderEndTime;
     //操作
     private String operation;
+    private Integer serviceId;
 }

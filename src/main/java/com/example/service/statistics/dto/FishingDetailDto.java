@@ -2,6 +2,8 @@ package com.example.service.statistics.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FishingDetailDto {
     //订单详情id
@@ -32,5 +34,8 @@ public class FishingDetailDto {
     private Double TotalMoney;
     //垂钓经办人
     private String OperatorPerson;
-
+    //就餐项目类型 1炒菜2火锅
+    private String MealType;
+    //导航栏title
+    private String tabName;
 }

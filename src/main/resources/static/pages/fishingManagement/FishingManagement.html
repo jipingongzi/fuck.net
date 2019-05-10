@@ -203,7 +203,6 @@
 </div>
 
 <table class="table table-bordered table-condensed table-responsive"  id="tablelist" data-mobile-responsive="true"></table>
-
 <script type="text/javascript">
   mui.init({
     pullRefresh : {
@@ -297,6 +296,7 @@
 
     showLoading("加载中...");
     setTimeout(function () {
+      // alert($.cookie('serviceId'));
       $.ajax({
         type: 'GET',
         data:{
