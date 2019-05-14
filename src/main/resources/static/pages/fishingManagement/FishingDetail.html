@@ -103,26 +103,29 @@
 <!--  <li id="entertainmentButton"><a href="#entertaiment">棋牌娱乐</a></li>-->
 <!--  <li id="handwritingButton"><a href="#handwriting">书法</a></li>-->
 <!--</ul>-->
-<ul id="myTab" class="nav nav-tabs" role="tablist">
-  <li id="fishingButton" class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#fishing">垂钓</a>
-  </li>
-  <li id="mealButton" class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#meal">就餐</a>
-  </li>
-</ul>
+<div>
+
+  <ul id="myTab" style="height: auto" class="nav nav-tabs" role="tablist">
+    <li id="fishingButton" class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#fishing">垂钓</a>
+    </li>
+    <li id="mealButton" class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#meal">就餐</a>
+    </li>
+  </ul>
 
 
-<div id="myTabContent" class="tab-content" >
-  <div class="tab-pane container active" id="fishing">
-    <table class="table table-bordered table2" id="chuidiao">
-    </table>
+  <div id="myTabContent" style="width: 100%" class="tab-content" >
+    <div class="tab-pane container active" style="width: 100%" id="fishing">
+      <table class="table table-bordered table2" id="chuidiao">
+      </table>
+    </div>
+    <div class="tab-pane container fade" style="width: 100%" id="meal" >
+      <table class="table table-bordered table2" id="jiucan" >
+      </table>
+    </div>
+
   </div>
-  <div class="tab-pane container fade" id="meal" >
-    <table class="table table-bordered table2" id="jiucan" >
-    </table>
-  </div>
-
 </div>
 
 
@@ -285,7 +288,7 @@
   }
   //动态加载新增的导航栏跳转表格
   function loadTable(i) {
-    document.getElementById('myTabContent').innerHTML += '<div class="tab-pane container fade" id="tabItem'+i+'">\n' +
+    document.getElementById('myTabContent').innerHTML += '<div class="tab-pane container fade" style="width: 100%" id="tabItem'+i+'">\n' +
       '    <table class="table table-bordered table2" id="tableItem'+i+'">\n' +
       '    </table>\n' +
       '  </div>';

@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +52,15 @@ public class FishingTicketController {
         fishingTicketVo.setOrderId(orderId);
         fishingTicketVo.setUserName(user);
         fishingTicketVo.setGuaranteeSite(guaranteeSite);
-        fishingTicketVo.setLeaveForStartTime(leaveForStartTime);
-        fishingTicketVo.setLeaveForEndTime(leaveForEndTime);
+        if(leaveForStartTime != null && !leaveForStartTime.isEmpty())
+            fishingTicketVo.setLeaveForStartTime(LocalDate.parse(leaveForStartTime));
+        if(leaveForEndTime != null && !leaveForEndTime.isEmpty())
+            fishingTicketVo.setLeaveForEndTime(LocalDate.parse(leaveForEndTime));
         fishingTicketVo.setStatus(Status);
-        fishingTicketVo.setOrderStartTime(orderStartTime);
-        fishingTicketVo.setOrderEndTime(orderEndTime);
+        if(orderStartTime != null && !orderStartTime.isEmpty())
+            fishingTicketVo.setOrderStartTime(LocalDate.parse(orderStartTime));
+        if(orderEndTime != null && !orderEndTime.isEmpty())
+            fishingTicketVo.setOrderEndTime(LocalDate.parse(orderEndTime));
         fishingTicketVo.setPageNumber(pageNumber);
         fishingTicketVo.setPageSize(pageSize);
         fishingTicketVo.setServiceId(serviceId);

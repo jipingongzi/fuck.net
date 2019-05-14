@@ -3,6 +3,7 @@ package com.example.service.statistics.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -36,13 +37,13 @@ public class FishingTicketVo {
     //页大小
     private Integer pageSize;
     //前往时间开始时间
-    private String leaveForStartTime;
+    private LocalDate leaveForStartTime;
     //前往时间结束时间
-    private String leaveForEndTime;
+    private LocalDate leaveForEndTime;
     //下单开始时间
-    private String orderStartTime;
+    private LocalDate orderStartTime;
     //下单结束时间
-    private String orderEndTime;
+    private LocalDate orderEndTime;
     //操作
     private String operation;
     private Integer serviceId;

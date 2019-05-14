@@ -16,9 +16,9 @@ public class PerformOrderDto {
     //演出名称
     private String performName;
     //演出开始时间
-    private LocalDateTime performStartTime;
+    private String performStartTime;
     //演出结束时间
-    private LocalDateTime performEndTime;
+    private String performEndTime;
     //演出分类
     private String performCategory;
     //演出剧场
@@ -26,9 +26,9 @@ public class PerformOrderDto {
     //演出厅
     private String performRoom;
     //下单截止时间
-    private LocalDateTime orderEndTime;
+    private String orderEndTime;
     //下单时间
-    private LocalDateTime orderTime;
+    private String orderTime;
     //订单金额
     private Double orderAmount;
     //预约张数

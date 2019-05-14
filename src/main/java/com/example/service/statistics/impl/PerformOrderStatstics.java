@@ -50,7 +50,7 @@ public class PerformOrderStatstics implements IPerformOrderStatistics {
                 "\tLEFT JOIN YUNYI_Theater t5 ON t3.TID = t5.ID\n" +
                 "\tLEFT JOIN YUNYI_TheaterRoom t6 ON t3.TRID = t6.ID\n");
         sql.append(sqlCondition(performOrderVo));
-        Query query = entityManager.createNativeQuery(sql.toString());
+        Query query = entityManager.createNativeQuery(""+sql.toString());
         query.unwrap(SQLQuery.class).addScalar("orderId", StandardBasicTypes.STRING)
                 .addScalar("user",StandardBasicTypes.STRING)
                 .addScalar("performName",StandardBasicTypes.STRING)
@@ -61,8 +61,8 @@ public class PerformOrderStatstics implements IPerformOrderStatistics {
                 .addScalar("performRoom",StandardBasicTypes.STRING)
                 .addScalar("orderEndTime",StandardBasicTypes.STRING)
                 .addScalar("orderTime",StandardBasicTypes.STRING)
-                .addScalar("orderAmount",StandardBasicTypes.STRING)
-                .addScalar("reservationNumber",StandardBasicTypes.STRING)
+                .addScalar("orderAmount",StandardBasicTypes.DOUBLE)
+                .addScalar("reservationNumber",StandardBasicTypes.INTEGER)
                 .addScalar("ordrStatus",StandardBasicTypes.STRING)
                 .setResultTransformer(Transformers.aliasToBean(PerformOrderDto.class));
         List<PerformOrderDto> performOrderDtoList = new ArrayList<>();
@@ -72,7 +72,7 @@ public class PerformOrderStatstics implements IPerformOrderStatistics {
     private String sqlCondition(PerformOrderVo performOrderVo){
         StringBuilder stringBuilder = new StringBuilder(" where 1 = 1\n");
         if(performOrderVo == null){
-            return null;
+            return stringBuilder.toString();
         }
         if(!StringUtils.isEmpty(performOrderVo.getOrderId())){
             stringBuilder.append(" AND t1.OrderNumber = '%").append(performOrderVo.getOrderId()).append("%',\n");
