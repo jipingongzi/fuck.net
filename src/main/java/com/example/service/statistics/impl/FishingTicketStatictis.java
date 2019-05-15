@@ -3,12 +3,12 @@ package com.example.service.statistics.impl;
 import com.example.service.statistics.dto.FishingDetailDto;
 import com.example.service.statistics.dto.FishingTicketDto;
 import com.example.service.statistics.vo.FishingTicketVo;
-import com.example.service.statistics.vo.PerformOrderVo;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,14 +21,23 @@ import java.util.List;
 public class FishingTicketStatictis {
 
     private final EntityManager entityManager;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public FishingTicketStatictis(EntityManager entityManager) {
+    public FishingTicketStatictis(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
         this.entityManager = entityManager;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<FishingTicketVo> getFishingTicketInfo(FishingTicketVo fishingTicketVo){
-        StringBuilder stringBuilder = new StringBuilder("SELECT\n" +
+        Integer start = (fishingTicketVo.getPageNumber() -1) * fishingTicketVo.getPageSize() + 1;
+        Integer end = start + fishingTicketVo.getPageSize();
+        StringBuilder stringBuilder = new StringBuilder("SELECT TOP\n" +
+                "\t7 numComImg.* \n" +
+                "FROM\n" +
+                "\t(\n" +
+                "SELECT\n" +
+                "\tROW_NUMBER () OVER ( ORDER BY t1.CTIME DESC ) AS rownumber,\n" +
                 "\tt1.ID AS id,\n" +
                 "\tt1.OrderNumber AS OrderId,\n" +
                 "\tt2.Phone AS userName,\n" +
@@ -39,13 +48,16 @@ public class FishingTicketStatictis {
                 "\tt1.OrderTotalMoney AS orderTotalMoney,\n" +
                 "\tt1.OrderBalancTotal AS orderBalancTotal,\n" +
                 "\tt1.OrderSubsidyTotal AS orderSubsidyTotal,\n" +
-                "\tt1.Status AS Status\n" +
+                "\tt1.Status AS Status \n" +
                 "FROM\n" +
                 "\tYUNYI_GuaranteeServiceOrder t1\n" +
                 "\tLEFT JOIN YUNYI_Member t2 ON t1.MemberID = t2.ID\n" +
-                "\tLEFT JOIN YUNYI_GuaranteeServiceManage t3 ON t1.GSMID = t3.ID");
+                "\tLEFT JOIN YUNYI_GuaranteeServiceManage t3 ON t1.GSMID = t3.ID ");
         stringBuilder.append(sqlCondition(fishingTicketVo));
-        stringBuilder.append(" ORDER BY t1.CTIME DESC\n");
+        stringBuilder.append("\t) AS numComImg \n" +
+                "WHERE\n" +
+                "\trownumber BETWEEN \n" + start +
+                " AND " + end);
         Query query = entityManager.createNativeQuery(stringBuilder.toString());
         query.unwrap(SQLQuery.class).addScalar("id",StandardBasicTypes.INTEGER)
                 .addScalar("orderId", StandardBasicTypes.STRING)
@@ -60,6 +72,14 @@ public class FishingTicketStatictis {
                 .addScalar("Status",StandardBasicTypes.INTEGER)
                 .setResultTransformer(Transformers.aliasToBean(FishingTicketDto.class));
         List<FishingTicketDto> fishingTicketDtoList = query.getResultList();
+        StringBuilder sqlForCount = new StringBuilder("SELECT\n" +
+                "\tCOUNT(*) AS totalNumber\n" +
+                "FROM\n" +
+                "\tYUNYI_GuaranteeServiceOrder t1\n" +
+                "\tLEFT JOIN YUNYI_Member t2 ON t1.MemberID = t2.ID\n" +
+                "\tLEFT JOIN YUNYI_GuaranteeServiceManage t3 ON t1.GSMID = t3.ID\n");
+        sqlForCount.append(sqlCondition(fishingTicketVo));
+        Integer totalNumber = jdbcTemplate.queryForObject(sqlForCount.toString(),Integer.class);
         //增加序号、修改订单状态
         List<FishingTicketVo> fishingTicketVoList = new ArrayList<>();
         Integer i = 1;
@@ -82,6 +102,7 @@ public class FishingTicketStatictis {
                 default:
                     break;
             }
+            fishingTicketVo1.setTotalNumber(totalNumber);
             fishingTicketVoList.add(fishingTicketVo1);
         }
         return fishingTicketVoList;

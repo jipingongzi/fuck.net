@@ -36,6 +36,8 @@ public class FishingTicketVo {
     private Integer pageNumber;
     //页大小
     private Integer pageSize;
+    //总页数
+    private Integer totalNumber;
     //前往时间开始时间
     private LocalDate leaveForStartTime;
     //前往时间结束时间

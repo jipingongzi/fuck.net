@@ -45,8 +45,8 @@ public class FishingTicketController {
                                          @RequestParam(required = false) String orderStartTime,
                                          @RequestParam(required = false) String orderEndTime,
                                          @RequestParam(required = false,defaultValue = "1") Integer pageNumber,
-                                         @RequestParam(required = false,defaultValue = "20") Integer pageSize,
-                                         @CookieValue(value = "serviceId") Integer serviceId){
+                                         @RequestParam(required = false,defaultValue = "7") Integer pageSize,
+                                         @CookieValue(value = "serviceId") String serviceId){
         List<FishingTicketVo> fishingTicketVoList = new ArrayList<>();
         FishingTicketVo fishingTicketVo = new FishingTicketVo();
         fishingTicketVo.setOrderId(orderId);
@@ -63,8 +63,15 @@ public class FishingTicketController {
             fishingTicketVo.setOrderEndTime(LocalDate.parse(orderEndTime));
         fishingTicketVo.setPageNumber(pageNumber);
         fishingTicketVo.setPageSize(pageSize);
-        fishingTicketVo.setServiceId(serviceId);
+        fishingTicketVo.setServiceId(Integer.valueOf(serviceId));
+        fishingTicketVo.setPageNumber(pageNumber);
+        fishingTicketVo.setPageSize(pageSize);
         fishingTicketVoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
+        for(FishingTicketVo fishingTicketVo1:fishingTicketVoList){
+            fishingTicketVo1.setPageNumber(pageNumber);
+            fishingTicketVo1.setPageSize(pageSize);
+            fishingTicketVo1.setTotalNumber(fishingTicketVo1.getTotalNumber()/fishingTicketVo1.getPageSize() + 1);
+        }
         log.info("获取垂钓订单信息");
         return RestResponse.buildResponse(fishingTicketVoList);
     }
@@ -72,10 +79,10 @@ public class FishingTicketController {
 //    垂钓订单查询-垂钓管理详情
     @GetMapping(value = "orderDetail")
     public RestResponse getOrderDetail(@RequestParam String orderId,
-                                       @CookieValue(value = "serviceId") Integer serviceId){
+                                       @CookieValue(value = "serviceId") String serviceId){
         FishingTicketVo fishingTicketVo = new FishingTicketVo();
         fishingTicketVo.setOrderId(orderId);
-        fishingTicketVo.setServiceId(serviceId);
+        fishingTicketVo.setServiceId(Integer.valueOf(serviceId));
         List<FishingTicketVo> fishingTicketDtoList = new ArrayList<>();
         fishingTicketDtoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
         log.info("获取垂钓订单详情");
