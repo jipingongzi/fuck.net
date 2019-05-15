@@ -84,6 +84,8 @@ public class FishingTicketController {
         fishingTicketVo.setOrderId(orderId);
         fishingTicketVo.setServiceId(Integer.valueOf(serviceId));
         List<FishingTicketVo> fishingTicketDtoList = new ArrayList<>();
+        fishingTicketVo.setPageNumber(1);
+        fishingTicketVo.setPageSize(7);
         fishingTicketDtoList = fishingTicketStatictis.getFishingTicketInfo(fishingTicketVo);
         log.info("获取垂钓订单详情");
         return RestResponse.buildResponse(fishingTicketDtoList.get(0));

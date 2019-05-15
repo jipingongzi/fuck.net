@@ -14,7 +14,7 @@
   <title>垂钓订单管理</title>
   <style>
     /** { touch-action: none; }*/
-    .nav{position:relative; width:100%;height: 8vh}
+    .nav{position:relative; width:100%;height: 7vh}
     .nav img{
       width: 100%;height: 100%}
     .nav middle{position:absolute;width:100%;left:0px;bottom:0px;top:10px;color: white;text-align: center;font-size: 18px}
@@ -206,6 +206,7 @@
     <div class="input-group-addon" onclick="editPageInput()">跳转</div>
     <input id="inputPage" type="text" class="form-control" placeholder="输入页码" aria-describedby="basic-addon1">
   </div>
+  <p id="pageInfo" style="float: left;margin-top: 7px">页码信息</div>
 </div>
 
 <script type="text/javascript">
@@ -227,8 +228,8 @@
 
   }
   var tableData = [];
-  var pageNumber;
-  var pageSize;
+  pageNumber = 1;
+  var pageSize = 7;
   totalNumber = 3;
   var _this;
   initLoading();
@@ -238,7 +239,7 @@
     searchDate(pageNumber,pageSize,false);
   }
   function editPageInput(){
-    pageNumber=$('#inputPage');
+    pageNumber=$('#inputPage').val();
     searchDate(pageNumber,pageSize,false);
   }
   $('#tablelist').bootstrapTable({
@@ -293,6 +294,16 @@
 
   //获取统计数据
   function searchDate(pageNumberArg,pageSize, flag) {
+    if(pageNumberArg==1){
+      $('#previous').css('display','none');
+    }else {
+      $('#previous').css('display','inline');
+    }
+    if(pageNumberArg==totalNumber){
+      $('#next').css('display','none');
+    }else {
+      $('#next').css('display','inline');
+    }
     var orderNumber = $('#orderNumber').val();
     var userName = $('#userName').val();
     var guaranteeSite = $('#guaranteeSite').val();
@@ -347,6 +358,7 @@
             configTable(tableData);
             totalNumber=res.data[0].totalNumber;
           $('.fixed-table-loading').hide();
+          $('#pageInfo').text(pageNumberArg+"/"+totalNumber);
         },
         error: function () {
           hideLoading();
