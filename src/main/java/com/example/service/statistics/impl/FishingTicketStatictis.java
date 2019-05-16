@@ -133,20 +133,14 @@ public class FishingTicketStatictis {
         if(fishingTicketVo.getLeaveForEndTime() != null && !StringUtils.isEmpty(fishingTicketVo.getLeaveForEndTime())){
             stringBuilder.append(" AND t1.LeaveForTime < '").append(fishingTicketVo.getLeaveForEndTime().plusDays(1)).append("'\n");
         }
-//        if(fishingTicketVo.getLeaveForStartTime() != null && fishingTicketVo.getLeaveForEndTime() != null){
-//            stringBuilder.append(" AND t1.LeaveForTime BETWEEN '").append(fishingTicketVo.getLeaveForStartTime())
-//                    .append("' AND '").append(fishingTicketVo.getLeaveForEndTime()).append("'\n");
-//        }
+
         if(fishingTicketVo.getOrderStartTime() != null && !StringUtils.isEmpty(fishingTicketVo.getOrderStartTime())){
             stringBuilder.append(" AND t1.CTime > '").append(fishingTicketVo.getOrderStartTime().minusDays(1)).append("'\n");
         }
         if(fishingTicketVo.getOrderEndTime() != null && !StringUtils.isEmpty(fishingTicketVo.getOrderEndTime())){
             stringBuilder.append(" AND t1.CTime < '").append(fishingTicketVo.getOrderEndTime().plusDays(1)).append("'\n");
         }
-//        if(fishingTicketVo.getOrderStartTime() != null && fishingTicketVo.getOrderEndTime() != null){
-//            stringBuilder.append(" AND t.CTime BETWEEN '").append(fishingTicketVo.getOrderStartTime())
-//                    .append("' AND '").append(fishingTicketVo.getOrderEndTime()).append("'\n");
-//        }
+
         return stringBuilder.toString();
     }
 
